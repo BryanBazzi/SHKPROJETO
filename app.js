@@ -38,7 +38,7 @@
   }
   function setTema(t, titulo) {
     document.body.setAttribute("data-tema", t);
-    document.title = (titulo ? titulo + " • " : "") + SITE.nome + " • " + SITE.subtitulo;
+    document.title = (titulo ? titulo + " • " : "") + SITE.nome + " " + SITE.subtitulo;
   }
   function achar(id) {
     for (var i = 0; i < PRODUTOS.length; i++) if (PRODUTOS[i].id === id) return PRODUTOS[i];

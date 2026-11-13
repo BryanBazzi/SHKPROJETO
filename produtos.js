@@ -5,8 +5,8 @@
 
 /* ---------- Dados gerais do site ---------- */
 const SITE = {
-  nome: "É o Bryan",
-  subtitulo: "Achados Gamer",
+  nome: "SHK",
+  subtitulo: "Games",
   youtube: "",   // cole o link do seu canal (ex.: "https://youtube.com/@seucanal")
   twitch: ""     // cole o link da sua Twitch (ex.: "https://twitch.tv/seucanal")
 };
@@ -34,10 +34,10 @@ const LOJAS = {
    destaque   -> true para aparecer na página inicial
    descricao  -> texto curto sobre o produto
    midia      -> (opcional) a galeria do produto, NA ORDEM em que você escrever. Pode misturar:
-                   - imagens: o caminho do arquivo dentro da pasta "img" (ex.: "img/astro-bot.jpg")
+                   - imagens: o NOME do arquivo (ex.: "astro-bot.jpg"), enviado pro GitHub junto com os outros arquivos
                    - vídeos: o link do YouTube (ex.: "https://www.youtube.com/watch?v=...")
                  A primeira imagem da lista também vira a capa do card. Exemplo:
-                   midia: ["img/capa.jpg", "https://youtube.com/watch?v=...", "img/print1.jpg", "img/print2.jpg"]
+                   midia: ["capa.jpg", "https://youtube.com/watch?v=...", "print1.jpg", "print2.jpg"]
    trailer    -> (alternativa simples, só se NÃO usar "midia") link do YouTube ou o código do vídeo. Deixe "" se não tiver.
    capa       -> (alternativa simples, só se NÃO usar "midia") imagem de capa. Se ficar "" o site cria uma capa neon automática.
    links      -> seu link de AFILIADO em cada loja. Deixe "" nas lojas que não tiver:
@@ -94,7 +94,7 @@ const PRODUTOS = [
     destaque: false,
     descricao: "Aventura de plataforma cheia de criatividade, feita para aproveitar tudo do DualSense.",
     midia: [
-      "img/astro-bot.jpg",
+      "astro-bot.jpg",
       "https://www.youtube.com/watch?v=wHMNQzLG_Jg"
     ],
     links: {
