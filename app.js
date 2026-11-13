@@ -27,6 +27,16 @@
   function norm(s) {
     return String(s || "").normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
   }
+  /* busca: ignora acento, maiúscula, espaço e pontuação ("astrobot" acha "Astro Bot") */
+  function chave(s) { return norm(s).replace(/[^a-z0-9]/g, ""); }
+  function acha(p, q) {
+    var junto = chave(q);
+    if (!junto) return false;
+    var feno = chave(p.nome + " " + p.id + " " + (p.versao || "") + " " + p.descricao);
+    if (feno.indexOf(junto) !== -1) return true;
+    var palavras = norm(q).split(/\s+/).map(chave).filter(Boolean);
+    return palavras.length > 1 && palavras.every(function (w) { return feno.indexOf(w) !== -1; });
+  }
   function urlSegura(u) {
     return /^https?:\/\//i.test(u || "") ? u : "";
   }
@@ -262,10 +272,7 @@
 
   function busca(q) {
     setTema("neutro", "Busca");
-    var t = norm(q);
-    var achados = PRODUTOS.filter(function (p) {
-      return norm(p.nome).indexOf(t) !== -1 || norm(p.descricao).indexOf(t) !== -1;
-    });
+    var achados = PRODUTOS.filter(function (p) { return acha(p, q); });
     app.innerHTML =
       '<section class="plat-topo"><p class="hero-kicker">Busca</p><h1>Resultados para “' + esc(q) + "”</h1></section>" +
       secao(achados.length + (achados.length === 1 ? " resultado" : " resultados"), grade(achados, "Não achei nada com esse nome. Tente outra palavra."));
@@ -276,7 +283,9 @@
     var v = linkDe(p.id, k);
     if (v === "-") return "";
     var nome = esc(LOJAS[k].nome);
-    var ico = '<span class="loja-ico" aria-hidden="true">' + esc(LOJAS[k].sigla) + "</span>";
+    var pasta = SITE.pastaImagens ? SITE.pastaImagens + "/" : "";
+    var ico = '<span class="loja-ico" aria-hidden="true" data-sigla="' + esc(LOJAS[k].sigla) + '">' +
+      '<img src="' + pasta + 'loja-' + k + '.png" alt="" onerror="this.parentNode.classList.add(\'sem-logo\');this.remove()"></span>';
     if (urlSegura(v)) {
       return '<a class="loja loja-' + k + '" href="' + esc(v) + '" target="_blank" rel="sponsored noopener noreferrer">' + ico +
         '<span class="loja-txt"><strong>' + nome + "</strong><small>Ver preço atualizado</small></span><em>→</em></a>";
@@ -356,6 +365,10 @@
     else if (a === "produto") produto(b);
     else if (a === "busca") busca(b || "");
     else naoEncontrado();
+    /* na página inicial, deixa o endereço limpo (sem o "#") */
+    if (!a && location.hash && window.history && history.replaceState) {
+      history.replaceState(null, "", location.pathname + location.search);
+    }
     preencherCapas();
   }
 

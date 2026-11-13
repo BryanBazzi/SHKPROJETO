@@ -185,12 +185,9 @@ main { flex: 1; width: 100%; max-width: 1120px; margin: 0 auto; padding: 24px 16
   border: 1px solid color-mix(in srgb, var(--lc) 45%, transparent);
   transition: transform .15s, box-shadow .15s, border-color .15s;
 }
-.loja-ico {
-  flex: none; width: 46px; height: 46px; border-radius: 12px;
-  display: grid; place-items: center;
-  font-family: "Orbitron", sans-serif; font-weight: 800; font-size: 1.1rem; letter-spacing: -.02em;
-  background: var(--ib); color: var(--if); box-shadow: 0 0 16px -4px var(--lc);
-}
+.loja-ico { flex: none; width: 76px; height: 46px; display: flex; align-items: center; justify-content: center; }
+.loja-ico img { max-width: 100%; max-height: 100%; object-fit: contain; filter: drop-shadow(0 0 6px rgba(255, 255, 255, .5)); }
+.loja-ico.sem-logo::before { content: attr(data-sigla); font-family: "Orbitron", sans-serif; font-weight: 800; font-size: 1.2rem; color: #fff; text-shadow: 0 0 10px rgba(255, 255, 255, .6); }
 .loja-txt { display: flex; flex-direction: column; flex: 1; min-width: 0; }
 .loja strong { font-size: 1.1rem; }
 .loja small { color: var(--mut); }
