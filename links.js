@@ -36,10 +36,9 @@ gta-6_aliexpress =
 # ===== Astro Bot =====
 astro-bot_trailer = https://www.youtube.com/watch?v=wHMNQzLG_Jg
 astro-bot_amazon = https://link.amazon/B0fPEUjma
-astro-bot_kabum =
-astro-bot_mercadolivre =
-astro-bot_shopee =
-astro-bot_aliexpress =
+astro-bot_kabum = https://tidd.ly/4sWME9G
+astro-bot_mercadolivre = https://meli.la/12FKGVd
+astro-bot_shopee = https://s.shopee.com.br/ql1uJHOPl
 
 # ===== Marvel's Spider-Man 2 =====
 spider-man-2_trailer =
