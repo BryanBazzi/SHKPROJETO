@@ -8,9 +8,17 @@
 | imagens (`.jpg`) | Capa e prints de cada produto, pelo nome do arquivo |
 | `index.html`, `app.js`, `style.css` | O site em si (normalmente você não mexe) |
 
-## Imagens: automático pelo nome do arquivo
-Suba as imagens pro GitHub (Add file → Upload files), soltas, sem pasta, com estes nomes
-(o começo é sempre o **id** do produto, o mesmo do `produtos.js`):
+## Imagens: automático pelo nome do arquivo, dentro da pasta `imagens`
+Todas as imagens ficam numa pasta chamada `imagens` no GitHub, separadas do código.
+
+**Criar a pasta (só uma vez):**
+1. No repositório: Add file → Create new file.
+2. No campo do nome, digite `imagens/` (ao digitar a barra, o GitHub cria a pasta) e depois `leia-me.txt`.
+3. Escreva qualquer coisa no conteúdo e clique em Commit changes.
+
+**Enviar imagens:** abra a pasta `imagens` no GitHub → Add file → Upload files → arraste as imagens → Commit changes.
+
+Use estes nomes (o começo é sempre o **id** do produto, o mesmo do `produtos.js`):
 
 - `gta-6_capa.jpg` → capa do card e primeira imagem da galeria
 - `gta-6_print1.jpg`, `gta-6_print2.jpg`, `gta-6_print3.jpg` … → prints do jogo

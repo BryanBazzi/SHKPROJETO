@@ -10,6 +10,7 @@
 const SITE = {
   nome: "SHK",
   subtitulo: "Games",
+  pastaImagens: "imagens",   // pasta do GitHub onde ficam as imagens (deixe "" para usar a raiz)
   youtube: "",   // cole o link do seu canal (ex.: "https://youtube.com/@seucanal")
   twitch: ""     // cole o link da sua Twitch (ex.: "https://twitch.tv/seucanal")
 };

@@ -86,7 +86,7 @@
     return EXTENSOES.reduce(function (cadeia, ext) {
       return cadeia.then(function (achada) {
         if (achada) return achada;
-        var src = base + "." + ext;
+        var src = (SITE.pastaImagens ? SITE.pastaImagens + "/" : "") + base + "." + ext;
         return testar(src).then(function (ok) { return ok ? src : ""; });
       });
     }, Promise.resolve("")).then(function (r) {
