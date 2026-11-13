@@ -6,7 +6,7 @@
   var fundo = document.getElementById("fundo");
   var btnMenu = document.getElementById("btnMenu");
   var campoBusca = document.getElementById("campoBusca");
-  var tokenRota = 0; // muda a cada troca de página (evita atualizar a página errada)
+  var tokenRota = 0;
 
   var PLAT = {
     ps5: {
@@ -50,7 +50,6 @@
   function norm(s) {
     return String(s || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
   }
-  /* busca: ignora acento, maiúscula, espaço e pontuação ("astrobot" acha "Astro Bot") */
   function chave(s) { return norm(s).replace(/[^a-z0-9]/g, ""); }
   function acha(p, q) {
     var junto = chave(q);
@@ -61,11 +60,15 @@
     return palavras.length > 1 && palavras.every(function (w) { return feno.indexOf(w) !== -1; });
   }
   function urlSegura(u) {
-    return /^https?:\/\//i.test(u || "") ? u : "";
+    u = String(u || "").trim();
+    if (!u || u === "-") return "";
+    if (/^https?:\/\//i.test(u)) return u;
+    if (u.indexOf(".") !== -1) return "https://" + u;
+    return "";
   }
   function ytId(v) {
     if (!v) return "";
-    v = String(v);
+    v = String(v).trim();
     var m = v.match(/(?:v=|youtu\.be\/|embed\/|shorts\/)([\w-]{11})/);
     if (m) return m[1];
     return /^[\w-]{11}$/.test(v) ? v : "";
@@ -96,10 +99,8 @@
     return MAPA_LINKS[base + "_" + tipo] || MAPA_LINKS[tipo + "_" + base] || "";
   }
 
-  /* ---------- imagens automáticas pelo nome do arquivo (sem cascata de 404) ----------
-     Prioriza .png e .webp primeiro e verifica print por print sequencialmente,
-     parando imediatamente no primeiro número que não existir. */
-  var EXTENSOES = ["png", "webp", "jpg", "jpeg"];
+  /* ---------- imagens automáticas pelo nome do arquivo (do jeito original) ---------- */
+  var EXTENSOES = ["jpg", "png", "webp", "jpeg"];
   var cacheImg = {};
 
   function testar(src) {
@@ -125,21 +126,21 @@
     });
   }
 
-  /* procura print1, print2... um por um e para imediatamente quando não houver mais */
   function acharPrints(id) {
     var achadas = [];
-    function proximo(n) {
-      if (n > 20) return Promise.resolve(achadas);
-      return acharImagem(id + "_print" + n).then(function (src) {
-        if (!src) return achadas;
-        achadas.push({ tipo: "imagem", src: src });
-        return proximo(n + 1);
+    function lote(inicio) {
+      var nums = [inicio, inicio + 1, inicio + 2, inicio + 3];
+      return Promise.all(nums.map(function (n) { return acharImagem(id + "_print" + n); })).then(function (srcs) {
+        for (var i = 0; i < srcs.length; i++) {
+          if (!srcs[i]) return achadas;
+          achadas.push({ tipo: "imagem", src: srcs[i] });
+        }
+        return inicio + 4 > 60 ? achadas : lote(inicio + 4);
       });
     }
-    return proximo(1);
+    return lote(1);
   }
 
-  /* ordem da galeria: capa, trailer, prints */
   function resolverMidia(p) {
     return Promise.all([acharImagem(p.id + "_capa"), acharPrints(p.id)]).then(function (r) {
       var itens = [];
@@ -205,7 +206,6 @@
     return { chave: "jogos", nome: "Jogos" };
   }
 
-  /* capa dos cards: começa com a capa neon e troca pela imagem {id}_capa se ela existir */
   function capa(p) {
     return '<div class="capa capa-' + esc(p.plataforma) + '" data-id="' + esc(p.id) + '" data-nome="' + esc(p.nome) + '">' +
       '<span class="capa-ico">' + iconeDeTipo(p.tipo) + "</span>" +
@@ -323,15 +323,24 @@
       secao(achados.length + (achados.length === 1 ? " resultado" : " resultados"), grade(achados, "Não achei nada com esse nome. Tente outra palavra."));
   }
 
-  /* botão de uma loja: só aparece quando houver link preenchido no links.js.
-     Assim que você colar o link lá, o botão volta a aparecer automaticamente! */
+  /* botão de uma loja (do jeito original):
+     - com link = clicável com efeito neon
+     - sem link = aparece o card da loja com a imagem e "Link em breve"
+     - link "-" = escondido */
   function botaoLoja(p, k) {
     var v = linkDe(p.id, k);
-    if (!v || v === "-" || !urlSegura(v)) return "";
+    if (v === "-") return "";
     var nome = esc(LOJAS[k].nome);
-    var ico = '<span class="loja-ico sem-logo" aria-hidden="true" data-sigla="' + esc(LOJAS[k].sigla) + '"></span>';
-    return '<a class="loja loja-' + k + '" href="' + esc(v) + '" target="_blank" rel="sponsored noopener noreferrer">' + ico +
-      '<span class="loja-txt"><strong>' + nome + "</strong><small>Ver preço atualizado</small></span><em>→</em></a>";
+    var pasta = SITE.pastaImagens ? SITE.pastaImagens + "/" : "";
+    var ico = '<span class="loja-ico" aria-hidden="true" data-sigla="' + esc(LOJAS[k].sigla) + '">' +
+      '<img src="' + pasta + "loja-" + k + '.png" alt="" onerror="this.parentNode.classList.add(\'sem-logo\');this.remove()"></span>';
+    var url = urlSegura(v);
+    if (url) {
+      return '<a class="loja loja-' + k + '" href="' + esc(url) + '" target="_blank" rel="sponsored noopener noreferrer">' + ico +
+        '<span class="loja-txt"><strong>' + nome + "</strong><small>Ver preço atualizado</small></span><em>→</em></a>";
+    }
+    return '<div class="loja loja-' + k + ' off">' + ico +
+      '<span class="loja-txt"><strong>' + nome + "</strong><small>Link em breve</small></span></div>";
   }
 
   function produto(id) {
@@ -384,7 +393,7 @@
   fundo.addEventListener("click", function () { abrirMenu(false); });
   document.addEventListener("keydown", function (e) { if (e.key === "Escape") abrirMenu(false); });
 
-  /* ---------- busca em tempo real (Live Search) ---------- */
+  /* ---------- busca em tempo real ---------- */
   var timerBusca = null;
   campoBusca.addEventListener("input", function () {
     clearTimeout(timerBusca);
@@ -413,7 +422,6 @@
     abrirMenu(false);
 
     var a = partes[0], b = partes[1];
-    /* não rola para o topo se estiver apenas digitando na busca */
     if (a !== "busca" || document.activeElement !== campoBusca) {
       window.scrollTo(0, 0);
     }
@@ -431,7 +439,6 @@
     else if (a === "busca") busca(b || "");
     else naoEncontrado();
 
-    /* na página inicial, deixa o endereço limpo (sem o "#") */
     if (!a && location.hash && window.history && history.replaceState) {
       history.replaceState(null, "", location.pathname + location.search);
     }
@@ -442,9 +449,8 @@
   document.getElementById("marcaNome").textContent = SITE.nome;
   document.getElementById("marcaSub").textContent = SITE.subtitulo;
 
-  /* Redes sociais sempre visíveis no menu, mesmo sem link configurado ainda */
-  var linkYt = urlSegura(SITE.youtube) ? esc(SITE.youtube) : "#";
-  var linkTw = urlSegura(SITE.twitch) ? esc(SITE.twitch) : "#";
+  var linkYt = urlSegura(SITE.youtube) ? esc(urlSegura(SITE.youtube)) : "#";
+  var linkTw = urlSegura(SITE.twitch) ? esc(urlSegura(SITE.twitch)) : "#";
   var attrYt = urlSegura(SITE.youtube) ? ' target="_blank" rel="noopener"' : ' onclick="return false;" title="Em breve"';
   var attrTw = urlSegura(SITE.twitch) ? ' target="_blank" rel="noopener"' : ' onclick="return false;" title="Em breve"';
 
