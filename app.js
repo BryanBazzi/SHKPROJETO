@@ -126,8 +126,7 @@
   function palcoHTML(m, p) {
     if (m.tipo === "video") {
       return '<div class="video"><iframe src="https://www.youtube-nocookie.com/embed/' + m.id + '" title="Trailer de ' + esc(p.nome) +
-        '" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture; fullscreen" allowfullscreen></iframe></div>' +
-        '<a class="yt-link" href="https://www.youtube.com/watch?v=' + m.id + '" target="_blank" rel="noopener noreferrer">▶ Assistir no YouTube</a>';
+        '" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture; fullscreen" allowfullscreen></iframe></div>';
     }
     return '<div class="video palco-img">' +
       '<img class="palco-fundo" src="' + esc(m.src) + '" alt="" aria-hidden="true">' +
@@ -178,7 +177,8 @@
       acharImagem(c.getAttribute("data-id") + "_capa").then(function (src) {
         if (!src || meu !== tokenRota) return;
         c.classList.remove("capa-ps5", "capa-switch");
-        c.innerHTML = '<img src="' + esc(src) + '" alt="' + esc(c.getAttribute("data-nome")) + '">';
+        c.innerHTML = '<img class="capa-fundo" src="' + esc(src) + '" alt="" aria-hidden="true">' +
+          '<img class="capa-foto" src="' + esc(src) + '" alt="' + esc(c.getAttribute("data-nome")) + '">';
       });
     });
   }

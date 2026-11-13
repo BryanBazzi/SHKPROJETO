@@ -59,8 +59,12 @@ main { flex: 1; width: 100%; max-width: 1120px; margin: 0 auto; padding: 24px 16
 .hamb.ativo span:nth-child(2) { opacity: 0; }
 .hamb.ativo span:nth-child(3) { transform: translateY(-9px) rotate(-45deg); }
 
-.marca { display: flex; flex-direction: column; align-items: flex-start; line-height: 1; flex: none; }
-.marca span { font-weight: 800; font-size: 1.75rem; letter-spacing: .08em; color: var(--neon); text-shadow: 0 0 14px var(--glow), 0 0 30px var(--glow); }
+.marca { display: flex; align-items: center; gap: 10px; flex: none; }
+.marca-logo { width: 48px; height: 27px; flex: none; fill: var(--neon); filter: drop-shadow(0 0 6px var(--glow)); }
+.marca-logo .olho { fill: var(--bg); }
+.marca-logo .traco { fill: none; stroke: var(--bg); stroke-width: 1; stroke-linecap: round; }
+.marca-texto { display: flex; flex-direction: column; align-items: flex-start; line-height: 1; }
+.marca-texto span { font-weight: 800; font-size: 1.75rem; letter-spacing: .08em; color: var(--neon); text-shadow: 0 0 14px var(--glow), 0 0 30px var(--glow); }
 .marca small { margin-top: 2px; padding-left: 3px; color: var(--txt); font-family: "Orbitron", sans-serif; font-weight: 600; font-size: .62rem; letter-spacing: .5em; text-transform: uppercase; opacity: .85; }
 
 .busca { margin-left: auto; display: flex; flex: 0 1 320px; min-width: 0; }
@@ -138,8 +142,9 @@ main { flex: 1; width: 100%; max-width: 1120px; margin: 0 auto; padding: 24px 16
   transition: transform .2s, box-shadow .2s, border-color .2s;
 }
 .card:hover { transform: translateY(-4px); border-color: var(--neon); box-shadow: 0 0 28px -2px var(--glow); }
-.capa { aspect-ratio: 16 / 10; position: relative; overflow: hidden; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; padding: 12px; text-align: center; background: linear-gradient(135deg, #1a1030, #3a1a6a); }
-.capa img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.capa { aspect-ratio: 1 / 1; position: relative; overflow: hidden; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; padding: 12px; text-align: center; background: linear-gradient(135deg, #1a1030, #3a1a6a); }
+.capa-fundo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; filter: blur(18px) brightness(.55); transform: scale(1.2); }
+.capa-foto { position: absolute; inset: 8px; width: calc(100% - 16px); height: calc(100% - 16px); object-fit: contain; z-index: 1; }
 .capa-ps5 { background: linear-gradient(135deg, #07123a 0%, #1f6bff 60%, #00d4ff 100%); }
 .capa-switch { background: linear-gradient(135deg, #2e040d 0%, #ff2a55 60%, #ff6a3d 100%); }
 .capa-ico { font-size: 2rem; filter: drop-shadow(0 0 10px rgba(255, 255, 255, .5)); }
@@ -168,8 +173,6 @@ main { flex: 1; width: 100%; max-width: 1120px; margin: 0 auto; padding: 24px 16
 .mini:hover { border-color: color-mix(in srgb, var(--neon) 60%, transparent); transform: translateY(-2px); }
 .mini.ativa { border-color: var(--neon); box-shadow: 0 0 16px -2px var(--glow); }
 .mini-play { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; color: #fff; background: rgba(0, 0, 0, .35); text-shadow: 0 0 10px #000; }
-.yt-link { display: inline-block; margin-top: 12px; padding: 9px 16px; border-radius: 10px; font-weight: 700; background: var(--bg2); border: 1px solid var(--neon); color: var(--neon); }
-.yt-link:hover { box-shadow: 0 0 18px -2px var(--glow); }
 .produto-info h1 { font-size: clamp(1.4rem, 3.6vw, 2.1rem); line-height: 1.2; margin: 10px 0; text-shadow: 0 0 18px var(--glow); }
 .desc { color: var(--mut); margin-bottom: 18px; }
 .produto-info h2 { font-size: 1rem; text-transform: uppercase; letter-spacing: .12em; color: var(--neon); margin-bottom: 10px; }
@@ -208,7 +211,8 @@ a.loja:hover { transform: translateX(4px); border-color: var(--lc); box-shadow: 
 @media (max-width: 760px) {
   body { font-size: 17px; }
   .produto { grid-template-columns: 1fr; }
-  .marca span { font-size: 1.45rem; }
+  .marca-texto span { font-size: 1.45rem; }
+  .marca-logo { width: 40px; height: 22px; }
   .grade { grid-template-columns: repeat(2, 1fr); gap: 12px; }
   .card h3 { font-size: .85rem; }
   .plat-btn { width: 100%; }

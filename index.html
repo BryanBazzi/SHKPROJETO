@@ -17,9 +17,16 @@
     <button id="btnMenu" class="hamb" aria-label="Abrir menu" aria-expanded="false" aria-controls="menu">
       <span></span><span></span><span></span>
     </button>
-    <a class="marca" href="#/">
-      <span id="marcaNome">SHK</span>
-      <small id="marcaSub">Games</small>
+    <a class="marca" href="#/" aria-label="SHK Games, início">
+      <svg class="marca-logo" viewBox="0 0 76 42" aria-hidden="true" focusable="false">
+        <path d="M18 20 L4 3 C8 9 10 14 11.5 20 C10 26 9 31 7 38 L18 23 C26 28 34 30.5 41 30.5 Q38 34 34 40 L46 30.5 C54 31 63 29 69 26 Q72 25 74 24 C68 19 57 13.5 45 13 C41 9 38 5 35 1.5 C34.5 7 32 11 30 14 C26 15.5 22 17.5 18 20 Z"/>
+        <circle class="olho" cx="63" cy="21.2" r="1.4"/>
+        <path class="traco" d="M51 19.5 L52 25 M54 19.5 L55 25 M57 19.5 L58 25 M70 25.6 Q65 27.4 60 26.2"/>
+      </svg>
+      <div class="marca-texto">
+        <span id="marcaNome">SHK</span>
+        <small id="marcaSub">Games</small>
+      </div>
     </a>
     <form id="formBusca" class="busca" role="search">
       <input id="campoBusca" type="search" placeholder="Buscar jogo ou console…" aria-label="Buscar jogo ou console" autocomplete="off">
