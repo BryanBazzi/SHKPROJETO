@@ -35,7 +35,7 @@ gta-6_aliexpress =
 
 # ===== Astro Bot =====
 astro-bot_trailer = https://www.youtube.com/watch?v=wHMNQzLG_Jg
-astro-bot_amazon =
+astro-bot_amazon = https://link.amazon/B080aCy7A
 astro-bot_kabum =
 astro-bot_mercadolivre =
 astro-bot_shopee =
