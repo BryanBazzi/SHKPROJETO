@@ -1,6 +1,9 @@
 /* ==========================================================
-   ARQUIVO PRINCIPAL DE CONTEÚDO — é aqui que você edita tudo.
-   Não precisa mexer no resto do site.
+   LISTA DE PRODUTOS — aqui ficam só os dados básicos de cada produto.
+
+   Imagens, trailers e links de afiliado NÃO ficam aqui:
+   - Imagens: é só enviar o arquivo com o nome certo (veja o LEIA-ME.md)
+   - Trailers e links de afiliado: arquivo links.js
    ========================================================== */
 
 /* ---------- Dados gerais do site ---------- */
@@ -12,20 +15,23 @@ const SITE = {
 };
 
 /* ---------- Lojas ----------
-   Não precisa mexer aqui, a não ser que queira mudar o nome exibido. */
+   sigla = a letrinha que aparece no ícone do botão. Não precisa mexer aqui. */
 const LOJAS = {
-  amazon:       { nome: "Amazon" },
-  kabum:        { nome: "KaBuM!" },
-  mercadolivre: { nome: "Mercado Livre" },
-  shopee:       { nome: "Shopee" },
-  aliexpress:   { nome: "AliExpress" }
+  amazon:       { nome: "Amazon",        sigla: "a" },
+  kabum:        { nome: "KaBuM!",        sigla: "K" },
+  mercadolivre: { nome: "Mercado Livre", sigla: "ML" },
+  shopee:       { nome: "Shopee",        sigla: "S" },
+  aliexpress:   { nome: "AliExpress",    sigla: "Ali" }
 };
 
 /* ---------- Produtos ----------
-   Para adicionar um produto, copie um bloco { ... } inteiro, cole logo abaixo
-   (sem esquecer da vírgula entre eles) e troque os dados.
+   Para adicionar um produto novo:
+   1) copie um bloco { ... } inteiro e cole logo abaixo (com vírgula entre os blocos);
+   2) troque os dados;
+   3) no links.js, adicione as linhas do novo produto (use o mesmo "id").
 
-   id         -> nome curto sem espaço, acento ou maiúscula (vira o endereço da página)
+   id         -> nome curto, minúsculo, sem espaço nem acento (ex.: "gta-6").
+                 É ele que você usa nos nomes das imagens e no links.js.
    nome       -> como aparece no site
    plataforma -> "ps5" ou "switch"
    tipo       -> "console" ou "jogo"
@@ -33,18 +39,6 @@ const LOJAS = {
    promocao   -> true se estiver em promoção (aparece na aba Promoções), senão false
    destaque   -> true para aparecer na página inicial
    descricao  -> texto curto sobre o produto
-   midia      -> (opcional) a galeria do produto, NA ORDEM em que você escrever. Pode misturar:
-                   - imagens: o NOME do arquivo (ex.: "astro-bot.jpg"), enviado pro GitHub junto com os outros arquivos
-                   - vídeos: o link do YouTube (ex.: "https://www.youtube.com/watch?v=...")
-                 A primeira imagem da lista também vira a capa do card. Exemplo:
-                   midia: ["capa.jpg", "https://youtube.com/watch?v=...", "print1.jpg", "print2.jpg"]
-   trailer    -> (alternativa simples, só se NÃO usar "midia") link do YouTube ou o código do vídeo. Deixe "" se não tiver.
-   capa       -> (alternativa simples, só se NÃO usar "midia") imagem de capa. Se ficar "" o site cria uma capa neon automática.
-   links      -> seu link de AFILIADO em cada loja. Deixe "" nas lojas que não tiver:
-                 o botão dessa loja simplesmente não aparece.
-
-   ATENÇÃO: os links abaixo são só EXEMPLO (levam para a página inicial de cada loja).
-   Troque pelos seus links de afiliado.
 */
 const PRODUTOS = [
 
@@ -56,16 +50,7 @@ const PRODUTOS = [
     tipo: "console",
     promocao: true,
     destaque: true,
-    descricao: "O console da Sony em versão mais compacta, com SSD ultrarrápido, controle DualSense e jogos em 4K.",
-    trailer: "",
-    capa: "",
-    links: {
-      amazon: "https://www.amazon.com.br/",
-      kabum: "https://www.kabum.com.br/",
-      mercadolivre: "https://www.mercadolivre.com.br/",
-      shopee: "https://shopee.com.br/",
-      aliexpress: ""
-    }
+    descricao: "O console da Sony em versão mais compacta, com SSD ultrarrápido, controle DualSense e jogos em 4K."
   },
   {
     id: "gta-6",
@@ -74,16 +59,7 @@ const PRODUTOS = [
     tipo: "jogo",
     promocao: false,
     destaque: true,
-    descricao: "O novo capítulo da série da Rockstar. Assista ao trailer e veja onde comprar.",
-    trailer: "",
-    capa: "",
-    links: {
-      amazon: "https://www.amazon.com.br/",
-      kabum: "https://www.kabum.com.br/",
-      mercadolivre: "https://www.mercadolivre.com.br/",
-      shopee: "",
-      aliexpress: ""
-    }
+    descricao: "O novo capítulo da série da Rockstar. Assista ao trailer e veja onde comprar."
   },
   {
     id: "astro-bot",
@@ -92,18 +68,7 @@ const PRODUTOS = [
     tipo: "jogo",
     promocao: true,
     destaque: false,
-    descricao: "Aventura de plataforma cheia de criatividade, feita para aproveitar tudo do DualSense.",
-    midia: [
-      "astro-bot.jpg",
-      "https://www.youtube.com/watch?v=wHMNQzLG_Jg"
-    ],
-    links: {
-      amazon: "https://www.amazon.com.br/",
-      kabum: "https://www.kabum.com.br/",
-      mercadolivre: "https://www.mercadolivre.com.br/",
-      shopee: "",
-      aliexpress: ""
-    }
+    descricao: "Aventura de plataforma cheia de criatividade, feita para aproveitar tudo do DualSense."
   },
   {
     id: "spider-man-2",
@@ -112,16 +77,7 @@ const PRODUTOS = [
     tipo: "jogo",
     promocao: false,
     destaque: false,
-    descricao: "Jogue com Peter Parker e Miles Morales numa Nova York ainda maior.",
-    trailer: "",
-    capa: "",
-    links: {
-      amazon: "https://www.amazon.com.br/",
-      kabum: "https://www.kabum.com.br/",
-      mercadolivre: "https://www.mercadolivre.com.br/",
-      shopee: "",
-      aliexpress: ""
-    }
+    descricao: "Jogue com Peter Parker e Miles Morales numa Nova York ainda maior."
   },
   {
     id: "dualsense",
@@ -130,16 +86,7 @@ const PRODUTOS = [
     tipo: "console",
     promocao: false,
     destaque: false,
-    descricao: "Controle sem fio oficial do PS5, com gatilhos adaptáveis e retorno tátil.",
-    trailer: "",
-    capa: "",
-    links: {
-      amazon: "https://www.amazon.com.br/",
-      kabum: "https://www.kabum.com.br/",
-      mercadolivre: "https://www.mercadolivre.com.br/",
-      shopee: "https://shopee.com.br/",
-      aliexpress: "https://pt.aliexpress.com/"
-    }
+    descricao: "Controle sem fio oficial do PS5, com gatilhos adaptáveis e retorno tátil."
   },
 
   /* ===================== NINTENDO SWITCH ===================== */
@@ -151,16 +98,7 @@ const PRODUTOS = [
     versao: "Switch 2",
     promocao: false,
     destaque: true,
-    descricao: "O novo console da Nintendo, com tela maior, mais desempenho e compatibilidade com jogos do Switch.",
-    trailer: "",
-    capa: "",
-    links: {
-      amazon: "https://www.amazon.com.br/",
-      kabum: "https://www.kabum.com.br/",
-      mercadolivre: "https://www.mercadolivre.com.br/",
-      shopee: "",
-      aliexpress: ""
-    }
+    descricao: "O novo console da Nintendo, com tela maior, mais desempenho e compatibilidade com jogos do Switch."
   },
   {
     id: "switch-oled",
@@ -170,16 +108,7 @@ const PRODUTOS = [
     versao: "Switch 1",
     promocao: true,
     destaque: false,
-    descricao: "Versão com tela OLED de 7 polegadas, ótima para jogar no modo portátil.",
-    trailer: "",
-    capa: "",
-    links: {
-      amazon: "https://www.amazon.com.br/",
-      kabum: "https://www.kabum.com.br/",
-      mercadolivre: "https://www.mercadolivre.com.br/",
-      shopee: "https://shopee.com.br/",
-      aliexpress: ""
-    }
+    descricao: "Versão com tela OLED de 7 polegadas, ótima para jogar no modo portátil."
   },
   {
     id: "mario-kart-world",
@@ -189,16 +118,7 @@ const PRODUTOS = [
     versao: "Switch 2",
     promocao: false,
     destaque: true,
-    descricao: "Corridas com mundo aberto conectado e muito caos com os amigos.",
-    trailer: "",
-    capa: "",
-    links: {
-      amazon: "https://www.amazon.com.br/",
-      kabum: "https://www.kabum.com.br/",
-      mercadolivre: "https://www.mercadolivre.com.br/",
-      shopee: "",
-      aliexpress: ""
-    }
+    descricao: "Corridas com mundo aberto conectado e muito caos com os amigos."
   },
   {
     id: "zelda-totk",
@@ -208,16 +128,7 @@ const PRODUTOS = [
     versao: "Switch 1 e 2",
     promocao: true,
     destaque: false,
-    descricao: "Explore Hyrule, os céus e as profundezas nesta aventura épica.",
-    trailer: "",
-    capa: "",
-    links: {
-      amazon: "https://www.amazon.com.br/",
-      kabum: "https://www.kabum.com.br/",
-      mercadolivre: "https://www.mercadolivre.com.br/",
-      shopee: "",
-      aliexpress: ""
-    }
+    descricao: "Explore Hyrule, os céus e as profundezas nesta aventura épica."
   },
   {
     id: "pro-controller",
@@ -227,16 +138,7 @@ const PRODUTOS = [
     versao: "Switch 1 e 2",
     promocao: false,
     destaque: false,
-    descricao: "Controle oficial, confortável para sessões longas.",
-    trailer: "",
-    capa: "",
-    links: {
-      amazon: "https://www.amazon.com.br/",
-      kabum: "https://www.kabum.com.br/",
-      mercadolivre: "https://www.mercadolivre.com.br/",
-      shopee: "https://shopee.com.br/",
-      aliexpress: "https://pt.aliexpress.com/"
-    }
+    descricao: "Controle oficial, confortável para sessões longas."
   }
 
 ];

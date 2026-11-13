@@ -175,22 +175,30 @@ main { flex: 1; width: 100%; max-width: 1120px; margin: 0 auto; padding: 24px 16
 .produto-info h2 { font-size: 1rem; text-transform: uppercase; letter-spacing: .12em; color: var(--neon); margin-bottom: 10px; }
 .lojas { display: flex; flex-direction: column; gap: 10px; }
 .loja {
-  --lc: #888;
-  display: flex; align-items: center; justify-content: space-between; gap: 10px;
-  padding: 13px 16px; border-radius: 12px; background: var(--bg2);
-  border: 1px solid var(--bg3); border-left: 5px solid var(--lc);
+  --lc: #888; --ib: #333; --if: #fff;
+  display: flex; align-items: center; gap: 14px;
+  padding: 11px 16px 11px 11px; border-radius: 14px;
+  background: linear-gradient(90deg, color-mix(in srgb, var(--lc) 16%, var(--bg2)), var(--bg2) 75%);
+  border: 1px solid color-mix(in srgb, var(--lc) 45%, transparent);
   transition: transform .15s, box-shadow .15s, border-color .15s;
 }
-.loja span { display: flex; flex-direction: column; }
+.loja-ico {
+  flex: none; width: 46px; height: 46px; border-radius: 12px;
+  display: grid; place-items: center;
+  font-family: "Orbitron", sans-serif; font-weight: 800; font-size: 1.1rem; letter-spacing: -.02em;
+  background: var(--ib); color: var(--if); box-shadow: 0 0 16px -4px var(--lc);
+}
+.loja-txt { display: flex; flex-direction: column; flex: 1; min-width: 0; }
 .loja strong { font-size: 1.1rem; }
 .loja small { color: var(--mut); }
 .loja em { font-style: normal; font-size: 1.3rem; color: var(--lc); }
-.loja:hover { transform: translateX(4px); border-color: var(--lc); box-shadow: 0 0 22px -6px var(--lc); }
-.loja-amazon { --lc: #ff9900; }
-.loja-kabum { --lc: #ff6500; }
-.loja-mercadolivre { --lc: #ffe600; }
-.loja-shopee { --lc: #ee4d2d; }
-.loja-aliexpress { --lc: #ff3b1d; }
+a.loja:hover { transform: translateX(4px); border-color: var(--lc); box-shadow: 0 0 24px -6px var(--lc); }
+.loja.off { opacity: .45; filter: grayscale(.8); cursor: default; }
+.loja-amazon { --lc: #ff9900; --ib: #232f3e; --if: #ff9900; }
+.loja-kabum { --lc: #ff6500; --ib: #ff6500; --if: #fff; }
+.loja-mercadolivre { --lc: #ffe600; --ib: #ffe600; --if: #2d3277; }
+.loja-shopee { --lc: #ee4d2d; --ib: #ee4d2d; --if: #fff; }
+.loja-aliexpress { --lc: #ff4747; --ib: #e62e04; --if: #fff; }
 .nota { margin-top: 14px; color: var(--mut); font-size: .9rem; }
 
 /* ---------- rodapé ---------- */
