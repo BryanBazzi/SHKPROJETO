@@ -26,19 +26,20 @@ ps5-slim_shopee =
 ps5-slim_aliexpress =
 
 # ===== Grand Theft Auto VI =====
-gta-6_trailer = https://www.youtube.com/watch?v=3JUboYgqIxc
-gta-6_amazon = https://link.amazon/B0fVSo1vK
-gta-6_kabum = https://tidd.ly/4C14zjJ
-gta-6_mercadolivre = https://meli.la/2HckGp4
-gta-6_shopee = https://s.shopee.com.br/8VAT0owzlY
+gta-6_trailer =
+gta-6_amazon =
+gta-6_kabum =
+gta-6_mercadolivre =
+gta-6_shopee =
 gta-6_aliexpress =
 
 # ===== Astro Bot =====
 astro-bot_trailer = https://www.youtube.com/watch?v=wHMNQzLG_Jg
-astro-bot_amazon = https://link.amazon/B0fPEUjma
-astro-bot_kabum = https://tidd.ly/4sWME9G
-astro-bot_mercadolivre = https://meli.la/12FKGVd
-astro-bot_shopee = https://s.shopee.com.br/ql1uJHOPl
+astro-bot_amazon =
+astro-bot_kabum =
+astro-bot_mercadolivre =
+astro-bot_shopee =
+astro-bot_aliexpress =
 
 # ===== Marvel's Spider-Man 2 =====
 spider-man-2_trailer =
