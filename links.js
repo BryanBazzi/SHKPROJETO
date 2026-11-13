@@ -31,7 +31,7 @@ gta-6_amazon = https://link.amazon/B0eoBgMej
 gta-6_kabum = https://tidd.ly/4C1FWn1
 gta-6_mercadolivre = https://meli.la/2HckGp4
 gta-6_shopee = https://s.shopee.com.br/7fbMYhQHUa
-gta-6_aliexpress =
+gta-6_aliexpress = -
 
 # ===== Astro Bot =====
 astro-bot_trailer = https://www.youtube.com/watch?v=wHMNQzLG_Jg
