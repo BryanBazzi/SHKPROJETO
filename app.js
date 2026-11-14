@@ -96,11 +96,12 @@
   });
   function linkDe(id, tipo) {
     var base = limpaChave(id);
-    return MAPA_LINKS[base + "_" + tipo] || MAPA_LINKS[tipo + "_" + base] || "";
+    var t = limpaChave(tipo);
+    return MAPA_LINKS[base + "_" + t] || MAPA_LINKS[t + "_" + base] || "";
   }
 
-  /* ---------- imagens automáticas pelo nome do arquivo (do jeito original) ---------- */
-  var EXTENSOES = ["jpg", "png", "webp", "jpeg"];
+  /* ---------- imagens automáticas pelo nome do arquivo ---------- */
+  var EXTENSOES = ["png", "webp", "jpg", "jpeg"];
   var cacheImg = {};
 
   function testar(src) {
@@ -128,17 +129,15 @@
 
   function acharPrints(id) {
     var achadas = [];
-    function lote(inicio) {
-      var nums = [inicio, inicio + 1, inicio + 2, inicio + 3];
-      return Promise.all(nums.map(function (n) { return acharImagem(id + "_print" + n); })).then(function (srcs) {
-        for (var i = 0; i < srcs.length; i++) {
-          if (!srcs[i]) return achadas;
-          achadas.push({ tipo: "imagem", src: srcs[i] });
-        }
-        return inicio + 4 > 60 ? achadas : lote(inicio + 4);
+    function proximo(n) {
+      if (n > 20) return Promise.resolve(achadas);
+      return acharImagem(id + "_print" + n).then(function (src) {
+        if (!src) return achadas;
+        achadas.push({ tipo: "imagem", src: src });
+        return proximo(n + 1);
       });
     }
-    return lote(1);
+    return proximo(1);
   }
 
   function resolverMidia(p) {
@@ -151,7 +150,11 @@
     });
   }
 
-  /* ---------- peças de interface ---------- */
+  /* ---------- INTERFACE E LIGHTBOX (ZOOM) ---------- */
+  var itensGaleria = [];
+  var indiceGaleria = 0;
+  var produtoAtual = null;
+
   function palcoHTML(m, p) {
     if (m.tipo === "video") {
       return '<div class="video"><iframe src="https://www.youtube-nocookie.com/embed/' + m.id + '" title="Trailer de ' + esc(p.nome) +
@@ -171,6 +174,25 @@
       (m.tipo === "video" ? '<span class="mini-play">▶</span>' : "") + "</button>";
   }
 
+  function abrirLightbox(i) {
+    if (!itensGaleria || !itensGaleria.length) return;
+    indiceGaleria = i;
+    var lb = document.getElementById("lightbox");
+    if (lb) {
+      lb.classList.remove("escondido");
+      document.getElementById("lb-conteudo").innerHTML = palcoHTML(itensGaleria[indiceGaleria], produtoAtual);
+    }
+  }
+
+  function mudarLightbox(direcao) {
+    if (direcao === 'ant') {
+      indiceGaleria = indiceGaleria > 0 ? indiceGaleria - 1 : itensGaleria.length - 1;
+    } else {
+      indiceGaleria = indiceGaleria < itensGaleria.length - 1 ? indiceGaleria + 1 : 0;
+    }
+    document.getElementById("lb-conteudo").innerHTML = palcoHTML(itensGaleria[indiceGaleria], produtoAtual);
+  }
+
   function montarMidia(itens, p, meu) {
     var box = document.getElementById("midiaBox");
     if (!box || meu !== tokenRota) return;
@@ -178,13 +200,24 @@
       box.innerHTML = '<div class="video video-vazio"><span>🎬</span><p>Imagens e trailer em breve</p></div>';
       return;
     }
-    box.innerHTML = '<div id="palco" class="palco">' + palcoHTML(itens[0], p) + "</div>" +
+
+    itensGaleria = itens;
+    produtoAtual = p;
+
+    // Adicionado cursor de lupa e evento de clique na imagem em destaque
+    box.innerHTML = '<div id="palco" class="palco" style="cursor: zoom-in;" title="Clique para expandir a imagem ou vídeo">' + palcoHTML(itens[0], p) + "</div>" +
       (itens.length > 1 ? '<div class="minis">' + itens.map(function (m, i) { return miniHTML(m, i, p); }).join("") + "</div>" : "");
+    
     var palco = document.getElementById("palco");
+    if (palco) {
+      palco.addEventListener("click", function() { abrirLightbox(indiceGaleria); });
+    }
+
     var minis = box.querySelectorAll ? box.querySelectorAll(".mini") : [];
     Array.prototype.forEach.call(minis, function (btn) {
       btn.addEventListener("click", function () {
         var i = parseInt(btn.getAttribute("data-i"), 10);
+        indiceGaleria = i;
         palco.innerHTML = palcoHTML(itens[i], p);
         Array.prototype.forEach.call(minis, function (b) { b.classList.remove("ativa"); });
         btn.classList.add("ativa");
@@ -337,10 +370,10 @@
     var url = urlSegura(v);
     if (url) {
       return '<a class="loja loja-' + k + '" href="' + esc(url) + '" target="_blank" rel="sponsored noopener noreferrer">' + ico +
-        '<span class="loja-txt"><strong>' + nome + "</strong><small>Ver preço atualizado</small></span><em>→</em></a>";
+        '<span class="loja-txt"><strong>' + nome + "</strong><small>Ver preço atualizado</small></span><em>→</em></a>';
     }
     return '<div class="loja loja-' + k + ' off">' + ico +
-      '<span class="loja-txt"><strong>' + nome + "</strong><small>Link em breve</small></span></div>";
+      '<span class="loja-txt"><strong>' + nome + "</strong><small>Link em breve</small></span></div>';
   }
 
   function produto(id) {
@@ -391,7 +424,21 @@
   }
   btnMenu.addEventListener("click", function () { abrirMenu(!menu.classList.contains("aberto")); });
   fundo.addEventListener("click", function () { abrirMenu(false); });
-  document.addEventListener("keydown", function (e) { if (e.key === "Escape") abrirMenu(false); });
+
+  // Evento atualizado para suportar Esc e setas para o Lightbox
+  document.addEventListener("keydown", function (e) {
+    var lb = document.getElementById("lightbox");
+    if (lb && !lb.classList.contains("escondido")) {
+      if (e.key === "Escape") {
+        lb.classList.add("escondido");
+        document.getElementById("lb-conteudo").innerHTML = "";
+      }
+      if (e.key === "ArrowLeft") mudarLightbox('ant');
+      if (e.key === "ArrowRight") mudarLightbox('prox');
+    } else {
+      if (e.key === "Escape") abrirMenu(false);
+    }
+  });
 
   /* ---------- busca em tempo real ---------- */
   var timerBusca = null;
@@ -419,7 +466,15 @@
     var h = location.hash.replace(/^#\/?/, "");
     var partes;
     try { partes = h.split("/").map(decodeURIComponent); } catch (e) { partes = [""]; }
+    
     abrirMenu(false);
+
+    // Fecha a galeria caso o usuário volte ou troque de página
+    var lb = document.getElementById("lightbox");
+    if (lb) {
+      lb.classList.add("escondido");
+      document.getElementById("lb-conteudo").innerHTML = "";
+    }
 
     var a = partes[0], b = partes[1];
     if (a !== "busca" || document.activeElement !== campoBusca) {
@@ -444,6 +499,19 @@
     }
     preencherCapas();
   }
+
+  /* ---------- Eventos do Lightbox (Zoom) ---------- */
+  var lbFechar = document.querySelector(".lb-fechar");
+  if (lbFechar) lbFechar.addEventListener("click", function() { document.getElementById("lightbox").classList.add("escondido"); document.getElementById("lb-conteudo").innerHTML = ""; });
+  
+  var lbAnt = document.querySelector(".lb-ant");
+  if (lbAnt) lbAnt.addEventListener("click", function() { mudarLightbox('ant'); });
+  
+  var lbProx = document.querySelector(".lb-prox");
+  if (lbProx) lbProx.addEventListener("click", function() { mudarLightbox('prox'); });
+  
+  var lbBox = document.getElementById("lightbox");
+  if (lbBox) lbBox.addEventListener("click", function(e) { if (e.target === this) { this.classList.add("escondido"); document.getElementById("lb-conteudo").innerHTML = ""; }});
 
   /* ---------- início ---------- */
   document.getElementById("marcaNome").textContent = SITE.nome;
