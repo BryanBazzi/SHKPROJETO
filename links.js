@@ -58,7 +58,7 @@ death-stranding-2_shopee =
 death-stranding-2_aliexpress =
 
 # ===== Zelda: Ocarina of Time Remake =====
-zelda-ocarina-remake_trailer =
+zelda-ocarina-remake_trailer = https://www.youtube.com/watch?v=g0ipZ6UoLac
 zelda-ocarina-remake_amazon =
 zelda-ocarina-remake_kabum =
 zelda-ocarina-remake_mercadolivre =

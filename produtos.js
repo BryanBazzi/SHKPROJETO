@@ -29,9 +29,9 @@ const LOJAS = {
    Basta colocar os IDs dos produtos na ordem exata em que você quer que apareçam! */
 const HOME_DESTAQUES = [
   "gta-6",
-  "astro-bot",
   "zelda-ocarina-remake",
-  "phantom-blade-zero"
+  "phantom-blade-zero",
+  "astro-bot"
 ];
 
 const HOME_LANCAMENTOS = [
