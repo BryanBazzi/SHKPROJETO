@@ -96,12 +96,11 @@
   });
   function linkDe(id, tipo) {
     var base = limpaChave(id);
-    var t = limpaChave(tipo);
-    return MAPA_LINKS[base + "_" + t] || MAPA_LINKS[t + "_" + base] || "";
+    return MAPA_LINKS[base + "_" + tipo] || MAPA_LINKS[tipo + "_" + base] || "";
   }
 
-  /* ---------- SISTEMA DE PASTAS (imagens/gta-6/capa.png) ---------- */
-  var EXTENSOES = ["png", "webp", "jpg", "jpeg"];
+  /* ---------- imagens automáticas pelo nome do arquivo (do jeito original) ---------- */
+  var EXTENSOES = ["jpg", "png", "webp", "jpeg"];
   var cacheImg = {};
 
   function testar(src) {
@@ -113,39 +112,37 @@
     });
   }
 
-  function acharMidiaProduto(idProduto, nomeArquivo) {
-    var chaveCache = idProduto + "/" + nomeArquivo;
-    if (cacheImg[chaveCache] !== undefined) return Promise.resolve(cacheImg[chaveCache]);
-    
+  function acharImagem(base) {
+    if (cacheImg[base] !== undefined) return Promise.resolve(cacheImg[base]);
     return EXTENSOES.reduce(function (cadeia, ext) {
       return cadeia.then(function (achada) {
         if (achada) return achada;
-        // Monta o link: imagens/gta-6/capa.png
-        var pasta = SITE.pastaImagens ? SITE.pastaImagens + "/" : "";
-        var src = pasta + idProduto + "/" + nomeArquivo + "." + ext;
+        var src = (SITE.pastaImagens ? SITE.pastaImagens + "/" : "") + base + "." + ext;
         return testar(src).then(function (ok) { return ok ? src : ""; });
       });
     }, Promise.resolve("")).then(function (r) {
-      cacheImg[chaveCache] = r;
+      cacheImg[base] = r;
       return r;
     });
   }
 
-  function acharPrints(idProduto) {
+  function acharPrints(id) {
     var achadas = [];
-    function proximo(n) {
-      if (n > 20) return Promise.resolve(achadas);
-      return acharMidiaProduto(idProduto, "print" + n).then(function (src) {
-        if (!src) return achadas;
-        achadas.push({ tipo: "imagem", src: src });
-        return proximo(n + 1);
+    function lote(inicio) {
+      var nums = [inicio, inicio + 1, inicio + 2, inicio + 3];
+      return Promise.all(nums.map(function (n) { return acharImagem(id + "_print" + n); })).then(function (srcs) {
+        for (var i = 0; i < srcs.length; i++) {
+          if (!srcs[i]) return achadas;
+          achadas.push({ tipo: "imagem", src: srcs[i] });
+        }
+        return inicio + 4 > 60 ? achadas : lote(inicio + 4);
       });
     }
-    return proximo(1);
+    return lote(1);
   }
 
   function resolverMidia(p) {
-    return Promise.all([acharMidiaProduto(p.id, "capa"), acharPrints(p.id)]).then(function (r) {
+    return Promise.all([acharImagem(p.id + "_capa"), acharPrints(p.id)]).then(function (r) {
       var itens = [];
       if (r[0]) itens.push({ tipo: "imagem", src: r[0] });
       var yt = ytId(linkDe(p.id, "trailer"));
@@ -154,17 +151,14 @@
     });
   }
 
-  /* ---------- INTERFACE E LIGHTBOX (ZOOM) ---------- */
-  var itensGaleria = [];
-  var indiceGaleria = 0;
-  var produtoAtual = null;
-
+  /* ---------- peças de interface ---------- */
   function palcoHTML(m, p) {
     if (m.tipo === "video") {
       return '<div class="video"><iframe src="https://www.youtube-nocookie.com/embed/' + m.id + '" title="Trailer de ' + esc(p.nome) +
         '" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture; fullscreen" allowfullscreen></iframe></div>';
     }
     return '<div class="video palco-img">' +
+      '<img class="palco-fundo" src="' + esc(m.src) + '" alt="" aria-hidden="true">' +
       '<img class="palco-foto" src="' + esc(m.src) + '" alt="' + esc(p.nome) + '">' +
       "</div>";
   }
@@ -177,39 +171,6 @@
       (m.tipo === "video" ? '<span class="mini-play">▶</span>' : "") + "</button>";
   }
 
-  function abrirLightbox(i) {
-    if (!itensGaleria.length) return;
-    indiceGaleria = i;
-    var lb = document.getElementById("lightbox");
-    if(lb) {
-      lb.classList.remove("escondido");
-      document.getElementById("lb-conteudo").innerHTML = palcoHTML(itensGaleria[indiceGaleria], produtoAtual);
-    }
-  }
-
-  function mudarLightbox(direcao) {
-    if (direcao === 'ant') {
-      indiceGaleria = indiceGaleria > 0 ? indiceGaleria - 1 : itensGaleria.length - 1;
-    } else {
-      indiceGaleria = indiceGaleria < itensGaleria.length - 1 ? indiceGaleria + 1 : 0;
-    }
-    document.getElementById("lb-conteudo").innerHTML = palcoHTML(itensGaleria[indiceGaleria], produtoAtual);
-  }
-
-  // Controles do Lightbox
-  var btnFechar = document.querySelector(".lb-fechar");
-  if(btnFechar) btnFechar.addEventListener("click", function() { document.getElementById("lightbox").classList.add("escondido"); document.getElementById("lb-conteudo").innerHTML = ""; });
-  
-  var btnAnt = document.querySelector(".lb-ant");
-  if(btnAnt) btnAnt.addEventListener("click", function() { mudarLightbox('ant'); });
-  
-  var btnProx = document.querySelector(".lb-prox");
-  if(btnProx) btnProx.addEventListener("click", function() { mudarLightbox('prox'); });
-  
-  var lbBox = document.getElementById("lightbox");
-  if(lbBox) lbBox.addEventListener("click", function(e) { if(e.target === this) { this.classList.add("escondido"); document.getElementById("lb-conteudo").innerHTML = ""; }});
-
-
   function montarMidia(itens, p, meu) {
     var box = document.getElementById("midiaBox");
     if (!box || meu !== tokenRota) return;
@@ -217,22 +178,13 @@
       box.innerHTML = '<div class="video video-vazio"><span>🎬</span><p>Imagens e trailer em breve</p></div>';
       return;
     }
-
-    itensGaleria = itens;
-    produtoAtual = p;
-
-    // Coloca cursor de lupa
-    box.innerHTML = '<div id="palco" class="palco" style="cursor: zoom-in;" title="Clique para expandir">' + palcoHTML(itens[0], p) + "</div>" +
+    box.innerHTML = '<div id="palco" class="palco">' + palcoHTML(itens[0], p) + "</div>" +
       (itens.length > 1 ? '<div class="minis">' + itens.map(function (m, i) { return miniHTML(m, i, p); }).join("") + "</div>" : "");
-    
     var palco = document.getElementById("palco");
-    palco.addEventListener("click", function() { abrirLightbox(indiceGaleria); });
-
     var minis = box.querySelectorAll ? box.querySelectorAll(".mini") : [];
     Array.prototype.forEach.call(minis, function (btn) {
       btn.addEventListener("click", function () {
         var i = parseInt(btn.getAttribute("data-i"), 10);
-        indiceGaleria = i;
         palco.innerHTML = palcoHTML(itens[i], p);
         Array.prototype.forEach.call(minis, function (b) { b.classList.remove("ativa"); });
         btn.classList.add("ativa");
@@ -264,10 +216,11 @@
     var meu = tokenRota;
     var lista = app.querySelectorAll ? app.querySelectorAll(".capa[data-id]") : [];
     Array.prototype.forEach.call(lista, function (c) {
-      acharMidiaProduto(c.getAttribute("data-id"), "capa").then(function (src) {
+      acharImagem(c.getAttribute("data-id") + "_capa").then(function (src) {
         if (!src || meu !== tokenRota) return;
         c.classList.remove("capa-ps5", "capa-switch", "capa-pc");
-        c.innerHTML = '<img class="capa-foto" src="' + esc(src) + '" alt="' + esc(c.getAttribute("data-nome")) + '">';
+        c.innerHTML = '<img class="capa-fundo" src="' + esc(src) + '" alt="" aria-hidden="true">' +
+          '<img class="capa-foto" src="' + esc(src) + '" alt="' + esc(c.getAttribute("data-nome")) + '">';
       });
     });
   }
@@ -295,7 +248,7 @@
     return '<section class="secao"><div class="secao-topo"><h2>' + esc(titulo) + "</h2>" + (extra || "") + "</div>" + html + "</section>";
   }
 
-  /* ---------- PÁGINAS ---------- */
+  /* ---------- páginas ---------- */
   function home() {
     setTema("neutro");
     var promos = PRODUTOS.filter(function (p) { return p.promocao; }).slice(0, 6);
@@ -370,26 +323,24 @@
       secao(achados.length + (achados.length === 1 ? " resultado" : " resultados"), grade(achados, "Não achei nada com esse nome. Tente outra palavra."));
   }
 
-  function iconeLojaHTML(k) {
-    // As logos das lojas continuam soltas na raiz da pasta imagens/
-    var pasta = SITE.pastaImagens ? SITE.pastaImagens + "/" : "";
-    return '<span class="loja-ico" aria-hidden="true" data-sigla="' + esc(LOJAS[k].sigla) + '">' +
-      '<img src="' + pasta + "loja-" + k + '.png" alt="" onerror="this.parentNode.classList.add(\'sem-logo\');this.remove()"></span>';
-  }
-
+  /* botão de uma loja (do jeito original):
+     - com link = clicável com efeito neon
+     - sem link = aparece o card da loja com a imagem e "Link em breve"
+     - link "-" = escondido */
   function botaoLoja(p, k) {
     var v = linkDe(p.id, k);
     if (v === "-") return "";
     var nome = esc(LOJAS[k].nome);
+    var pasta = SITE.pastaImagens ? SITE.pastaImagens + "/" : "";
+    var ico = '<span class="loja-ico" aria-hidden="true" data-sigla="' + esc(LOJAS[k].sigla) + '">' +
+      '<img src="' + pasta + "loja-" + k + '.png" alt="" onerror="this.parentNode.classList.add(\'sem-logo\');this.remove()"></span>';
     var url = urlSegura(v);
     if (url) {
-      return '<a class="loja loja-' + k + '" href="' + esc(url) + '" target="_blank" rel="sponsored noopener noreferrer">' +
-        iconeLojaHTML(k) +
-        '<span class="loja-txt"><strong>' + nome + "</strong><small>Ver preço atualizado</small></span><em>→</em></a>';
+      return '<a class="loja loja-' + k + '" href="' + esc(url) + '" target="_blank" rel="sponsored noopener noreferrer">' + ico +
+        '<span class="loja-txt"><strong>' + nome + "</strong><small>Ver preço atualizado</small></span><em>→</em></a>";
     }
-    return '<div class="loja loja-' + k + ' off">' +
-      iconeLojaHTML(k) +
-      '<span class="loja-txt"><strong>' + nome + "</strong><small>Link em breve</small></span></div>';
+    return '<div class="loja loja-' + k + ' off">' + ico +
+      '<span class="loja-txt"><strong>' + nome + "</strong><small>Link em breve</small></span></div>";
   }
 
   function produto(id) {
@@ -418,7 +369,7 @@
       "<h1>" + esc(p.nome) + "</h1>" +
       "<p class=\"desc\">" + esc(p.descricao) + "</p>" +
       "<h2>Onde comprar</h2>" +
-      '<div class="lojas">' + (botoes || '<p class="vazio">Link em breve.</p>') + "</div>" +
+      '<div class="lojas">' + (botoes || '<p class="vazio">Links de compra em breve.</p>') + "</div>" +
       '<p class="nota">Os links abrem na loja com o preço do dia. Posso receber comissão pela compra, sem custo extra pra você.</p>' +
       "</div></article>" +
       (rel.length ? secao("Veja também", grade(rel)) : "");
@@ -468,11 +419,7 @@
     var h = location.hash.replace(/^#\/?/, "");
     var partes;
     try { partes = h.split("/").map(decodeURIComponent); } catch (e) { partes = [""]; }
-    
     abrirMenu(false);
-    // Fecha o zoom ao mudar de página
-    var lb = document.getElementById("lightbox");
-    if(lb) lb.classList.add("escondido");
 
     var a = partes[0], b = partes[1];
     if (a !== "busca" || document.activeElement !== campoBusca) {
