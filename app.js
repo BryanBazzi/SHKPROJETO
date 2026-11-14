@@ -5,41 +5,18 @@
   var menu = document.getElementById("menu");
   var fundo = document.getElementById("fundo");
   var btnMenu = document.getElementById("btnMenu");
-  var campoBusca = document.getElementById("campoBusca");
-  var tokenRota = 0;
+  var tokenRota = 0; // muda a cada troca de página (evita atualizar a página errada)
 
   var PLAT = {
-    ps5: {
-      nome: "PlayStation 5",
-      curto: "PS5",
-      abas: [
-        { chave: "", rotulo: "Tudo" },
-        { chave: "consoles", rotulo: "Consoles" },
-        { chave: "jogos", rotulo: "Jogos" },
-        { chave: "promocoes", rotulo: "Promoções" }
-      ]
-    },
-    "switch": {
-      nome: "Nintendo Switch",
-      curto: "Switch",
-      abas: [
-        { chave: "", rotulo: "Tudo" },
-        { chave: "consoles", rotulo: "Consoles" },
-        { chave: "jogos", rotulo: "Jogos" },
-        { chave: "promocoes", rotulo: "Promoções" }
-      ]
-    },
-    pc: {
-      nome: "PC & Setup",
-      curto: "PC & Setup",
-      abas: [
-        { chave: "", rotulo: "Tudo" },
-        { chave: "hardware", rotulo: "Hardware" },
-        { chave: "perifericos", rotulo: "Periféricos" },
-        { chave: "promocoes", rotulo: "Promoções" }
-      ]
-    }
+    ps5: { nome: "PlayStation 5", curto: "PS5" },
+    "switch": { nome: "Nintendo Switch", curto: "Switch" }
   };
+  var ABAS = [
+    { chave: "", rotulo: "Tudo" },
+    { chave: "consoles", rotulo: "Consoles" },
+    { chave: "jogos", rotulo: "Jogos" },
+    { chave: "promocoes", rotulo: "Promoções" }
+  ];
 
   /* ---------- utilidades ---------- */
   function esc(s) {
@@ -48,8 +25,9 @@
     });
   }
   function norm(s) {
-    return String(s || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+    return String(s || "").normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
   }
+  /* busca: ignora acento, maiúscula, espaço e pontuação ("astrobot" acha "Astro Bot") */
   function chave(s) { return norm(s).replace(/[^a-z0-9]/g, ""); }
   function acha(p, q) {
     var junto = chave(q);
@@ -60,15 +38,11 @@
     return palavras.length > 1 && palavras.every(function (w) { return feno.indexOf(w) !== -1; });
   }
   function urlSegura(u) {
-    u = String(u || "").trim();
-    if (!u || u === "-") return "";
-    if (/^https?:\/\//i.test(u)) return u;
-    if (u.indexOf(".") !== -1) return "https://" + u;
-    return "";
+    return /^https?:\/\//i.test(u || "") ? u : "";
   }
   function ytId(v) {
     if (!v) return "";
-    v = String(v).trim();
+    v = String(v);
     var m = v.match(/(?:v=|youtu\.be\/|embed\/|shorts\/)([\w-]{11})/);
     if (m) return m[1];
     return /^[\w-]{11}$/.test(v) ? v : "";
@@ -82,7 +56,10 @@
     return null;
   }
 
-  /* ---------- links.js: trailers e links de afiliado ---------- */
+  /* ---------- links.js: trailers e links de afiliado ----------
+     Cada linha do arquivo é:  produto_loja = link   (ou  produto_trailer = link).
+     Maiúsculas, hífens e espaços não importam, e a ordem também não
+     (amazon_astro-bot é igual a Astro-Bot_Amazon). */
   function limpaChave(s) {
     return String(s || "").toLowerCase().replace(/[^a-z0-9_]/g, "");
   }
@@ -96,12 +73,13 @@
   });
   function linkDe(id, tipo) {
     var base = limpaChave(id);
-    var t = limpaChave(tipo);
-    return MAPA_LINKS[base + "_" + t] || MAPA_LINKS[t + "_" + base] || "";
+    return MAPA_LINKS[base + "_" + tipo] || MAPA_LINKS[tipo + "_" + base] || "";
   }
 
-  /* ---------- imagens automáticas pelo nome do arquivo ---------- */
-  var EXTENSOES = ["png", "webp", "jpg", "jpeg"];
+  /* ---------- imagens automáticas pelo nome do arquivo ----------
+     {id}_capa.jpg, {id}_print1.jpg, {id}_print2.jpg ...
+     O site tenta abrir esses nomes e usa os que existirem. */
+  var EXTENSOES = ["jpg", "png", "webp", "jpeg"];
   var cacheImg = {};
 
   function testar(src) {
@@ -127,19 +105,23 @@
     });
   }
 
+  /* procura print1, print2, print3... de 4 em 4 e para na primeira que faltar */
   function acharPrints(id) {
     var achadas = [];
-    function proximo(n) {
-      if (n > 20) return Promise.resolve(achadas);
-      return acharImagem(id + "_print" + n).then(function (src) {
-        if (!src) return achadas;
-        achadas.push({ tipo: "imagem", src: src });
-        return proximo(n + 1);
+    function lote(inicio) {
+      var nums = [inicio, inicio + 1, inicio + 2, inicio + 3];
+      return Promise.all(nums.map(function (n) { return acharImagem(id + "_print" + n); })).then(function (srcs) {
+        for (var i = 0; i < srcs.length; i++) {
+          if (!srcs[i]) return achadas;
+          achadas.push({ tipo: "imagem", src: srcs[i] });
+        }
+        return inicio + 4 > 60 ? achadas : lote(inicio + 4);
       });
     }
-    return proximo(1);
+    return lote(1);
   }
 
+  /* ordem da galeria: capa, trailer, prints */
   function resolverMidia(p) {
     return Promise.all([acharImagem(p.id + "_capa"), acharPrints(p.id)]).then(function (r) {
       var itens = [];
@@ -150,30 +132,7 @@
     });
   }
 
-  /* ---------- INTERFACE E LIGHTBOX (ZOOM) ---------- */
-  var itensGaleria = [];
-  var indiceGaleria = 0;
-  var produtoAtual = null;
-
-  function abrirLightbox(i) {
-    if (!itensGaleria || !itensGaleria.length) return;
-    indiceGaleria = i;
-    var lb = document.getElementById("lightbox");
-    if (lb) {
-      lb.classList.remove("escondido");
-      document.getElementById("lb-conteudo").innerHTML = palcoHTML(itensGaleria[indiceGaleria], produtoAtual);
-    }
-  }
-
-  function mudarLightbox(direcao) {
-    if (direcao === 'ant') {
-      indiceGaleria = indiceGaleria > 0 ? indiceGaleria - 1 : itensGaleria.length - 1;
-    } else {
-      indiceGaleria = indiceGaleria < itensGaleria.length - 1 ? indiceGaleria + 1 : 0;
-    }
-    document.getElementById("lb-conteudo").innerHTML = palcoHTML(itensGaleria[indiceGaleria], produtoAtual);
-  }
-
+  /* ---------- peças de interface ---------- */
   function palcoHTML(m, p) {
     if (m.tipo === "video") {
       return '<div class="video"><iframe src="https://www.youtube-nocookie.com/embed/' + m.id + '" title="Trailer de ' + esc(p.nome) +
@@ -200,23 +159,13 @@
       box.innerHTML = '<div class="video video-vazio"><span>🎬</span><p>Imagens e trailer em breve</p></div>';
       return;
     }
-
-    itensGaleria = itens;
-    produtoAtual = p;
-
-    box.innerHTML = '<div id="palco" class="palco" style="cursor: zoom-in;" title="Clique para expandir">' + palcoHTML(itens[0], p) + "</div>" +
+    box.innerHTML = '<div id="palco" class="palco">' + palcoHTML(itens[0], p) + "</div>" +
       (itens.length > 1 ? '<div class="minis">' + itens.map(function (m, i) { return miniHTML(m, i, p); }).join("") + "</div>" : "");
-    
     var palco = document.getElementById("palco");
-    if (palco) {
-      palco.addEventListener("click", function() { abrirLightbox(indiceGaleria); });
-    }
-
     var minis = box.querySelectorAll ? box.querySelectorAll(".mini") : [];
     Array.prototype.forEach.call(minis, function (btn) {
       btn.addEventListener("click", function () {
         var i = parseInt(btn.getAttribute("data-i"), 10);
-        indiceGaleria = i;
         palco.innerHTML = palcoHTML(itens[i], p);
         Array.prototype.forEach.call(minis, function (b) { b.classList.remove("ativa"); });
         btn.classList.add("ativa");
@@ -224,23 +173,10 @@
     });
   }
 
-  function iconeDeTipo(tipo) {
-    if (tipo === "console") return "🎮";
-    if (tipo === "hardware") return "🖥️";
-    if (tipo === "periferico") return "🎧";
-    return "💿";
-  }
-
-  function rotuloDeTipo(p) {
-    if (p.tipo === "console") return { chave: "consoles", nome: "Consoles" };
-    if (p.tipo === "hardware") return { chave: "hardware", nome: "Hardware" };
-    if (p.tipo === "periferico") return { chave: "perifericos", nome: "Periféricos" };
-    return { chave: "jogos", nome: "Jogos" };
-  }
-
+  /* capa dos cards: começa com a capa neon e troca pela imagem {id}_capa se ela existir */
   function capa(p) {
     return '<div class="capa capa-' + esc(p.plataforma) + '" data-id="' + esc(p.id) + '" data-nome="' + esc(p.nome) + '">' +
-      '<span class="capa-ico">' + iconeDeTipo(p.tipo) + "</span>" +
+      '<span class="capa-ico">' + (p.tipo === "console" ? "🎮" : "💿") + "</span>" +
       '<span class="capa-nome">' + esc(p.nome) + "</span></div>";
   }
 
@@ -250,7 +186,7 @@
     Array.prototype.forEach.call(lista, function (c) {
       acharImagem(c.getAttribute("data-id") + "_capa").then(function (src) {
         if (!src || meu !== tokenRota) return;
-        c.classList.remove("capa-ps5", "capa-switch", "capa-pc");
+        c.classList.remove("capa-ps5", "capa-switch");
         c.innerHTML = '<img class="capa-fundo" src="' + esc(src) + '" alt="" aria-hidden="true">' +
           '<img class="capa-foto" src="' + esc(src) + '" alt="' + esc(c.getAttribute("data-nome")) + '">';
       });
@@ -288,12 +224,11 @@
     app.innerHTML =
       '<section class="hero">' +
       '<p class="hero-kicker">Direto das minhas lives</p>' +
-      "<h1>Ache seu próximo game ou upgrade <span>com o melhor caminho de compra</span></h1>" +
-      "<p>Escolha a categoria, veja o trailer e vá direto pra loja: Amazon, KaBuM!, Mercado Livre, Shopee e AliExpress.</p>" +
+      "<h1>Ache seu próximo game <span>com o melhor caminho de compra</span></h1>" +
+      "<p>Escolha a plataforma, veja o trailer e vá direto pra loja: Amazon, KaBuM!, Mercado Livre, Shopee e AliExpress.</p>" +
       '<div class="hero-botoes">' +
       '<a class="plat-btn tema-ps5" href="#/ps5"><small>Plataforma</small><strong>PlayStation 5</strong></a>' +
       '<a class="plat-btn tema-switch" href="#/switch"><small>Plataforma</small><strong>Nintendo Switch</strong></a>' +
-      '<a class="plat-btn tema-pc" href="#/pc"><small>Categoria</small><strong>PC &amp; Setup</strong></a>' +
       "</div></section>" +
       secao("🔥 Promoções em destaque", grade(promos, "Sem promoções no momento."),
         '<a class="mais" href="#/promocoes">Ver todas →</a>') +
@@ -301,41 +236,29 @@
   }
 
   function plataforma(plat, aba) {
-    var infoPlat = PLAT[plat];
-    if (!infoPlat) return naoEncontrado();
-    setTema(plat, infoPlat.nome);
+    if (!PLAT[plat]) return naoEncontrado();
+    setTema(plat, PLAT[plat].nome);
     var lista = PRODUTOS.filter(function (p) { return p.plataforma === plat; });
 
-    var tabs = '<div class="abas">' + infoPlat.abas.map(function (a) {
+    var tabs = '<div class="abas">' + ABAS.map(function (a) {
       var href = "#/" + plat + (a.chave ? "/" + a.chave : "");
       return '<a class="aba' + (a.chave === aba ? " ativa" : "") + '" href="' + href + '">' + a.rotulo + "</a>";
     }).join("") + "</div>";
 
     var corpo = "";
+    var consoles = lista.filter(function (p) { return p.tipo === "console"; });
+    var jogos = lista.filter(function (p) { return p.tipo === "jogo"; });
     var promos = lista.filter(function (p) { return p.promocao; });
 
-    if (plat === "pc") {
-      var hardware = lista.filter(function (p) { return p.tipo === "hardware"; });
-      var perifericos = lista.filter(function (p) { return p.tipo === "periferico"; });
-      if (aba === "hardware") corpo = secao("Hardware e Componentes", grade(hardware, "Nenhum hardware cadastrado ainda."));
-      else if (aba === "perifericos") corpo = secao("Periféricos e Acessórios", grade(perifericos, "Nenhum periférico cadastrado ainda."));
-      else if (aba === "promocoes") corpo = secao("🔥 Promoções", grade(promos, "Sem promoções no momento."));
-      else corpo =
-        secao("Hardware e Componentes", grade(hardware, "Nenhum hardware cadastrado ainda.")) +
-        secao("Periféricos e Acessórios", grade(perifericos, "Nenhum periférico cadastrado ainda."));
-    } else {
-      var consoles = lista.filter(function (p) { return p.tipo === "console"; });
-      var jogos = lista.filter(function (p) { return p.tipo === "jogo"; });
-      if (aba === "consoles") corpo = secao("Consoles e acessórios", grade(consoles, "Nenhum console cadastrado ainda."));
-      else if (aba === "jogos") corpo = secao("Jogos", grade(jogos, "Nenhum jogo cadastrado ainda."));
-      else if (aba === "promocoes") corpo = secao("🔥 Promoções", grade(promos, "Sem promoções no momento."));
-      else corpo =
-        secao("Consoles e acessórios", grade(consoles, "Nenhum console cadastrado ainda.")) +
-        secao("Jogos", grade(jogos, "Nenhum jogo cadastrado ainda."));
-    }
+    if (aba === "consoles") corpo = secao("Consoles e acessórios", grade(consoles, "Nenhum console cadastrado ainda."));
+    else if (aba === "jogos") corpo = secao("Jogos", grade(jogos, "Nenhum jogo cadastrado ainda."));
+    else if (aba === "promocoes") corpo = secao("🔥 Promoções", grade(promos, "Sem promoções no momento."));
+    else corpo =
+      secao("Consoles e acessórios", grade(consoles, "Nenhum console cadastrado ainda.")) +
+      secao("Jogos", grade(jogos, "Nenhum jogo cadastrado ainda."));
 
     app.innerHTML =
-      '<section class="plat-topo"><p class="hero-kicker">Categoria</p><h1>' + esc(infoPlat.nome) + "</h1></section>" +
+      '<section class="plat-topo"><p class="hero-kicker">Plataforma</p><h1>' + esc(PLAT[plat].nome) + "</h1></section>" +
       tabs + corpo;
   }
 
@@ -351,36 +274,31 @@
     setTema("neutro", "Busca");
     var achados = PRODUTOS.filter(function (p) { return acha(p, q); });
     app.innerHTML =
-      '<section class="plat-topo"><p class="hero-kicker">Busca em tempo real</p><h1>Resultados para “' + esc(q) + "”</h1></section>" +
+      '<section class="plat-topo"><p class="hero-kicker">Busca</p><h1>Resultados para “' + esc(q) + "”</h1></section>" +
       secao(achados.length + (achados.length === 1 ? " resultado" : " resultados"), grade(achados, "Não achei nada com esse nome. Tente outra palavra."));
   }
 
-  /* botão de uma loja (do jeito original):
-     - com link = clicável com efeito neon
-     - sem link = aparece o card da loja com a imagem e "Link em breve"
-     - link "-" = escondido */
+  /* botão de uma loja: com link = clicável; sem link = "Link em breve"; link "-" = escondido */
   function botaoLoja(p, k) {
     var v = linkDe(p.id, k);
     if (v === "-") return "";
     var nome = esc(LOJAS[k].nome);
     var pasta = SITE.pastaImagens ? SITE.pastaImagens + "/" : "";
     var ico = '<span class="loja-ico" aria-hidden="true" data-sigla="' + esc(LOJAS[k].sigla) + '">' +
-      '<img src="' + pasta + "loja-" + k + '.png" alt="" onerror="this.parentNode.classList.add(\'sem-logo\');this.remove()"></span>';
-    var url = urlSegura(v);
-    if (url) {
-      return '<a class="loja loja-' + k + '" href="' + esc(url) + '" target="_blank" rel="sponsored noopener noreferrer">' + ico +
-        '<span class="loja-txt"><strong>' + nome + "</strong><small>Ver preço atualizado</small></span><em>→</em></a>';
+      '<img src="' + pasta + 'loja-' + k + '.png" alt="" onerror="this.parentNode.classList.add(\'sem-logo\');this.remove()"></span>';
+    if (urlSegura(v)) {
+      return '<a class="loja loja-' + k + '" href="' + esc(v) + '" target="_blank" rel="sponsored noopener noreferrer">' + ico +
+        '<span class="loja-txt"><strong>' + nome + "</strong><small>Ver preço atualizado</small></span><em>→</em></a>";
     }
     return '<div class="loja loja-' + k + ' off">' + ico +
-      '<span class="loja-txt"><strong>' + nome + "</strong><small>Link em breve</small></span></div>';
+      '<span class="loja-txt"><strong>' + nome + "</strong><small>Link em breve</small></span></div>";
   }
 
   function produto(id) {
     var p = achar(id);
     if (!p) return naoEncontrado();
     setTema(p.plataforma, p.nome);
-    var plat = PLAT[p.plataforma] || { nome: "Início", curto: "" };
-    var infoTipo = rotuloDeTipo(p);
+    var plat = PLAT[p.plataforma];
     var meu = tokenRota;
 
     var botoes = Object.keys(LOJAS).map(function (k) { return botaoLoja(p, k); }).join("");
@@ -391,7 +309,7 @@
 
     app.innerHTML =
       '<nav class="trilha"><a href="#/">Início</a> › <a href="#/' + p.plataforma + '">' + esc(plat.nome) + "</a> › " +
-      '<a href="#/' + p.plataforma + "/" + infoTipo.chave + '">' + infoTipo.nome + "</a></nav>" +
+      '<a href="#/' + p.plataforma + "/" + (p.tipo === "console" ? "consoles" : "jogos") + '">' + (p.tipo === "console" ? "Consoles" : "Jogos") + "</a></nav>" +
       '<article class="produto">' +
       '<div id="midiaBox" class="produto-midia"><div class="video video-vazio"><span>⏳</span><p>Carregando…</p></div></div>' +
       '<div class="produto-info">' +
@@ -423,34 +341,12 @@
   }
   btnMenu.addEventListener("click", function () { abrirMenu(!menu.classList.contains("aberto")); });
   fundo.addEventListener("click", function () { abrirMenu(false); });
-  document.addEventListener("keydown", function (e) {
-    var lb = document.getElementById("lightbox");
-    if (lb && !lb.classList.contains("escondido")) {
-      if (e.key === "Escape") { lb.classList.add("escondido"); document.getElementById("lb-conteudo").innerHTML = ""; }
-      if (e.key === "ArrowLeft") mudarLightbox('ant');
-      if (e.key === "ArrowRight") mudarLightbox('prox');
-    } else {
-      if (e.key === "Escape") abrirMenu(false);
-    }
-  });
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape") abrirMenu(false); });
 
-  /* ---------- busca em tempo real ---------- */
-  var timerBusca = null;
-  campoBusca.addEventListener("input", function () {
-    clearTimeout(timerBusca);
-    timerBusca = setTimeout(function () {
-      var q = campoBusca.value.trim();
-      if (q) {
-        location.hash = "#/busca/" + encodeURIComponent(q);
-      } else if (location.hash.indexOf("#/busca/") === 0) {
-        location.hash = "#/";
-      }
-    }, 150);
-  });
-
+  /* ---------- busca ---------- */
   document.getElementById("formBusca").addEventListener("submit", function (e) {
     e.preventDefault();
-    var q = campoBusca.value.trim();
+    var q = document.getElementById("campoBusca").value.trim();
     if (q) location.hash = "#/busca/" + encodeURIComponent(q);
   });
 
@@ -461,58 +357,28 @@
     var partes;
     try { partes = h.split("/").map(decodeURIComponent); } catch (e) { partes = [""]; }
     abrirMenu(false);
-    var lb = document.getElementById("lightbox");
-    if(lb) { lb.classList.add("escondido"); document.getElementById("lb-conteudo").innerHTML = ""; }
-
+    window.scrollTo(0, 0);
     var a = partes[0], b = partes[1];
-    if (a !== "busca" || document.activeElement !== campoBusca) {
-      window.scrollTo(0, 0);
-    }
-
-    if (a === "busca" && campoBusca.value.trim() !== (b || "")) {
-      campoBusca.value = b || "";
-    } else if (a !== "busca" && document.activeElement !== campoBusca) {
-      campoBusca.value = "";
-    }
-
     if (!a) home();
-    else if (PLAT[a]) plataforma(a, b || "");
+    else if (a === "ps5" || a === "switch") plataforma(a, b || "");
     else if (a === "promocoes") promocoes();
     else if (a === "produto") produto(b);
     else if (a === "busca") busca(b || "");
     else naoEncontrado();
-
+    /* na página inicial, deixa o endereço limpo (sem o "#") */
     if (!a && location.hash && window.history && history.replaceState) {
       history.replaceState(null, "", location.pathname + location.search);
     }
     preencherCapas();
   }
 
-
-  var lbFechar = document.querySelector(".lb-fechar");
-  if (lbFechar) lbFechar.addEventListener("click", function() { document.getElementById("lightbox").classList.add("escondido"); document.getElementById("lb-conteudo").innerHTML = ""; });
-  
-  var lbAnt = document.querySelector(".lb-ant");
-  if (lbAnt) lbAnt.addEventListener("click", function() { mudarLightbox('ant'); });
-  
-  var lbProx = document.querySelector(".lb-prox");
-  if (lbProx) lbProx.addEventListener("click", function() { mudarLightbox('prox'); });
-  
-  var lbBox = document.getElementById("lightbox");
-  if (lbBox) lbBox.addEventListener("click", function(e) { if (e.target === this) { this.classList.add("escondido"); document.getElementById("lb-conteudo").innerHTML = ""; }});
-
   /* ---------- início ---------- */
   document.getElementById("marcaNome").textContent = SITE.nome;
   document.getElementById("marcaSub").textContent = SITE.subtitulo;
-
-  var linkYt = urlSegura(SITE.youtube) ? esc(urlSegura(SITE.youtube)) : "#";
-  var linkTw = urlSegura(SITE.twitch) ? esc(urlSegura(SITE.twitch)) : "#";
-  var attrYt = urlSegura(SITE.youtube) ? ' target="_blank" rel="noopener"' : ' onclick="return false;" title="Em breve"';
-  var attrTw = urlSegura(SITE.twitch) ? ' target="_blank" rel="noopener"' : ' onclick="return false;" title="Em breve"';
-
-  document.getElementById("redes").innerHTML =
-    '<a href="' + linkYt + '"' + attrYt + '>▶ YouTube</a>' +
-    '<a href="' + linkTw + '"' + attrTw + '>🟣 Twitch</a>';
+  var redes = [];
+  if (urlSegura(SITE.youtube)) redes.push('<a href="' + esc(SITE.youtube) + '" target="_blank" rel="noopener">▶ YouTube</a>');
+  if (urlSegura(SITE.twitch)) redes.push('<a href="' + esc(SITE.twitch) + '" target="_blank" rel="noopener">🟣 Twitch</a>');
+  document.getElementById("redes").innerHTML = redes.join("");
 
   window.addEventListener("hashchange", rota);
   rota();

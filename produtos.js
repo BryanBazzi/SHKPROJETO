@@ -8,7 +8,7 @@
 
 /* ---------- Dados gerais do site ---------- */
 const SITE = {
-  nome: "SHKN",
+  nome: "SHK",
   subtitulo: "Games",
   pastaImagens: "imagens",   // pasta do GitHub onde ficam as imagens (deixe "" para usar a raiz)
   youtube: "",   // cole o link do seu canal (ex.: "https://youtube.com/@seucanal")
@@ -26,11 +26,17 @@ const LOJAS = {
 };
 
 /* ---------- Produtos ----------
+   Para adicionar um produto novo:
+   1) copie um bloco { ... } inteiro e cole logo abaixo (com vírgula entre os blocos);
+   2) troque os dados;
+   3) no links.js, adicione as linhas do novo produto (use o mesmo "id").
+
    id         -> nome curto, minúsculo, sem espaço nem acento (ex.: "gta-6").
+                 É ele que você usa nos nomes das imagens e no links.js.
    nome       -> como aparece no site
-   plataforma -> "ps5", "switch" ou "pc"
-   tipo       -> "console", "jogo", "hardware" ou "periferico"
-   versao     -> (opcional) etiqueta extra, ex.: "Switch 2", "DDR4 / DDR5", "USB / XLR"
+   plataforma -> "ps5" ou "switch"
+   tipo       -> "console" ou "jogo"
+   versao     -> (opcional) etiqueta extra, ex.: "Switch 2", "Switch 1", "Switch 1 e 2"
    promocao   -> true se estiver em promoção (aparece na aba Promoções), senão false
    destaque   -> true para aparecer na página inicial
    descricao  -> texto curto sobre o produto
@@ -134,28 +140,6 @@ const PRODUTOS = [
     promocao: false,
     destaque: false,
     descricao: "Controle oficial, confortável para sessões longas."
-  },
-
-  /* ===================== PC & SETUP ===================== */
-  {
-    id: "rtx-5070",
-    nome: "GeForce RTX 5070 12GB",
-    plataforma: "pc",
-    tipo: "hardware",
-    versao: "GPU",
-    promocao: false,
-    destaque: true,
-    descricao: "Placa de vídeo de alto desempenho para rodar jogos em Quad HD com Ray Tracing, DLSS e codificação AV1 para lives."
-  },
-  {
-    id: "fifine-am8",
-    nome: "Microfone Dinâmico Fifine AM8",
-    plataforma: "pc",
-    tipo: "periferico",
-    versao: "USB / XLR",
-    promocao: true,
-    destaque: false,
-    descricao: "Microfone dinâmico com conexão dupla USB e XLR, iluminação RGB e áudio limpo ideal para lives e gravações."
   }
 
 ];
