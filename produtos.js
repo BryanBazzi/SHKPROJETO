@@ -25,6 +25,22 @@ const LOJAS = {
   aliexpress:   { nome: "AliExpress",    sigla: "Ali" }
 };
 
+/* ---------- Ordem da página inicial ----------
+   Basta colocar os IDs dos produtos na ordem exata em que você quer que apareçam! */
+const HOME_DESTAQUES = [
+  "gta-6",
+  "astro-bot",
+  "zelda-ocarina-remake",
+  "phantom-blade-zero"
+];
+
+const HOME_LANCAMENTOS = [
+  "gta-6",
+  "zelda-ocarina-remake",
+  "phantom-blade-zero",
+  "death-stranding-2"
+];
+
 /* ---------- Produtos ----------
    Para adicionar um produto novo:
    1) copie um bloco { ... } inteiro e cole logo abaixo (com vírgula entre os blocos);
@@ -37,8 +53,9 @@ const LOJAS = {
    plataforma -> "ps5" ou "switch"
    tipo       -> "console", "acessorio" ou "jogo"
    versao     -> (opcional) etiqueta extra, ex.: "Switch 2", "Switch 1", "Switch 1 e 2"
-   promocao   -> true se estiver em promoção (aparece na aba Promoções), senão false
-   destaque   -> true para aparecer na página inicial
+   promocao   -> true se estiver em promoção, senão false
+   destaque   -> true para aparecer em Destaques
+   lancamento -> true para aparecer em Lançamentos
    descricao  -> texto curto sobre o produto
 */
 const PRODUTOS = [
@@ -49,8 +66,9 @@ const PRODUTOS = [
     nome: "PlayStation 5 Slim",
     plataforma: "ps5",
     tipo: "console",
-    promocao: true,
-    destaque: true,
+    promocao: false,
+    destaque: false,
+    lancamento: false,
     descricao: "O console da Sony em versão mais compacta, com SSD ultrarrápido, controle DualSense e jogos em 4K."
   },
   {
@@ -60,16 +78,38 @@ const PRODUTOS = [
     tipo: "jogo",
     promocao: false,
     destaque: true,
-    descricao: "O novo capítulo da série da Rockstar. Assista ao trailer e veja onde comprar."
+    lancamento: true,
+    descricao: "O novo capítulo da série da Rockstar em Vice City. Assista ao trailer e veja onde comprar."
   },
   {
     id: "astro-bot",
     nome: "Astro Bot",
     plataforma: "ps5",
     tipo: "jogo",
-    promocao: true,
+    promocao: false,
+    destaque: true,
+    lancamento: false,
+    descricao: "Aventura de plataforma cheia de criatividade, eleita Jogo do Ano e feita para aproveitar tudo do DualSense."
+  },
+  {
+    id: "phantom-blade-zero",
+    nome: "Phantom Blade Zero",
+    plataforma: "ps5",
+    tipo: "jogo",
+    promocao: false,
+    destaque: true,
+    lancamento: true,
+    descricao: "RPG de ação frenético em estilo kung-fu punk sombrio, com combates de espada cinematográficos no PS5."
+  },
+  {
+    id: "death-stranding-2",
+    nome: "Death Stranding 2: On the Beach",
+    plataforma: "ps5",
+    tipo: "jogo",
+    promocao: false,
     destaque: false,
-    descricao: "Aventura de plataforma cheia de criatividade, feita para aproveitar tudo do DualSense."
+    lancamento: true,
+    descricao: "A nova superprodução de Hideo Kojima para o PlayStation 5, expandindo a jornada de Sam Bridges."
   },
   {
     id: "spider-man-2",
@@ -78,6 +118,7 @@ const PRODUTOS = [
     tipo: "jogo",
     promocao: false,
     destaque: false,
+    lancamento: false,
     descricao: "Jogue com Peter Parker e Miles Morales numa Nova York ainda maior."
   },
   {
@@ -87,6 +128,7 @@ const PRODUTOS = [
     tipo: "acessorio",
     promocao: false,
     destaque: false,
+    lancamento: false,
     descricao: "Controle sem fio oficial do PS5, com gatilhos adaptáveis e retorno tátil."
   },
 
@@ -98,8 +140,20 @@ const PRODUTOS = [
     tipo: "console",
     versao: "Switch 2",
     promocao: false,
-    destaque: true,
+    destaque: false,
+    lancamento: false,
     descricao: "O novo console da Nintendo, com tela maior, mais desempenho e compatibilidade com jogos do Switch."
+  },
+  {
+    id: "zelda-ocarina-remake",
+    nome: "The Legend of Zelda: Ocarina of Time Remake",
+    plataforma: "switch",
+    tipo: "jogo",
+    versao: "Switch 2",
+    promocao: false,
+    destaque: true,
+    lancamento: true,
+    descricao: "O clássico lendário de Hyrule totalmente reconstruído para a nova geração no Nintendo Switch 2."
   },
   {
     id: "switch-oled",
@@ -107,8 +161,9 @@ const PRODUTOS = [
     plataforma: "switch",
     tipo: "console",
     versao: "Switch 1",
-    promocao: true,
+    promocao: false,
     destaque: false,
+    lancamento: false,
     descricao: "Versão com tela OLED de 7 polegadas, ótima para jogar no modo portátil."
   },
   {
@@ -118,7 +173,8 @@ const PRODUTOS = [
     tipo: "jogo",
     versao: "Switch 2",
     promocao: false,
-    destaque: true,
+    destaque: false,
+    lancamento: false,
     descricao: "Corridas com mundo aberto conectado e muito caos com os amigos."
   },
   {
@@ -127,8 +183,9 @@ const PRODUTOS = [
     plataforma: "switch",
     tipo: "jogo",
     versao: "Switch 1 e 2",
-    promocao: true,
+    promocao: false,
     destaque: false,
+    lancamento: false,
     descricao: "Explore Hyrule, os céus e as profundezas nesta aventura épica."
   },
   {
@@ -139,6 +196,7 @@ const PRODUTOS = [
     versao: "Switch 1 e 2",
     promocao: false,
     destaque: false,
+    lancamento: false,
     descricao: "Controle oficial, confortável para sessões longas."
   }
 

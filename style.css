@@ -147,15 +147,29 @@ main { flex: 1; width: 100%; max-width: 1120px; margin: 0 auto; padding: 24px 16
 }
 .plat-btn small { color: var(--mut); text-transform: uppercase; letter-spacing: .15em; font-size: .75rem; }
 .plat-btn strong { font-family: "Orbitron", sans-serif; font-size: 1.25rem; color: var(--neon); text-shadow: 0 0 14px var(--neon); }
+.plat-btn .plat-sub { color: var(--mut); font-size: .86rem; margin-top: 4px; font-weight: 600; }
 .plat-btn:hover { transform: translateY(-3px); box-shadow: 0 0 38px 0 var(--glow), inset 0 0 28px -8px var(--glow); }
 
-/* ---------- seÃ§Ãµes ---------- */
+.faixa-lojas {
+  margin: 28px auto 0; max-width: 780px; padding: 12px 20px; border-radius: 999px;
+  background: rgba(15, 15, 26, .75); border: 1px solid rgba(255, 255, 255, .12);
+  display: flex; align-items: center; justify-content: center; gap: 18px; flex-wrap: wrap;
+}
+.faixa-rotulo { font-size: .82rem; text-transform: uppercase; letter-spacing: .12em; color: var(--mut); font-weight: 700; }
+.faixa-lista { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; justify-content: center; }
+.faixa-loja { display: flex; align-items: center; gap: 7px; font-weight: 700; font-size: .92rem; color: var(--txt); opacity: .85; transition: opacity .2s, transform .2s; }
+.faixa-loja:hover { opacity: 1; transform: translateY(-1px); }
+.faixa-loja img { width: 28px; height: 22px; object-fit: contain; filter: drop-shadow(0 0 4px rgba(255, 255, 255, .35)); }
+
+/* ---------- seções ---------- */
 .plat-topo { padding: 12px 0 8px; }
 .plat-topo h1 { font-size: clamp(1.6rem, 4.5vw, 2.6rem); color: var(--neon); text-shadow: 0 0 22px var(--glow); }
-.secao { margin-top: 30px; }
-.secao-topo { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin-bottom: 14px; }
-.secao h2 { font-size: 1.15rem; letter-spacing: .04em; }
-.mais { color: var(--neon); font-weight: 700; }
+.secao { margin-top: 38px; }
+.secao-topo { display: flex; justify-content: space-between; align-items: flex-end; gap: 12px; margin-bottom: 16px; }
+.secao-tit { display: flex; flex-direction: column; gap: 2px; }
+.secao h2 { font-size: 1.25rem; letter-spacing: .04em; }
+.secao-sub { color: var(--mut); font-size: .95rem; }
+.mais { color: var(--neon); font-weight: 700; white-space: nowrap; }
 .mais:hover { text-shadow: 0 0 10px var(--neon); }
 .vazio { color: var(--mut); padding: 18px; border: 1px dashed var(--bg3); border-radius: var(--raio); }
 
@@ -165,7 +179,7 @@ main { flex: 1; width: 100%; max-width: 1120px; margin: 0 auto; padding: 24px 16
 .aba.ativa { color: #fff; background: color-mix(in srgb, var(--neon) 30%, var(--bg2)); border-color: var(--neon); box-shadow: 0 0 16px -2px var(--glow); }
 
 /* ---------- cards ---------- */
-.grade { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 18px; }
+.grade { display: grid; grid-template-columns: repeat(auto-fill, minmax(235px, 1fr)); gap: 18px; }
 .card {
   display: flex; flex-direction: column; overflow: hidden;
   background: var(--bg2); border: 1px solid color-mix(in srgb, var(--neon) 55%, transparent); border-radius: var(--raio);
@@ -180,10 +194,17 @@ main { flex: 1; width: 100%; max-width: 1120px; margin: 0 auto; padding: 24px 16
 .capa-ico { font-size: 2rem; filter: drop-shadow(0 0 10px rgba(255, 255, 255, .5)); }
 .capa-nome { font-family: "Orbitron", sans-serif; font-weight: 800; font-size: .9rem; text-shadow: 0 2px 10px rgba(0, 0, 0, .6); }
 .card-corpo { padding: 14px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
-.card h3 { font-size: .95rem; line-height: 1.3; }
-.ver { margin-top: auto; color: var(--neon); font-weight: 700; }
+.card h3 { font-size: 1.02rem; line-height: 1.3; }
+.card-desc {
+  color: var(--mut); font-size: .88rem; line-height: 1.35;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+.ver { margin-top: auto; padding-top: 4px; color: var(--neon); font-weight: 700; }
 .selos { display: flex; gap: 6px; flex-wrap: wrap; }
-.selo { padding: 3px 10px; font-size: .78rem; font-weight: 700; border-radius: 999px; background: var(--bg3); color: var(--mut); border: 1px solid var(--bg3); }
+.selo { padding: 3px 10px; font-size: .76rem; font-weight: 700; border-radius: 999px; background: var(--bg3); color: var(--mut); border: 1px solid var(--bg3); }
+.selo-top { color: #07070d; background: linear-gradient(135deg, #ffe270, #ffae00); border-color: transparent; font-weight: 800; }
+.selo-destaque { color: #fff; background: color-mix(in srgb, var(--neon) 28%, var(--bg3)); border-color: color-mix(in srgb, var(--neon) 60%, transparent); }
+.selo-novo { color: #fff; background: linear-gradient(90deg, #00b4d8, #5b6bff); border-color: transparent; }
 .selo-promo { color: #fff; background: linear-gradient(90deg, #ff2a55, #ff8a3d); border-color: transparent; }
 
 /* ---------- pÃ¡gina do produto ---------- */

@@ -16,7 +16,7 @@
     { chave: "consoles", rotulo: "Consoles" },
     { chave: "acessorios", rotulo: "Acessórios" },
     { chave: "jogos", rotulo: "Jogos" },
-    { chave: "promocoes", rotulo: "Promoções" }
+    { chave: "lancamentos", rotulo: "Lançamentos" }
   ];
 
   /* ---------- utilidades ---------- */
@@ -440,46 +440,106 @@
     });
   }
 
-  function card(p) {
+  function card(p, opcoes) {
+    opcoes = opcoes || {};
     var plat = PLAT[p.plataforma] || { curto: "" };
+    var seloTop = opcoes.rank ? '<span class="selo selo-top">🏆 Top ' + opcoes.rank + "</span>" : "";
+    var seloTipo = "";
+    if (opcoes.modo === "lancamento" || (!opcoes.modo && p.lancamento)) {
+      seloTipo = '<span class="selo selo-novo">🚀 Lançamento</span>';
+    } else if (opcoes.modo === "destaque" || (!opcoes.modo && p.destaque)) {
+      seloTipo = '<span class="selo selo-destaque">⭐ Destaque</span>';
+    } else if (p.promocao) {
+      seloTipo = '<span class="selo selo-promo">🔥 Promoção</span>';
+    }
+    var descCurta = p.descricao ? '<p class="card-desc">' + esc(p.descricao) + "</p>" : "";
     return '<a class="card tema-' + esc(p.plataforma) + '" href="/produto/' + esc(p.id) + '">' +
       capa(p) +
       '<div class="card-corpo">' +
       '<div class="selos">' +
-      (p.promocao ? '<span class="selo selo-promo">🔥 Promoção</span>' : "") +
+      seloTop +
+      seloTipo +
       '<span class="selo">' + esc(p.versao || plat.curto) + "</span>" +
       "</div>" +
       "<h3>" + esc(p.nome) + "</h3>" +
+      descCurta +
       '<span class="ver">Ver onde comprar →</span>' +
       "</div></a>";
   }
 
-  function grade(lista, vazio) {
+  function grade(lista, vazio, opcoes) {
     if (!lista.length) return '<p class="vazio">' + esc(vazio || "Nada por aqui ainda.") + "</p>";
-    return '<div class="grade">' + lista.map(card).join("") + "</div>";
+    opcoes = opcoes || {};
+    return '<div class="grade">' + lista.map(function (p, i) {
+      return card(p, {
+        rank: opcoes.numerar ? (i + 1) : 0,
+        modo: opcoes.modo || ""
+      });
+    }).join("") + "</div>";
   }
 
-  function secao(titulo, html, extra) {
-    return '<section class="secao"><div class="secao-topo"><h2>' + esc(titulo) + "</h2>" + (extra || "") + "</div>" + html + "</section>";
+  function secao(titulo, html, extra, subtitulo) {
+    return '<section class="secao"><div class="secao-topo"><div class="secao-tit"><h2>' + esc(titulo) + "</h2>" +
+      (subtitulo ? '<p class="secao-sub">' + esc(subtitulo) + "</p>" : "") +
+      "</div>" + (extra || "") + "</div>" + html + "</section>";
+  }
+
+  function listaPorIds(ids, filtroPadrao) {
+    if (Array.isArray(ids) && ids.length) {
+      return ids.map(achar).filter(Boolean);
+    }
+    return PRODUTOS.filter(filtroPadrao);
   }
 
   /* ---------- páginas ---------- */
   function home() {
     setTema("neutro");
-    var promos = PRODUTOS.filter(function (p) { return p.promocao; }).slice(0, 6);
-    var destaques = PRODUTOS.filter(function (p) { return p.destaque; }).slice(0, 6);
+    var destaques = listaPorIds(
+      typeof HOME_DESTAQUES !== "undefined" ? HOME_DESTAQUES : null,
+      function (p) { return p.destaque; }
+    );
+    var lancamentos = listaPorIds(
+      typeof HOME_LANCAMENTOS !== "undefined" ? HOME_LANCAMENTOS : null,
+      function (p) { return p.lancamento; }
+    );
+    var consoles = PRODUTOS.filter(function (p) { return p.tipo === "console" || p.tipo === "acessorio"; }).slice(0, 4);
+
+    var lojasFaixa = Object.keys(LOJAS).map(function (k) {
+      var pasta = "/" + (SITE.pastaImagens ? SITE.pastaImagens + "/" : "") + "lojas/";
+      return '<div class="faixa-loja" title="' + esc(LOJAS[k].nome) + '">' +
+        '<img src="' + pasta + "loja-" + k + '.png" alt="' + esc(LOJAS[k].nome) + '">' +
+        "<span>" + esc(LOJAS[k].nome) + "</span></div>";
+    }).join("");
+
     app.innerHTML =
       '<section class="hero">' +
       '<p class="hero-kicker">Direto das minhas lives</p>' +
       "<h1>Ache seu próximo game <span>com o melhor caminho de compra</span></h1>" +
-      "<p>Escolha a plataforma, veja o trailer e vá direto pra loja: Amazon, KaBuM!, Mercado Livre, Shopee e AliExpress.</p>" +
+      "<p>Escolha a plataforma, veja o trailer e os prints em tela cheia e vá direto para a loja oficial.</p>" +
       '<div class="hero-botoes">' +
-      '<a class="plat-btn tema-ps5" href="/ps5"><small>Plataforma</small><strong>PlayStation 5</strong></a>' +
-      '<a class="plat-btn tema-switch" href="/switch"><small>Plataforma</small><strong>Nintendo Switch</strong></a>' +
-      "</div></section>" +
-      secao("🔥 Promoções em destaque", grade(promos, "Sem promoções no momento."),
-        '<a class="mais" href="/promocoes">Ver todas →</a>') +
-      secao("⭐ Destaques", grade(destaques, "Marque produtos com destaque: true para eles aparecerem aqui."));
+      '<a class="plat-btn tema-ps5" href="/ps5"><small>Plataforma</small><strong>PlayStation 5</strong><span class="plat-sub">Jogos, consoles e DualSense →</span></a>' +
+      '<a class="plat-btn tema-switch" href="/switch"><small>Plataforma</small><strong>Nintendo Switch 1 & 2</strong><span class="plat-sub">Jogos, consoles e acessórios →</span></a>' +
+      "</div>" +
+      '<div class="faixa-lojas"><span class="faixa-rotulo">Lojas parceiras verificadas:</span><div class="faixa-lista">' + lojasFaixa + "</div></div>" +
+      "</section>" +
+      secao(
+        "⭐ Destaques",
+        grade(destaques, "Nenhum destaque no momento.", { numerar: true, modo: "destaque" }),
+        "",
+        "Os games mais procurados e recomendados no canal"
+      ) +
+      secao(
+        "🚀 Últimos Lançamentos",
+        grade(lancamentos, "Nenhum lançamento cadastrado no momento.", { modo: "lancamento" }),
+        '<a class="mais" href="/lancamentos">Ver todos →</a>',
+        "Novidades e próximos grandes lançamentos para PlayStation 5 e Nintendo Switch 2"
+      ) +
+      secao(
+        "🎮 Consoles e Acessórios",
+        grade(consoles, "Nenhum console cadastrado no momento."),
+        "",
+        "Aparelhos e controles oficiais para elevar seu setup"
+      );
   }
 
   function plataforma(plat, aba) {
@@ -496,20 +556,36 @@
     var consoles = lista.filter(function (p) { return p.tipo === "console"; });
     var acessorios = lista.filter(function (p) { return p.tipo === "acessorio"; });
     var jogos = lista.filter(function (p) { return p.tipo === "jogo"; });
+    var lancamentos = lista.filter(function (p) { return p.lancamento; });
     var promos = lista.filter(function (p) { return p.promocao; });
 
     if (aba === "consoles") corpo = secao("Consoles", grade(consoles, "Nenhum console cadastrado ainda."));
     else if (aba === "acessorios") corpo = secao("Acessórios", grade(acessorios, "Nenhum acessório cadastrado ainda."));
     else if (aba === "jogos") corpo = secao("Jogos", grade(jogos, "Nenhum jogo cadastrado ainda."));
+    else if (aba === "lancamentos") corpo = secao("🚀 Lançamentos", grade(lancamentos, "Nenhum lançamento cadastrado ainda.", { modo: "lancamento" }));
     else if (aba === "promocoes") corpo = secao("🔥 Promoções", grade(promos, "Sem promoções no momento."));
     else corpo =
+      secao("Jogos", grade(jogos, "Nenhum jogo cadastrado ainda.")) +
       secao("Consoles", grade(consoles, "Nenhum console cadastrado ainda.")) +
-      secao("Acessórios", grade(acessorios, "Nenhum acessório cadastrado ainda.")) +
-      secao("Jogos", grade(jogos, "Nenhum jogo cadastrado ainda."));
+      secao("Acessórios", grade(acessorios, "Nenhum acessório cadastrado ainda."));
 
     app.innerHTML =
       '<section class="plat-topo"><p class="hero-kicker">Plataforma</p><h1>' + esc(PLAT[plat].nome) + "</h1></section>" +
       tabs + corpo;
+  }
+
+  function lancamentosPag() {
+    setTema("neutro", "Lançamentos");
+    var lancs = listaPorIds(
+      typeof HOME_LANCAMENTOS !== "undefined" ? HOME_LANCAMENTOS : null,
+      function (p) { return p.lancamento; }
+    );
+    PRODUTOS.forEach(function (p) {
+      if (p.lancamento && lancs.indexOf(p) === -1) lancs.push(p);
+    });
+    app.innerHTML =
+      '<section class="plat-topo"><p class="hero-kicker">Novidades</p><h1>🚀 Últimos Lançamentos</h1></section>' +
+      secao("PlayStation 5 e Nintendo Switch 2", grade(lancs, "Nenhum lançamento no momento.", { modo: "lancamento" }));
   }
 
   function promocoes() {
@@ -636,6 +712,7 @@
     var a = partes[0], b = partes[1];
     if (!a) home();
     else if (a === "ps5" || a === "switch") plataforma(a, b || "");
+    else if (a === "lancamentos") lancamentosPag();
     else if (a === "promocoes") promocoes();
     else if (a === "produto") produto(b);
     else if (a === "busca") busca(b || "");

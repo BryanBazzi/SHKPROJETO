@@ -41,6 +41,30 @@ astro-bot_mercadolivre =
 astro-bot_shopee =
 astro-bot_aliexpress =
 
+# ===== Phantom Blade Zero =====
+phantom-blade-zero_trailer =
+phantom-blade-zero_amazon =
+phantom-blade-zero_kabum =
+phantom-blade-zero_mercadolivre =
+phantom-blade-zero_shopee =
+phantom-blade-zero_aliexpress =
+
+# ===== Death Stranding 2: On the Beach =====
+death-stranding-2_trailer =
+death-stranding-2_amazon =
+death-stranding-2_kabum =
+death-stranding-2_mercadolivre =
+death-stranding-2_shopee =
+death-stranding-2_aliexpress =
+
+# ===== Zelda: Ocarina of Time Remake =====
+zelda-ocarina-remake_trailer =
+zelda-ocarina-remake_amazon =
+zelda-ocarina-remake_kabum =
+zelda-ocarina-remake_mercadolivre =
+zelda-ocarina-remake_shopee =
+zelda-ocarina-remake_aliexpress =
+
 # ===== Marvel's Spider-Man 2 =====
 spider-man-2_trailer =
 spider-man-2_amazon =
