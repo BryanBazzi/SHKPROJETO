@@ -8,7 +8,7 @@
 
 /* ---------- Dados gerais do site ---------- */
 const SITE = {
-  nome: "SHK",
+  nome: "SHKN",
   subtitulo: "Games",
   pastaImagens: "imagens",   // pasta do GitHub onde ficam as imagens (deixe "" para usar a raiz)
   youtube: "",   // cole o link do seu canal (ex.: "https://youtube.com/@seucanal")

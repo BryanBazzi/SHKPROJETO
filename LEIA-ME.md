@@ -1,4 +1,4 @@
-# SHK Games — site de links de afiliados
+# SHKN Games — site de links de afiliados
 
 ## O que cada arquivo faz
 | Arquivo | Para quê |
