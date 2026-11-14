@@ -8,28 +8,27 @@
 | imagens (`.jpg`) | Capa e prints de cada produto, pelo nome do arquivo |
 | `index.html`, `app.js`, `style.css` | O site em si (normalmente você não mexe) |
 
-## Imagens: automático pelo nome do arquivo, dentro da pasta `imagens`
-Todas as imagens ficam numa pasta chamada `imagens` no GitHub, separadas do código.
-
-**Criar a pasta (só uma vez):**
-1. No repositório: Add file → Create new file.
-2. No campo do nome, digite `imagens/` (ao digitar a barra, o GitHub cria a pasta) e depois `leia-me.txt`.
-3. Escreva qualquer coisa no conteúdo e clique em Commit changes.
-
-**Enviar imagens:** abra a pasta `imagens` no GitHub → Add file → Upload files → arraste as imagens → Commit changes.
-
-Use estes nomes (o começo é sempre o **id** do produto, o mesmo do `produtos.js`):
-
-- `gta-6_capa.jpg` → capa do card e primeira imagem da galeria
-- `gta-6_print1.jpg`, `gta-6_print2.jpg`, `gta-6_print3.jpg` … → prints do jogo
+## Imagens: uma pasta por produto, dentro da pasta `imagens`
+```
+imagens/
+  gta-6/        gta-6_capa.png, gta-6_print1.png, gta-6_print2.png ...
+  astro-bot/    astro-bot_capa.png, astro-bot_print1.png ...
+  lojas/        loja-amazon.png, loja-kabum.png, loja-mercadolivre.png, loja-shopee.png, loja-aliexpress.png
+```
+- A pasta tem o mesmo nome do **id** do produto (o do `produtos.js`) e os arquivos começam com o id: `{id}_capa.png`, `{id}_print1.png`…
+- **Loja nova:** adicione uma linha em `LOJAS` no `produtos.js` e o logo `imagens/lojas/loja-NOME.png`. O botão aparece em todos os produtos ("Link em breve" até você colocar o link no `links.js`).
+- No GitHub: Add file → Upload files, e para criar pasta digite `imagens/gta-6/` no nome do arquivo.
 
 Regras:
 - Tudo em letra minúscula, sem espaço e sem acento.
 - Formatos aceitos: `.jpg`, `.png`, `.webp`, `.jpeg`.
-- Numere em sequência (1, 2, 3…). Se faltar um número (pular o 4), o site para no 3.
-- Não precisa avisar ninguém nem editar código: o site acha as imagens sozinho.
+- Numere os prints em sequência (1, 2, 3…). Se faltar um número, o site para antes dele.
 
 A galeria aparece nesta ordem: **capa → trailer → prints**.
+
+## Endereços sem "#"
+O site usa endereços normais (`/produto/astro-bot`). O arquivo `vercel.json` faz isso funcionar no Vercel: **não apague**.
+Para testar no PC não dá mais para só abrir o `index.html`: use a extensão Live Server ou um servidor local que mande tudo para o `index.html`.
 
 ## Trailer e links de afiliado: arquivo `links.js`
 Cada linha: `produto_loja = seu link`
@@ -55,7 +54,7 @@ GitHub → Add file → Upload files (ou edite o arquivo direto no GitHub) → C
 O Vercel atualiza o site sozinho em cerca de 1 minuto.
 
 ## Ver o site no seu computador
-Dê dois cliques em `index.html`. (O trailer do YouTube só aparece no site publicado ou usando a extensão Live Server do VS Code.)
+Como os endereços não têm mais "#", abrir o `index.html` com dois cliques só mostra a página inicial. Para testar tudo, use a extensão Live Server do VS Code configurada para mandar tudo ao `index.html`, ou veja direto no site publicado (o Vercel já está configurado pelo `vercel.json`).
 
 Cuidado com aspas, vírgulas e chaves no `produtos.js`: se o site ficar em branco depois de editar, quase sempre é uma vírgula ou aspas faltando.
 

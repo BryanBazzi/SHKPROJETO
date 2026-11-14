@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="/style.css">
 </head>
 <body data-tema="neutro">
 
@@ -17,7 +17,7 @@
     <button id="btnMenu" class="hamb" aria-label="Abrir menu" aria-expanded="false" aria-controls="menu">
       <span></span><span></span><span></span>
     </button>
-    <a class="marca" href="#/" aria-label="SHKN Games, início">
+    <a class="marca" href="/" aria-label="SHKN Games, início">
       <svg class="marca-logo" viewBox="0 0 76 42" aria-hidden="true" focusable="false">
         <path d="M18 20 L4 3 C8 9 10 14 11.5 20 C10 26 9 31 7 38 L18 23 C26 28 34 30.5 41 30.5 Q38 34 34 40 L46 30.5 C54 31 63 29 69 26 Q72 25 74 24 C68 19 57 13.5 45 13 C41 9 38 5 35 1.5 C34.5 7 32 11 30 14 C26 15.5 22 17.5 18 20 Z"/>
         <circle class="olho" cx="63" cy="21.2" r="1.4"/>
@@ -28,34 +28,44 @@
         <small id="marcaSub">Games</small>
       </div>
     </a>
+    <nav class="topo-nav" aria-label="Navegação principal">
+      <a class="nav-link nav-home" href="/" data-nav="inicio" aria-label="Início">
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10v9.5h4.5V14h4v5.5h4.5V10"/></svg>
+        <span>Início</span>
+      </a>
+      <a class="nav-link nav-ps5" href="/ps5" data-nav="ps5">PlayStation 5</a>
+      <a class="nav-link nav-switch" href="/switch" data-nav="switch">Nintendo Switch</a>
+      <a class="nav-link nav-promo" href="/promocoes" data-nav="promocoes">🔥 Promoções</a>
+    </nav>
     <form id="formBusca" class="busca" role="search">
+      <svg class="busca-lupa" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4.5 4.5"/></svg>
       <input id="campoBusca" type="search" placeholder="Buscar jogo ou console…" aria-label="Buscar jogo ou console" autocomplete="off">
-      <button type="submit" aria-label="Buscar">🔍</button>
+      <button type="submit" aria-label="Buscar">Buscar</button>
     </form>
   </header>
 
   <div id="fundo" class="fundo"></div>
 
   <nav id="menu" class="menu" aria-label="Menu principal">
-    <a class="menu-link" href="#/">🏠 Início</a>
+    <a class="menu-link" href="/">🏠 Início</a>
 
     <div class="grupo tema-ps5">
       <strong>PlayStation 5</strong>
-      <a href="#/ps5">Ver tudo</a>
-      <a href="#/ps5/consoles">Consoles</a>
-      <a href="#/ps5/jogos">Jogos</a>
-      <a href="#/ps5/promocoes">Promoções</a>
+      <a href="/ps5">Ver tudo</a>
+      <a href="/ps5/consoles">Consoles</a>
+      <a href="/ps5/jogos">Jogos</a>
+      <a href="/ps5/promocoes">Promoções</a>
     </div>
 
     <div class="grupo tema-switch">
       <strong>Nintendo Switch</strong>
-      <a href="#/switch">Ver tudo</a>
-      <a href="#/switch/consoles">Consoles</a>
-      <a href="#/switch/jogos">Jogos</a>
-      <a href="#/switch/promocoes">Promoções</a>
+      <a href="/switch">Ver tudo</a>
+      <a href="/switch/consoles">Consoles</a>
+      <a href="/switch/jogos">Jogos</a>
+      <a href="/switch/promocoes">Promoções</a>
     </div>
 
-    <a class="menu-link menu-promo" href="#/promocoes">🔥 Todas as promoções</a>
+    <a class="menu-link menu-promo" href="/promocoes">🔥 Todas as promoções</a>
     <div class="redes" id="redes"></div>
   </nav>
 
@@ -66,8 +76,8 @@
     <p>Preços e estoque mudam a toda hora: confira sempre o valor final na página da loja.</p>
   </footer>
 
-  <script src="produtos.js"></script>
-  <script src="links.js"></script>
-  <script src="app.js"></script>
+  <script src="/produtos.js"></script>
+  <script src="/links.js"></script>
+  <script src="/app.js"></script>
 </body>
 </html>
