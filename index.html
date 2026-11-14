@@ -10,12 +10,10 @@
   <!-- Open Graph / WhatsApp / Discord -->
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="SHKN Games">
-  <meta property="og:title" content="SHKN Games — Jogos, Consoles e Setup com os Melhores Links">
-  <meta property="og:description" content="Catálogo direto das lives: escolha a plataforma (PS5, Switch ou PC & Setup), veja o trailer e vá direto para Amazon, Mercado Livre, Shopee, KaBuM! e AliExpress.">
-  <meta property="og:image" content="imagens/astro-bot_capa.png">
+  <meta property="og:title" content="SHKN Games — Jogos, Consoles e Setup">
+  <meta property="og:description" content="Catálogo direto das lives: escolha a plataforma, veja o trailer e vá direto para Amazon, Mercado Livre, Shopee e KaBuM!.">
+  <meta property="og:image" content="imagens/gta-6/capa.png">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="SHKN Games — Jogos, Consoles e Setup">
-  <meta name="twitter:description" content="Escolha a plataforma, veja o trailer e acesse as melhores ofertas em lojas confiáveis.">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -24,66 +22,74 @@
 </head>
 <body data-tema="neutro">
 
+  <!-- NOVO CABEÇALHO (Estilo da Imagem) -->
   <header class="topo">
-    <button id="btnMenu" class="hamb" aria-label="Abrir menu" aria-expanded="false" aria-controls="menu">
-      <span></span><span></span><span></span>
-    </button>
-    <a class="marca" href="#/" aria-label="SHKN Games, início">
-      <svg class="marca-logo" viewBox="0 0 76 42" aria-hidden="true" focusable="false">
-        <path d="M18 20 L4 3 C8 9 10 14 11.5 20 C10 26 9 31 7 38 L18 23 C26 28 34 30.5 41 30.5 Q38 34 34 40 L46 30.5 C54 31 63 29 69 26 Q72 25 74 24 C68 19 57 13.5 45 13 C41 9 38 5 35 1.5 C34.5 7 32 11 30 14 C26 15.5 22 17.5 18 20 Z"/>
-        <circle class="olho" cx="63" cy="21.2" r="1.4"/>
-        <path class="traco" d="M51 19.5 L52 25 M54 19.5 L55 25 M57 19.5 L58 25 M70 25.6 Q65 27.4 60 26.2"/>
-      </svg>
-      <div class="marca-texto">
-        <span id="marcaNome">SHKN</span>
-        <small id="marcaSub">Games</small>
-      </div>
-    </a>
+    <div class="topo-esquerda">
+      <button id="btnMenu" class="hamb" aria-label="Abrir menu" aria-expanded="false" aria-controls="menu">
+        <span></span><span></span><span></span>
+      </button>
+      <a class="marca" href="#/" aria-label="SHKN Games, início">
+        <svg class="marca-logo" viewBox="0 0 76 42" aria-hidden="true" focusable="false">
+          <path d="M18 20 L4 3 C8 9 10 14 11.5 20 C10 26 9 31 7 38 L18 23 C26 28 34 30.5 41 30.5 Q38 34 34 40 L46 30.5 C54 31 63 29 69 26 Q72 25 74 24 C68 19 57 13.5 45 13 C41 9 38 5 35 1.5 C34.5 7 32 11 30 14 C26 15.5 22 17.5 18 20 Z"/>
+          <circle class="olho" cx="63" cy="21.2" r="1.4"/>
+          <path class="traco" d="M51 19.5 L52 25 M54 19.5 L55 25 M57 19.5 L58 25 M70 25.6 Q65 27.4 60 26.2"/>
+        </svg>
+        <div class="marca-texto">
+          <span id="marcaNome">SHKN</span>
+          <small id="marcaSub">Games</small>
+        </div>
+      </a>
+    </div>
+
+    <nav class="menu-superior">
+      <a href="#/">🏠 Início</a>
+      <a href="#/ps5">PlayStation</a>
+      <a href="#/switch">Switch</a>
+      <a href="#/pc">PC & Setup</a>
+    </nav>
+
     <form id="formBusca" class="busca" role="search">
-      <input id="campoBusca" type="search" placeholder="Buscar jogo, console ou hardware…" aria-label="Buscar produto" autocomplete="off">
+      <input id="campoBusca" type="search" placeholder="Buscar jogo..." aria-label="Buscar produto" autocomplete="off">
       <button type="submit" aria-label="Buscar">🔍</button>
     </form>
   </header>
 
   <div id="fundo" class="fundo"></div>
 
+  <!-- MENU LATERAL (Mobile) -->
   <nav id="menu" class="menu" aria-label="Menu principal">
     <a class="menu-link" href="#/">🏠 Início</a>
-
     <div class="grupo tema-ps5">
       <strong>PlayStation 5</strong>
       <a href="#/ps5">Ver tudo</a>
-      <a href="#/ps5/consoles">Consoles</a>
       <a href="#/ps5/jogos">Jogos</a>
-      <a href="#/ps5/promocoes">Promoções</a>
     </div>
-
     <div class="grupo tema-switch">
       <strong>Nintendo Switch</strong>
       <a href="#/switch">Ver tudo</a>
-      <a href="#/switch/consoles">Consoles</a>
       <a href="#/switch/jogos">Jogos</a>
-      <a href="#/switch/promocoes">Promoções</a>
     </div>
-
     <div class="grupo tema-pc">
       <strong>PC &amp; Setup</strong>
       <a href="#/pc">Ver tudo</a>
-      <a href="#/pc/hardware">Hardware</a>
-      <a href="#/pc/perifericos">Periféricos</a>
-      <a href="#/pc/promocoes">Promoções</a>
     </div>
-
-    <a class="menu-link menu-promo" href="#/promocoes">🔥 Todas as promoções</a>
+    <a class="menu-link menu-promo" href="#/promocoes">🔥 Promoções</a>
     <div class="redes" id="redes"></div>
   </nav>
 
   <main id="app"></main>
 
   <footer class="rodape">
-    <p><strong>Aviso:</strong> este site usa links de afiliados. Posso receber uma comissão pelas compras feitas através deles, sem custo extra para você. Como Associado Amazon, eu ganho com compras qualificadas.</p>
-    <p>Preços e estoque mudam a toda hora: confira sempre o valor final na página da loja.</p>
+    <p><strong>Aviso:</strong> este site usa links de afiliados. Posso receber uma comissão pelas compras feitas através deles, sem custo extra para você.</p>
   </footer>
+
+  <!-- GALERIA / LIGHTBOX PARA ZOOM NAS FOTOS -->
+  <div id="lightbox" class="lightbox escondido">
+    <button class="lb-fechar" aria-label="Fechar Zoom">✖</button>
+    <button class="lb-ant" aria-label="Imagem Anterior">◀</button>
+    <div id="lb-conteudo" class="lb-conteudo"></div>
+    <button class="lb-prox" aria-label="Próxima Imagem">▶</button>
+  </div>
 
   <script src="produtos.js"></script>
   <script src="links.js"></script>
