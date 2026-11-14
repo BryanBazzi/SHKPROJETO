@@ -504,18 +504,36 @@
     );
     var consoles = PRODUTOS.filter(function (p) { return p.tipo === "console" || p.tipo === "acessorio"; }).slice(0, 4);
 
+    var pastaRaiz = "/" + (SITE.pastaImagens ? SITE.pastaImagens + "/" : "");
     var lojasFaixa = Object.keys(LOJAS).map(function (k) {
-      var pasta = "/" + (SITE.pastaImagens ? SITE.pastaImagens + "/" : "") + "lojas/";
       return '<div class="faixa-loja" title="' + esc(LOJAS[k].nome) + '">' +
-        '<img src="' + pasta + "loja-" + k + '.png" alt="' + esc(LOJAS[k].nome) + '">' +
+        '<img src="' + pastaRaiz + "lojas/loja-" + k + '.png" alt="' + esc(LOJAS[k].nome) + '">' +
         "<span>" + esc(LOJAS[k].nome) + "</span></div>";
     }).join("");
 
+    var b = typeof HOME_BANNER === "object" && HOME_BANNER ? HOME_BANNER : {
+      id: "gta-6",
+      imagem: "jogos-ps5/gta-6_banner.jpg",
+      selo: "🔥 Super Lançamento • PlayStation 5",
+      chamada: "Compare os preços e garanta seu GTA 6 no menor preço!",
+      subtexto: "Assista ao trailer, veja os prints em tela cheia e compre nas lojas oficiais verificadas.",
+      botao: "Ver onde comprar agora →"
+    };
+
+    var bannerHTML =
+      '<a class="banner-gta" href="/produto/' + esc(b.id) + '" aria-label="Ir para a página de ' + esc(b.id) + '">' +
+      '<img class="banner-gta-img" src="' + pastaRaiz + esc(b.imagem) + '" alt="Grand Theft Auto VI">' +
+      '<div class="banner-gta-sombra"></div>' +
+      '<div class="banner-gta-conteudo">' +
+      (b.selo ? '<span class="banner-gta-selo">' + esc(b.selo) + "</span>" : "") +
+      '<p class="banner-gta-chamada">' + esc(b.chamada) + "</p>" +
+      (b.subtexto ? '<p class="banner-gta-sub">' + esc(b.subtexto) + "</p>" : "") +
+      '<span class="banner-gta-cta">' + esc(b.botao || "Comprar agora →") + "</span>" +
+      "</div></a>";
+
     app.innerHTML =
-      '<section class="hero">' +
-      '<p class="hero-kicker">Direto das minhas lives</p>' +
-      "<h1>Ache seu próximo game <span>com o melhor caminho de compra</span></h1>" +
-      "<p>Escolha a plataforma, veja o trailer e os prints em tela cheia e vá direto para a loja oficial.</p>" +
+      bannerHTML +
+      '<section class="hero hero-compacto">' +
       '<div class="hero-botoes">' +
       '<a class="plat-btn tema-ps5" href="/ps5"><small>Plataforma</small><strong>PlayStation 5</strong><span class="plat-sub">Jogos, consoles e DualSense →</span></a>' +
       '<a class="plat-btn tema-switch" href="/switch"><small>Plataforma</small><strong>Nintendo Switch 1 & 2</strong><span class="plat-sub">Jogos, consoles e acessórios →</span></a>' +

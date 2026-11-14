@@ -131,8 +131,66 @@ main { flex: 1; width: 100%; max-width: 1120px; margin: 0 auto; padding: 24px 16
 .redes { display: flex; gap: 10px; flex-wrap: wrap; margin-top: auto; }
 .redes a { padding: 8px 12px; border-radius: 10px; background: var(--bg3); font-weight: 600; }
 
+/* ---------- banner principal (GTA 6 Vice City Neon) ---------- */
+.banner-gta {
+  position: relative; display: block; width: 100%; aspect-ratio: 16 / 9; max-height: 540px;
+  border-radius: 22px; overflow: hidden; margin-bottom: 24px;
+  border: 2px solid rgba(255, 68, 204, .75);
+  box-shadow: 0 0 42px -6px rgba(255, 42, 166, .55), 0 0 80px -20px rgba(255, 154, 60, .45);
+  background: #140824; transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+}
+.banner-gta:hover {
+  transform: translateY(-3px); border-color: #ff66dd;
+  box-shadow: 0 0 56px -2px rgba(255, 42, 166, .75), 0 0 95px -10px rgba(0, 229, 255, .45);
+}
+.banner-gta-img {
+  width: 100%; height: 100%; object-fit: cover; object-position: center 22%;
+  display: block; transition: transform .5s ease;
+}
+.banner-gta:hover .banner-gta-img { transform: scale(1.03); }
+.banner-gta-sombra {
+  position: absolute; inset: 0; pointer-events: none;
+  background:
+    linear-gradient(0deg, rgba(7, 5, 16, .94) 0%, rgba(16, 8, 32, .62) 34%, rgba(16, 8, 32, 0) 64%),
+    radial-gradient(circle at 22% 85%, rgba(255, 42, 166, .32), transparent 55%);
+}
+.banner-gta-conteudo {
+  position: absolute; left: 0; right: 0; bottom: 0; z-index: 2;
+  padding: 24px 30px; display: flex; flex-direction: column; align-items: flex-start; gap: 6px;
+}
+.banner-gta-selo {
+  padding: 4px 12px; border-radius: 999px; font-size: .78rem; font-weight: 800;
+  letter-spacing: .12em; text-transform: uppercase; color: #fff;
+  background: linear-gradient(90deg, #ff2aa6, #ff8a3d);
+  box-shadow: 0 0 18px rgba(255, 42, 166, .7);
+}
+.banner-gta-chamada {
+  font-family: "Orbitron", "Rajdhani", sans-serif; font-weight: 800;
+  font-size: clamp(1.15rem, 2.7vw, 1.95rem); line-height: 1.18; max-width: 720px;
+  color: #fff;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, .9), 0 0 16px #ff2aa6, 0 0 34px rgba(255, 120, 50, .85);
+}
+.banner-gta-sub {
+  color: #e9e4ff; font-size: clamp(.9rem, 1.6vw, 1.08rem); font-weight: 600;
+  max-width: 620px; text-shadow: 0 1px 6px rgba(0, 0, 0, .95);
+}
+.banner-gta-cta {
+  margin-top: 6px; padding: 10px 22px; border-radius: 999px;
+  font-family: "Orbitron", sans-serif; font-weight: 800; font-size: .9rem; letter-spacing: .05em;
+  color: #fff; background: linear-gradient(90deg, #ff2aa6 0%, #b44dff 55%, #00d4ff 100%);
+  border: 1px solid rgba(255, 255, 255, .45);
+  box-shadow: 0 0 24px rgba(255, 42, 166, .7);
+  transition: transform .2s, box-shadow .2s;
+}
+.banner-gta:hover .banner-gta-cta {
+  transform: scale(1.04); box-shadow: 0 0 32px rgba(0, 212, 255, .85), 0 0 24px rgba(255, 42, 166, .9);
+}
+
 /* ---------- hero ---------- */
 .hero { text-align: center; padding: 36px 8px 28px; }
+.hero-compacto { padding: 8px 8px 18px; }
+.hero-compacto .hero-botoes { margin-top: 4px; }
+.hero-compacto .faixa-lojas { margin-top: 18px; }
 .hero-kicker { color: var(--neon); letter-spacing: .2em; text-transform: uppercase; font-weight: 700; font-size: .85rem; text-shadow: 0 0 10px var(--glow); }
 .hero h1 { font-size: clamp(1.7rem, 5vw, 3rem); line-height: 1.15; margin: 10px 0 14px; }
 .hero h1 span { display: block; background: linear-gradient(90deg, #ffffff, #cfdcff, #ffffff); -webkit-background-clip: text; background-clip: text; color: transparent; }
@@ -367,6 +425,11 @@ a.loja:hover { transform: translateX(4px); border-color: var(--lc); box-shadow: 
   .grade { grid-template-columns: repeat(2, 1fr); gap: 12px; }
   .card h3 { font-size: .85rem; }
   .plat-btn { width: 100%; }
+  .banner-gta { aspect-ratio: 4 / 3; border-radius: 16px; }
+  .banner-gta-conteudo { padding: 16px 16px 18px; gap: 4px; }
+  .banner-gta-selo { font-size: .7rem; padding: 3px 10px; }
+  .banner-gta-sub { display: none; }
+  .banner-gta-cta { padding: 8px 16px; font-size: .8rem; }
   .lb-area { padding: 0; }
   .lb-seta { width: 40px; height: 40px; font-size: 1.8rem; }
   .lb-ant { left: 8px; }

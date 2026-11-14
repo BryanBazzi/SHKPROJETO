@@ -25,6 +25,17 @@ const LOJAS = {
   aliexpress:   { nome: "AliExpress",    sigla: "Ali" }
 };
 
+/* ---------- Banner principal do topo da Página Inicial ----------
+   Quando clicado, leva direto para a página do produto configurado abaixo. */
+const HOME_BANNER = {
+  id: "gta-6",
+  imagem: "jogos-ps5/gta-6_banner.jpg",
+  selo: "🔥 Super Lançamento • PlayStation 5",
+  chamada: "Compare os preços e garanta seu GTA 6 no menor preço!",
+  subtexto: "Assista ao trailer, veja os prints em tela cheia e compre nas lojas oficiais verificadas.",
+  botao: "Ver onde comprar agora →"
+};
+
 /* ---------- Ordem da página inicial ----------
    Basta colocar os IDs dos produtos na ordem exata em que você quer que apareçam! */
 const HOME_DESTAQUES = [
