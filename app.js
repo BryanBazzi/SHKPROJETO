@@ -41,9 +41,15 @@
     }
   };
 
-  /* ---------- UTILIDADES ---------- */
-  function esc(s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
-  function norm(s) { return String(s || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase(); }
+  /* ---------- utilidades ---------- */
+  function esc(s) {
+    return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+    });
+  }
+  function norm(s) {
+    return String(s || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+  }
   function chave(s) { return norm(s).replace(/[^a-z0-9]/g, ""); }
   function acha(p, q) {
     var junto = chave(q);
@@ -76,8 +82,10 @@
     return null;
   }
 
-  /* ---------- LINKS DE AFILIADO E TRAILER ---------- */
-  function limpaChave(s) { return String(s || "").toLowerCase().replace(/[^a-z0-9_]/g, ""); }
+  /* ---------- links.js: trailers e links de afiliado ---------- */
+  function limpaChave(s) {
+    return String(s || "").toLowerCase().replace(/[^a-z0-9_]/g, "");
+  }
   var MAPA_LINKS = {};
   String(typeof LINKS === "string" ? LINKS : "").split(/\r?\n/).forEach(function (linha) {
     linha = linha.trim();
@@ -88,12 +96,12 @@
   });
   function linkDe(id, tipo) {
     var base = limpaChave(id);
-    return MAPA_LINKS[base + "_" + tipo] || MAPA_LINKS[tipo + "_" + base] || "";
+    var t = limpaChave(tipo);
+    return MAPA_LINKS[base + "_" + t] || MAPA_LINKS[t + "_" + base] || "";
   }
 
-  /* ---------- NOVO: SISTEMA DE IMAGENS POR PASTA ----------
-     Agora busca em "imagens/id-do-produto/nomeDoArquivo.extensão" */
-  var EXTENSOES = ["png", "jpg", "webp", "jpeg"];
+  /* ---------- SISTEMA DE PASTAS (imagens/gta-6/capa.png) ---------- */
+  var EXTENSOES = ["png", "webp", "jpg", "jpeg"];
   var cacheImg = {};
 
   function testar(src) {
@@ -108,11 +116,13 @@
   function acharMidiaProduto(idProduto, nomeArquivo) {
     var chaveCache = idProduto + "/" + nomeArquivo;
     if (cacheImg[chaveCache] !== undefined) return Promise.resolve(cacheImg[chaveCache]);
+    
     return EXTENSOES.reduce(function (cadeia, ext) {
       return cadeia.then(function (achada) {
         if (achada) return achada;
-        // Caminho final: imagens/gta-6/capa.png
-        var src = (SITE.pastaImagens ? SITE.pastaImagens + "/" : "") + idProduto + "/" + nomeArquivo + "." + ext;
+        // Monta o link: imagens/gta-6/capa.png
+        var pasta = SITE.pastaImagens ? SITE.pastaImagens + "/" : "";
+        var src = pasta + idProduto + "/" + nomeArquivo + "." + ext;
         return testar(src).then(function (ok) { return ok ? src : ""; });
       });
     }, Promise.resolve("")).then(function (r) {
@@ -144,30 +154,37 @@
     });
   }
 
-  /* ---------- INTERFACE, GALERIA E LIGHTBOX ---------- */
+  /* ---------- INTERFACE E LIGHTBOX (ZOOM) ---------- */
   var itensGaleria = [];
   var indiceGaleria = 0;
   var produtoAtual = null;
 
   function palcoHTML(m, p) {
     if (m.tipo === "video") {
-      return '<div class="video"><iframe src="https://www.youtube-nocookie.com/embed/' + m.id + '" title="Trailer" allowfullscreen></iframe></div>';
+      return '<div class="video"><iframe src="https://www.youtube-nocookie.com/embed/' + m.id + '" title="Trailer de ' + esc(p.nome) +
+        '" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture; fullscreen" allowfullscreen></iframe></div>';
     }
-    return '<div class="video palco-img"><img class="palco-foto" src="' + esc(m.src) + '" alt="' + esc(p.nome) + '"></div>';
+    return '<div class="video palco-img">' +
+      '<img class="palco-foto" src="' + esc(m.src) + '" alt="' + esc(p.nome) + '">' +
+      "</div>";
   }
 
   function miniHTML(m, i, p) {
     var img = m.tipo === "video" ? "https://i.ytimg.com/vi/" + m.id + "/mqdefault.jpg" : m.src;
-    return '<button type="button" class="mini' + (i === 0 ? " ativa" : "") + '" data-i="' + i + '">' +
-      '<img src="' + esc(img) + '" loading="lazy">' +
+    return '<button type="button" class="mini' + (i === 0 ? " ativa" : "") + '" data-i="' + i + '" aria-label="' +
+      (m.tipo === "video" ? "Ver trailer" : "Ver imagem " + (i + 1)) + " de " + esc(p.nome) + '">' +
+      '<img src="' + esc(img) + '" alt="" loading="lazy">' +
       (m.tipo === "video" ? '<span class="mini-play">▶</span>' : "") + "</button>";
   }
 
   function abrirLightbox(i) {
     if (!itensGaleria.length) return;
     indiceGaleria = i;
-    document.getElementById("lightbox").classList.remove("escondido");
-    document.getElementById("lb-conteudo").innerHTML = palcoHTML(itensGaleria[indiceGaleria], produtoAtual);
+    var lb = document.getElementById("lightbox");
+    if(lb) {
+      lb.classList.remove("escondido");
+      document.getElementById("lb-conteudo").innerHTML = palcoHTML(itensGaleria[indiceGaleria], produtoAtual);
+    }
   }
 
   function mudarLightbox(direcao) {
@@ -179,10 +196,19 @@
     document.getElementById("lb-conteudo").innerHTML = palcoHTML(itensGaleria[indiceGaleria], produtoAtual);
   }
 
-  document.querySelector(".lb-fechar").addEventListener("click", function() { document.getElementById("lightbox").classList.add("escondido"); document.getElementById("lb-conteudo").innerHTML = ""; });
-  document.querySelector(".lb-ant").addEventListener("click", function() { mudarLightbox('ant'); });
-  document.querySelector(".lb-prox").addEventListener("click", function() { mudarLightbox('prox'); });
-  document.getElementById("lightbox").addEventListener("click", function(e) { if(e.target === this) { this.classList.add("escondido"); document.getElementById("lb-conteudo").innerHTML = ""; }});
+  // Controles do Lightbox
+  var btnFechar = document.querySelector(".lb-fechar");
+  if(btnFechar) btnFechar.addEventListener("click", function() { document.getElementById("lightbox").classList.add("escondido"); document.getElementById("lb-conteudo").innerHTML = ""; });
+  
+  var btnAnt = document.querySelector(".lb-ant");
+  if(btnAnt) btnAnt.addEventListener("click", function() { mudarLightbox('ant'); });
+  
+  var btnProx = document.querySelector(".lb-prox");
+  if(btnProx) btnProx.addEventListener("click", function() { mudarLightbox('prox'); });
+  
+  var lbBox = document.getElementById("lightbox");
+  if(lbBox) lbBox.addEventListener("click", function(e) { if(e.target === this) { this.classList.add("escondido"); document.getElementById("lb-conteudo").innerHTML = ""; }});
+
 
   function montarMidia(itens, p, meu) {
     var box = document.getElementById("midiaBox");
@@ -195,7 +221,7 @@
     itensGaleria = itens;
     produtoAtual = p;
 
-    // Coloca o cursor de lupa para indicar que tem zoom
+    // Coloca cursor de lupa
     box.innerHTML = '<div id="palco" class="palco" style="cursor: zoom-in;" title="Clique para expandir">' + palcoHTML(itens[0], p) + "</div>" +
       (itens.length > 1 ? '<div class="minis">' + itens.map(function (m, i) { return miniHTML(m, i, p); }).join("") + "</div>" : "");
     
@@ -240,6 +266,7 @@
     Array.prototype.forEach.call(lista, function (c) {
       acharMidiaProduto(c.getAttribute("data-id"), "capa").then(function (src) {
         if (!src || meu !== tokenRota) return;
+        c.classList.remove("capa-ps5", "capa-switch", "capa-pc");
         c.innerHTML = '<img class="capa-foto" src="' + esc(src) + '" alt="' + esc(c.getAttribute("data-nome")) + '">';
       });
     });
@@ -268,7 +295,7 @@
     return '<section class="secao"><div class="secao-topo"><h2>' + esc(titulo) + "</h2>" + (extra || "") + "</div>" + html + "</section>";
   }
 
-  /* ---------- PÁGINAS E ROTAS ORIGINAIS RESTAURADAS ---------- */
+  /* ---------- PÁGINAS ---------- */
   function home() {
     setTema("neutro");
     var promos = PRODUTOS.filter(function (p) { return p.promocao; }).slice(0, 6);
@@ -283,7 +310,8 @@
       '<a class="plat-btn tema-switch" href="#/switch"><small>Plataforma</small><strong>Nintendo Switch</strong></a>' +
       '<a class="plat-btn tema-pc" href="#/pc"><small>Categoria</small><strong>PC &amp; Setup</strong></a>' +
       "</div></section>" +
-      secao("🔥 Promoções em destaque", grade(promos, "Sem promoções no momento."), '<a class="mais" href="#/promocoes">Ver todas →</a>') +
+      secao("🔥 Promoções em destaque", grade(promos, "Sem promoções no momento."),
+        '<a class="mais" href="#/promocoes">Ver todas →</a>') +
       secao("⭐ Destaques", grade(destaques, "Marque produtos com destaque: true para eles aparecerem aqui."));
   }
 
@@ -304,49 +332,63 @@
     if (plat === "pc") {
       var hardware = lista.filter(function (p) { return p.tipo === "hardware"; });
       var perifericos = lista.filter(function (p) { return p.tipo === "periferico"; });
-      if (aba === "hardware") corpo = secao("Hardware e Componentes", grade(hardware, "Nenhum hardware cadastrado."));
-      else if (aba === "perifericos") corpo = secao("Periféricos e Acessórios", grade(perifericos, "Nenhum periférico cadastrado."));
+      if (aba === "hardware") corpo = secao("Hardware e Componentes", grade(hardware, "Nenhum hardware cadastrado ainda."));
+      else if (aba === "perifericos") corpo = secao("Periféricos e Acessórios", grade(perifericos, "Nenhum periférico cadastrado ainda."));
       else if (aba === "promocoes") corpo = secao("🔥 Promoções", grade(promos, "Sem promoções no momento."));
-      else corpo = secao("Hardware e Componentes", grade(hardware, "Nenhum hardware cadastrado.")) + secao("Periféricos e Acessórios", grade(perifericos, "Nenhum periférico cadastrado."));
+      else corpo =
+        secao("Hardware e Componentes", grade(hardware, "Nenhum hardware cadastrado ainda.")) +
+        secao("Periféricos e Acessórios", grade(perifericos, "Nenhum periférico cadastrado ainda."));
     } else {
       var consoles = lista.filter(function (p) { return p.tipo === "console"; });
       var jogos = lista.filter(function (p) { return p.tipo === "jogo"; });
-      if (aba === "consoles") corpo = secao("Consoles e acessórios", grade(consoles, "Nenhum console cadastrado."));
-      else if (aba === "jogos") corpo = secao("Jogos", grade(jogos, "Nenhum jogo cadastrado."));
+      if (aba === "consoles") corpo = secao("Consoles e acessórios", grade(consoles, "Nenhum console cadastrado ainda."));
+      else if (aba === "jogos") corpo = secao("Jogos", grade(jogos, "Nenhum jogo cadastrado ainda."));
       else if (aba === "promocoes") corpo = secao("🔥 Promoções", grade(promos, "Sem promoções no momento."));
-      else corpo = secao("Consoles e acessórios", grade(consoles, "Nenhum console cadastrado.")) + secao("Jogos", grade(jogos, "Nenhum jogo cadastrado."));
+      else corpo =
+        secao("Consoles e acessórios", grade(consoles, "Nenhum console cadastrado ainda.")) +
+        secao("Jogos", grade(jogos, "Nenhum jogo cadastrado ainda."));
     }
 
-    app.innerHTML = '<section class="plat-topo"><p class="hero-kicker">Categoria</p><h1>' + esc(infoPlat.nome) + "</h1></section>" + tabs + corpo;
+    app.innerHTML =
+      '<section class="plat-topo"><p class="hero-kicker">Categoria</p><h1>' + esc(infoPlat.nome) + "</h1></section>" +
+      tabs + corpo;
   }
 
   function promocoes() {
     setTema("neutro", "Promoções");
     var promos = PRODUTOS.filter(function (p) { return p.promocao; });
-    app.innerHTML = '<section class="plat-topo"><p class="hero-kicker">Aproveite</p><h1>🔥 Promoções</h1></section>' + secao("Todas as promoções", grade(promos, "Sem promoções no momento."));
+    app.innerHTML =
+      '<section class="plat-topo"><p class="hero-kicker">Aproveite</p><h1>🔥 Promoções</h1></section>' +
+      secao("Todas as promoções", grade(promos, "Sem promoções no momento."));
   }
 
   function busca(q) {
     setTema("neutro", "Busca");
     var achados = PRODUTOS.filter(function (p) { return acha(p, q); });
-    app.innerHTML = '<section class="plat-topo"><p class="hero-kicker">Busca em tempo real</p><h1>Resultados para “' + esc(q) + "”</h1></section>" +
-      secao(achados.length + (achados.length === 1 ? " resultado" : " resultados"), grade(achados, "Não achei nada. Tente outra palavra."));
+    app.innerHTML =
+      '<section class="plat-topo"><p class="hero-kicker">Busca em tempo real</p><h1>Resultados para “' + esc(q) + "”</h1></section>" +
+      secao(achados.length + (achados.length === 1 ? " resultado" : " resultados"), grade(achados, "Não achei nada com esse nome. Tente outra palavra."));
+  }
+
+  function iconeLojaHTML(k) {
+    // As logos das lojas continuam soltas na raiz da pasta imagens/
+    var pasta = SITE.pastaImagens ? SITE.pastaImagens + "/" : "";
+    return '<span class="loja-ico" aria-hidden="true" data-sigla="' + esc(LOJAS[k].sigla) + '">' +
+      '<img src="' + pasta + "loja-" + k + '.png" alt="" onerror="this.parentNode.classList.add(\'sem-logo\');this.remove()"></span>';
   }
 
   function botaoLoja(p, k) {
     var v = linkDe(p.id, k);
     if (v === "-") return "";
     var nome = esc(LOJAS[k].nome);
-    // As logos das lojas continuam na raiz da pasta imagens (imagens/loja-amazon.png)
-    var pasta = SITE.pastaImagens ? SITE.pastaImagens + "/" : "";
-    var ico = '<span class="loja-ico" aria-hidden="true" data-sigla="' + esc(LOJAS[k].sigla) + '">' +
-      '<img src="' + pasta + "loja-" + k + '.png" alt="" onerror="this.parentNode.classList.add(\'sem-logo\');this.remove()"></span>';
     var url = urlSegura(v);
     if (url) {
-      return '<a class="loja loja-' + k + '" href="' + esc(url) + '" target="_blank" rel="sponsored noopener noreferrer">' + ico +
+      return '<a class="loja loja-' + k + '" href="' + esc(url) + '" target="_blank" rel="sponsored noopener noreferrer">' +
+        iconeLojaHTML(k) +
         '<span class="loja-txt"><strong>' + nome + "</strong><small>Ver preço atualizado</small></span><em>→</em></a>';
     }
-    return '<div class="loja loja-' + k + ' off">' + ico +
+    return '<div class="loja loja-' + k + ' off">' +
+      iconeLojaHTML(k) +
       '<span class="loja-txt"><strong>' + nome + "</strong><small>Link em breve</small></span></div>';
   }
 
@@ -359,7 +401,10 @@
     var meu = tokenRota;
 
     var botoes = Object.keys(LOJAS).map(function (k) { return botaoLoja(p, k); }).join("");
-    var rel = PRODUTOS.filter(function (x) { return x.id !== p.id && x.plataforma === p.plataforma && x.tipo === p.tipo; }).slice(0, 4);
+
+    var rel = PRODUTOS.filter(function (x) {
+      return x.id !== p.id && x.plataforma === p.plataforma && x.tipo === p.tipo;
+    }).slice(0, 4);
 
     app.innerHTML =
       '<nav class="trilha"><a href="#/">Início</a> › <a href="#/' + p.plataforma + '">' + esc(plat.nome) + "</a> › " +
@@ -367,12 +412,14 @@
       '<article class="produto">' +
       '<div id="midiaBox" class="produto-midia"><div class="video video-vazio"><span>⏳</span><p>Carregando…</p></div></div>' +
       '<div class="produto-info">' +
-      '<div class="selos">' + (p.promocao ? '<span class="selo selo-promo">🔥 Promoção</span>' : "") + '<span class="selo">' + esc(p.versao || plat.curto) + "</span></div>" +
+      '<div class="selos">' +
+      (p.promocao ? '<span class="selo selo-promo">🔥 Promoção</span>' : "") +
+      '<span class="selo">' + esc(p.versao || plat.curto) + "</span></div>" +
       "<h1>" + esc(p.nome) + "</h1>" +
       "<p class=\"desc\">" + esc(p.descricao) + "</p>" +
       "<h2>Onde comprar</h2>" +
-      '<div class="lojas">' + (botoes || '<p class="vazio">Links de compra em breve.</p>') + "</div>" +
-      '<p class="nota">Os links abrem na loja com o preço do dia. Posso receber comissão pela compra.</p>' +
+      '<div class="lojas">' + (botoes || '<p class="vazio">Link em breve.</p>') + "</div>" +
+      '<p class="nota">Os links abrem na loja com o preço do dia. Posso receber comissão pela compra, sem custo extra pra você.</p>' +
       "</div></article>" +
       (rel.length ? secao("Veja também", grade(rel)) : "");
 
@@ -384,29 +431,38 @@
     app.innerHTML = '<section class="plat-topo"><h1>Página não encontrada</h1><p><a class="mais" href="#/">← Voltar ao início</a></p></section>';
   }
 
-  /* ---------- CONTROLES DO MENU E BUSCA ---------- */
+  /* ---------- menu ---------- */
   function abrirMenu(abrir) {
-    menu.classList.toggle("aberto", abrir); fundo.classList.toggle("aberto", abrir);
-    btnMenu.setAttribute("aria-expanded", abrir ? "true" : "false"); btnMenu.classList.toggle("ativo", abrir);
+    menu.classList.toggle("aberto", abrir);
+    fundo.classList.toggle("aberto", abrir);
+    btnMenu.setAttribute("aria-expanded", abrir ? "true" : "false");
+    btnMenu.classList.toggle("ativo", abrir);
   }
   btnMenu.addEventListener("click", function () { abrirMenu(!menu.classList.contains("aberto")); });
   fundo.addEventListener("click", function () { abrirMenu(false); });
   document.addEventListener("keydown", function (e) { if (e.key === "Escape") abrirMenu(false); });
 
+  /* ---------- busca em tempo real ---------- */
   var timerBusca = null;
   campoBusca.addEventListener("input", function () {
     clearTimeout(timerBusca);
     timerBusca = setTimeout(function () {
       var q = campoBusca.value.trim();
-      if (q) location.hash = "#/busca/" + encodeURIComponent(q);
-      else if (location.hash.indexOf("#/busca/") === 0) location.hash = "#/";
+      if (q) {
+        location.hash = "#/busca/" + encodeURIComponent(q);
+      } else if (location.hash.indexOf("#/busca/") === 0) {
+        location.hash = "#/";
+      }
     }, 150);
   });
+
   document.getElementById("formBusca").addEventListener("submit", function (e) {
-    e.preventDefault(); var q = campoBusca.value.trim(); if (q) location.hash = "#/busca/" + encodeURIComponent(q);
+    e.preventDefault();
+    var q = campoBusca.value.trim();
+    if (q) location.hash = "#/busca/" + encodeURIComponent(q);
   });
 
-  /* ---------- ROTEAMENTO ---------- */
+  /* ---------- rotas ---------- */
   function rota() {
     tokenRota++;
     var h = location.hash.replace(/^#\/?/, "");
@@ -414,12 +470,20 @@
     try { partes = h.split("/").map(decodeURIComponent); } catch (e) { partes = [""]; }
     
     abrirMenu(false);
-    document.getElementById("lightbox").classList.add("escondido"); // Fecha zoom se clicar em voltar
+    // Fecha o zoom ao mudar de página
+    var lb = document.getElementById("lightbox");
+    if(lb) lb.classList.add("escondido");
 
     var a = partes[0], b = partes[1];
-    if (a !== "busca" || document.activeElement !== campoBusca) window.scrollTo(0, 0);
-    if (a === "busca" && campoBusca.value.trim() !== (b || "")) campoBusca.value = b || "";
-    else if (a !== "busca" && document.activeElement !== campoBusca) campoBusca.value = "";
+    if (a !== "busca" || document.activeElement !== campoBusca) {
+      window.scrollTo(0, 0);
+    }
+
+    if (a === "busca" && campoBusca.value.trim() !== (b || "")) {
+      campoBusca.value = b || "";
+    } else if (a !== "busca" && document.activeElement !== campoBusca) {
+      campoBusca.value = "";
+    }
 
     if (!a) home();
     else if (PLAT[a]) plataforma(a, b || "");
@@ -428,11 +492,13 @@
     else if (a === "busca") busca(b || "");
     else naoEncontrado();
 
-    if (!a && location.hash && window.history && history.replaceState) history.replaceState(null, "", location.pathname + location.search);
+    if (!a && location.hash && window.history && history.replaceState) {
+      history.replaceState(null, "", location.pathname + location.search);
+    }
     preencherCapas();
   }
 
-  /* ---------- INÍCIO ---------- */
+  /* ---------- início ---------- */
   document.getElementById("marcaNome").textContent = SITE.nome;
   document.getElementById("marcaSub").textContent = SITE.subtitulo;
 
@@ -441,7 +507,9 @@
   var attrYt = urlSegura(SITE.youtube) ? ' target="_blank" rel="noopener"' : ' onclick="return false;" title="Em breve"';
   var attrTw = urlSegura(SITE.twitch) ? ' target="_blank" rel="noopener"' : ' onclick="return false;" title="Em breve"';
 
-  document.getElementById("redes").innerHTML = '<a href="' + linkYt + '"' + attrYt + '>▶ YouTube</a><a href="' + linkTw + '"' + attrTw + '>🟣 Twitch</a>';
+  document.getElementById("redes").innerHTML =
+    '<a href="' + linkYt + '"' + attrYt + '>▶ YouTube</a>' +
+    '<a href="' + linkTw + '"' + attrTw + '>🟣 Twitch</a>';
 
   window.addEventListener("hashchange", rota);
   rota();
