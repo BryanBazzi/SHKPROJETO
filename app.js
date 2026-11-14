@@ -14,6 +14,7 @@
   var ABAS = [
     { chave: "", rotulo: "Tudo" },
     { chave: "consoles", rotulo: "Consoles" },
+    { chave: "acessorios", rotulo: "Acessórios" },
     { chave: "jogos", rotulo: "Jogos" },
     { chave: "promocoes", rotulo: "Promoções" }
   ];
@@ -76,11 +77,23 @@
     return MAPA_LINKS[base + "_" + tipo] || MAPA_LINKS[tipo + "_" + base] || "";
   }
 
-  /* ---------- imagens automáticas pelo nome do arquivo ----------
-     {id}_capa.jpg, {id}_print1.jpg, {id}_print2.jpg ...
-     O site tenta abrir esses nomes e usa os que existirem. */
+  /* ---------- imagens automáticas por pasta de categoria ----------
+     As imagens ficam agrupadas por categoria dentro de "imagens/":
+     - jogos-ps5           (jogos de PlayStation 5)
+     - jogos-switch        (jogos de Nintendo Switch 1 e 2)
+     - consoles            (consoles PS5 e Nintendo Switch)
+     - ps5-acessorios      (controles e acessórios de PS5)
+     - switch-acessorios   (controles e acessórios de Nintendo Switch)
+     - lojas               (logos das lojas) */
   var EXTENSOES = ["jpg", "png", "webp", "jpeg"];
   var cacheImg = {};
+
+  function pastaCategoria(p) {
+    if (!p) return "";
+    if (p.tipo === "jogo") return p.plataforma === "ps5" ? "jogos-ps5" : "jogos-switch";
+    if (p.tipo === "acessorio") return p.plataforma === "ps5" ? "ps5-acessorios" : "switch-acessorios";
+    return "consoles";
+  }
 
   function testar(src) {
     return new Promise(function (resolve) {
@@ -93,12 +106,14 @@
 
   function acharImagem(base) {
     if (cacheImg[base] !== undefined) return Promise.resolve(cacheImg[base]);
+    var idProd = base.replace(/_(capa|print\d+)$/, "");
+    var prod = achar(idProd);
+    var cat = pastaCategoria(prod);
+    var prefixo = "/" + (SITE.pastaImagens ? SITE.pastaImagens + "/" : "") + (cat ? cat + "/" : "");
     return EXTENSOES.reduce(function (cadeia, ext) {
       return cadeia.then(function (achada) {
         if (achada) return achada;
-        /* cada produto tem a sua pasta: imagens/{id}/{id}_capa.png, {id}_print1.png ... */
-        var pastaProduto = base.replace(/_(capa|print\d+)$/, "");
-        var src = "/" + (SITE.pastaImagens ? SITE.pastaImagens + "/" : "") + pastaProduto + "/" + base + "." + ext;
+        var src = prefixo + base + "." + ext;
         return testar(src).then(function (ok) { return ok ? src : ""; });
       });
     }, Promise.resolve("")).then(function (r) {
@@ -406,8 +421,9 @@
 
   /* capa dos cards: começa com a capa neon e troca pela imagem {id}_capa se ela existir */
   function capa(p) {
+    var ico = p.tipo === "console" ? "🎮" : (p.tipo === "acessorio" ? "🎧" : "💿");
     return '<div class="capa capa-' + esc(p.plataforma) + '" data-id="' + esc(p.id) + '" data-nome="' + esc(p.nome) + '">' +
-      '<span class="capa-ico">' + (p.tipo === "console" ? "🎮" : "💿") + "</span>" +
+      '<span class="capa-ico">' + ico + "</span>" +
       '<span class="capa-nome">' + esc(p.nome) + "</span></div>";
   }
 
@@ -478,14 +494,17 @@
 
     var corpo = "";
     var consoles = lista.filter(function (p) { return p.tipo === "console"; });
+    var acessorios = lista.filter(function (p) { return p.tipo === "acessorio"; });
     var jogos = lista.filter(function (p) { return p.tipo === "jogo"; });
     var promos = lista.filter(function (p) { return p.promocao; });
 
-    if (aba === "consoles") corpo = secao("Consoles e acessórios", grade(consoles, "Nenhum console cadastrado ainda."));
+    if (aba === "consoles") corpo = secao("Consoles", grade(consoles, "Nenhum console cadastrado ainda."));
+    else if (aba === "acessorios") corpo = secao("Acessórios", grade(acessorios, "Nenhum acessório cadastrado ainda."));
     else if (aba === "jogos") corpo = secao("Jogos", grade(jogos, "Nenhum jogo cadastrado ainda."));
     else if (aba === "promocoes") corpo = secao("🔥 Promoções", grade(promos, "Sem promoções no momento."));
     else corpo =
-      secao("Consoles e acessórios", grade(consoles, "Nenhum console cadastrado ainda.")) +
+      secao("Consoles", grade(consoles, "Nenhum console cadastrado ainda.")) +
+      secao("Acessórios", grade(acessorios, "Nenhum acessório cadastrado ainda.")) +
       secao("Jogos", grade(jogos, "Nenhum jogo cadastrado ainda."));
 
     app.innerHTML =
@@ -538,9 +557,12 @@
       return x.id !== p.id && x.plataforma === p.plataforma && x.tipo === p.tipo;
     }).slice(0, 4);
 
+    var catRota = p.tipo === "console" ? "consoles" : (p.tipo === "acessorio" ? "acessorios" : "jogos");
+    var catNome = p.tipo === "console" ? "Consoles" : (p.tipo === "acessorio" ? "Acessórios" : "Jogos");
+
     app.innerHTML =
       '<nav class="trilha"><a href="/">Início</a> › <a href="/' + p.plataforma + '">' + esc(plat.nome) + "</a> › " +
-      '<a href="/' + p.plataforma + "/" + (p.tipo === "console" ? "consoles" : "jogos") + '">' + (p.tipo === "console" ? "Consoles" : "Jogos") + "</a></nav>" +
+      '<a href="/' + p.plataforma + "/" + catRota + '">' + catNome + "</a></nav>" +
       '<article class="produto">' +
       '<div id="midiaBox" class="produto-midia"><div class="video video-vazio"><span>⏳</span><p>Carregando…</p></div></div>' +
       '<div class="produto-info">' +

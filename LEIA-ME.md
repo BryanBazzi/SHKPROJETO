@@ -8,16 +8,21 @@
 | imagens (`.jpg`) | Capa e prints de cada produto, pelo nome do arquivo |
 | `index.html`, `app.js`, `style.css` | O site em si (normalmente você não mexe) |
 
-## Imagens: uma pasta por produto, dentro da pasta `imagens`
+## Imagens: pastas fixas por categoria (dentro da pasta `imagens`)
+Você **não** precisa criar uma pasta para cada jogo! Basta ter estas **6 pastas fixas** dentro de `imagens/`:
+
 ```
 imagens/
-  gta-6/        gta-6_capa.png, gta-6_print1.png, gta-6_print2.png ...
-  astro-bot/    astro-bot_capa.png, astro-bot_print1.png ...
-  lojas/        loja-amazon.png, loja-kabum.png, loja-mercadolivre.png, loja-shopee.png, loja-aliexpress.png
+  jogos-ps5/           (todos os jogos de PS5: gta-6_capa.png, gta-6_print1.png, astro-bot_capa.png...)
+  jogos-switch/        (todos os jogos de Nintendo Switch 1 e 2)
+  consoles/            (consoles de PS5 e Switch)
+  ps5-acessorios/      (controles, headsets e acessórios de PS5)
+  switch-acessorios/   (controles e acessórios de Switch)
+  lojas/               (loja-amazon.png, loja-kabum.png, loja-mercadolivre.png, loja-shopee.png, loja-aliexpress.png)
 ```
-- A pasta tem o mesmo nome do **id** do produto (o do `produtos.js`) e os arquivos começam com o id: `{id}_capa.png`, `{id}_print1.png`…
+- O site sabe sozinho em qual pasta procurar olhando a `plataforma` (`ps5` ou `switch`) e o `tipo` (`jogo`, `console` ou `acessorio`) no `produtos.js`.
+- Os nomes dos arquivos continuam começando com o **id** do produto: `{id}_capa.png`, `{id}_print1.png`, `{id}_print2.png`…
 - **Loja nova:** adicione uma linha em `LOJAS` no `produtos.js` e o logo `imagens/lojas/loja-NOME.png`. O botão aparece em todos os produtos ("Link em breve" até você colocar o link no `links.js`).
-- No GitHub: Add file → Upload files, e para criar pasta digite `imagens/gta-6/` no nome do arquivo.
 
 Regras:
 - Tudo em letra minúscula, sem espaço e sem acento.

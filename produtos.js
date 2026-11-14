@@ -35,7 +35,7 @@ const LOJAS = {
                  É ele que você usa nos nomes das imagens e no links.js.
    nome       -> como aparece no site
    plataforma -> "ps5" ou "switch"
-   tipo       -> "console" ou "jogo"
+   tipo       -> "console", "acessorio" ou "jogo"
    versao     -> (opcional) etiqueta extra, ex.: "Switch 2", "Switch 1", "Switch 1 e 2"
    promocao   -> true se estiver em promoção (aparece na aba Promoções), senão false
    destaque   -> true para aparecer na página inicial
@@ -84,7 +84,7 @@ const PRODUTOS = [
     id: "dualsense",
     nome: "Controle DualSense (PS5)",
     plataforma: "ps5",
-    tipo: "console",
+    tipo: "acessorio",
     promocao: false,
     destaque: false,
     descricao: "Controle sem fio oficial do PS5, com gatilhos adaptáveis e retorno tátil."
@@ -135,7 +135,7 @@ const PRODUTOS = [
     id: "pro-controller",
     nome: "Controle Pro Nintendo Switch",
     plataforma: "switch",
-    tipo: "console",
+    tipo: "acessorio",
     versao: "Switch 1 e 2",
     promocao: false,
     destaque: false,
