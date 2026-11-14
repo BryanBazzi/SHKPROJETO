@@ -229,7 +229,6 @@ a.loja:hover { transform: translateX(4px); border-color: var(--lc); box-shadow: 
 @media (prefers-reduced-motion: reduce) {
   * { transition: none !important; scroll-behavior: auto !important; }
 }
-
 /* ---------- Zoom nas fotos (Lightbox) ---------- */
 .lightbox {
   position: fixed; inset: 0; z-index: 1000;

@@ -155,25 +155,6 @@
   var indiceGaleria = 0;
   var produtoAtual = null;
 
-  function palcoHTML(m, p) {
-    if (m.tipo === "video") {
-      return '<div class="video"><iframe src="https://www.youtube-nocookie.com/embed/' + m.id + '" title="Trailer de ' + esc(p.nome) +
-        '" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture; fullscreen" allowfullscreen></iframe></div>';
-    }
-    return '<div class="video palco-img">' +
-      '<img class="palco-fundo" src="' + esc(m.src) + '" alt="" aria-hidden="true">' +
-      '<img class="palco-foto" src="' + esc(m.src) + '" alt="' + esc(p.nome) + '">' +
-      "</div>";
-  }
-
-  function miniHTML(m, i, p) {
-    var img = m.tipo === "video" ? "https://i.ytimg.com/vi/" + m.id + "/mqdefault.jpg" : m.src;
-    return '<button type="button" class="mini' + (i === 0 ? " ativa" : "") + '" data-i="' + i + '" aria-label="' +
-      (m.tipo === "video" ? "Ver trailer" : "Ver imagem " + (i + 1)) + " de " + esc(p.nome) + '">' +
-      '<img src="' + esc(img) + '" alt="" loading="lazy">' +
-      (m.tipo === "video" ? '<span class="mini-play">▶</span>' : "") + "</button>";
-  }
-
   function abrirLightbox(i) {
     if (!itensGaleria || !itensGaleria.length) return;
     indiceGaleria = i;
@@ -193,6 +174,25 @@
     document.getElementById("lb-conteudo").innerHTML = palcoHTML(itensGaleria[indiceGaleria], produtoAtual);
   }
 
+  function palcoHTML(m, p) {
+    if (m.tipo === "video") {
+      return '<div class="video"><iframe src="https://www.youtube-nocookie.com/embed/' + m.id + '" title="Trailer de ' + esc(p.nome) +
+        '" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture; fullscreen" allowfullscreen></iframe></div>';
+    }
+    return '<div class="video palco-img">' +
+      '<img class="palco-fundo" src="' + esc(m.src) + '" alt="" aria-hidden="true">' +
+      '<img class="palco-foto" src="' + esc(m.src) + '" alt="' + esc(p.nome) + '">' +
+      "</div>";
+  }
+
+  function miniHTML(m, i, p) {
+    var img = m.tipo === "video" ? "https://i.ytimg.com/vi/" + m.id + "/mqdefault.jpg" : m.src;
+    return '<button type="button" class="mini' + (i === 0 ? " ativa" : "") + '" data-i="' + i + '" aria-label="' +
+      (m.tipo === "video" ? "Ver trailer" : "Ver imagem " + (i + 1)) + " de " + esc(p.nome) + '">' +
+      '<img src="' + esc(img) + '" alt="" loading="lazy">' +
+      (m.tipo === "video" ? '<span class="mini-play">▶</span>' : "") + "</button>";
+  }
+
   function montarMidia(itens, p, meu) {
     var box = document.getElementById("midiaBox");
     if (!box || meu !== tokenRota) return;
@@ -204,8 +204,7 @@
     itensGaleria = itens;
     produtoAtual = p;
 
-    // Adicionado cursor de lupa e evento de clique na imagem em destaque
-    box.innerHTML = '<div id="palco" class="palco" style="cursor: zoom-in;" title="Clique para expandir a imagem ou vídeo">' + palcoHTML(itens[0], p) + "</div>" +
+    box.innerHTML = '<div id="palco" class="palco" style="cursor: zoom-in;" title="Clique para expandir">' + palcoHTML(itens[0], p) + "</div>" +
       (itens.length > 1 ? '<div class="minis">' + itens.map(function (m, i) { return miniHTML(m, i, p); }).join("") + "</div>" : "");
     
     var palco = document.getElementById("palco");
@@ -424,15 +423,10 @@
   }
   btnMenu.addEventListener("click", function () { abrirMenu(!menu.classList.contains("aberto")); });
   fundo.addEventListener("click", function () { abrirMenu(false); });
-
-  // Evento atualizado para suportar Esc e setas para o Lightbox
   document.addEventListener("keydown", function (e) {
     var lb = document.getElementById("lightbox");
     if (lb && !lb.classList.contains("escondido")) {
-      if (e.key === "Escape") {
-        lb.classList.add("escondido");
-        document.getElementById("lb-conteudo").innerHTML = "";
-      }
+      if (e.key === "Escape") { lb.classList.add("escondido"); document.getElementById("lb-conteudo").innerHTML = ""; }
       if (e.key === "ArrowLeft") mudarLightbox('ant');
       if (e.key === "ArrowRight") mudarLightbox('prox');
     } else {
@@ -466,15 +460,9 @@
     var h = location.hash.replace(/^#\/?/, "");
     var partes;
     try { partes = h.split("/").map(decodeURIComponent); } catch (e) { partes = [""]; }
-    
     abrirMenu(false);
-
-    // Fecha a galeria caso o usuário volte ou troque de página
     var lb = document.getElementById("lightbox");
-    if (lb) {
-      lb.classList.add("escondido");
-      document.getElementById("lb-conteudo").innerHTML = "";
-    }
+    if(lb) { lb.classList.add("escondido"); document.getElementById("lb-conteudo").innerHTML = ""; }
 
     var a = partes[0], b = partes[1];
     if (a !== "busca" || document.activeElement !== campoBusca) {
@@ -500,7 +488,7 @@
     preencherCapas();
   }
 
-  /* ---------- Eventos do Lightbox (Zoom) ---------- */
+
   var lbFechar = document.querySelector(".lb-fechar");
   if (lbFechar) lbFechar.addEventListener("click", function() { document.getElementById("lightbox").classList.add("escondido"); document.getElementById("lb-conteudo").innerHTML = ""; });
   
