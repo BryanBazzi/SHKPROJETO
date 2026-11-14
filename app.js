@@ -7,9 +7,12 @@
   var btnMenu = document.getElementById("btnMenu");
   var tokenRota = 0; // muda a cada troca de página (evita atualizar a página errada)
 
+  var timerBanner = null; // timer de 5s do carrossel de banners
+
   var PLAT = {
     ps5: { nome: "PlayStation 5", curto: "PS5" },
-    "switch": { nome: "Nintendo Switch", curto: "Switch" }
+    "switch": { nome: "Nintendo Switch", curto: "Switch" },
+    xbox: { nome: "Xbox Series X|S", curto: "Xbox" }
   };
   var ABAS = [
     { chave: "", rotulo: "Tudo" },
@@ -90,8 +93,16 @@
 
   function pastaCategoria(p) {
     if (!p) return "";
-    if (p.tipo === "jogo") return p.plataforma === "ps5" ? "jogos-ps5" : "jogos-switch";
-    if (p.tipo === "acessorio") return p.plataforma === "ps5" ? "ps5-acessorios" : "switch-acessorios";
+    if (p.tipo === "jogo") {
+      if (p.plataforma === "ps5") return "jogos-ps5";
+      if (p.plataforma === "xbox") return "jogos-xbox";
+      return "jogos-switch";
+    }
+    if (p.tipo === "acessorio") {
+      if (p.plataforma === "ps5") return "ps5-acessorios";
+      if (p.plataforma === "xbox") return "xbox-acessorios";
+      return "switch-acessorios";
+    }
     return "consoles";
   }
 
@@ -433,7 +444,7 @@
     Array.prototype.forEach.call(lista, function (c) {
       acharImagem(c.getAttribute("data-id") + "_capa").then(function (src) {
         if (!src || meu !== tokenRota) return;
-        c.classList.remove("capa-ps5", "capa-switch");
+        c.classList.remove("capa-ps5", "capa-switch", "capa-xbox");
         c.innerHTML = '<img class="capa-fundo" src="' + esc(src) + '" alt="" aria-hidden="true">' +
           '<img class="capa-foto" src="' + esc(src) + '" alt="' + esc(c.getAttribute("data-nome")) + '">';
       });
@@ -492,6 +503,68 @@
   }
 
   /* ---------- páginas ---------- */
+  function montarCarrossel() {
+    var box = document.getElementById("carrosselHome");
+    if (!box) return;
+    var trilha = document.getElementById("carrosselTrilha");
+    var slides = box.querySelectorAll(".banner-slide");
+    var pontos = box.querySelectorAll(".carrossel-ponto");
+    var total = slides.length;
+    if (total < 2) return;
+    var atual = 0;
+
+    function irSlide(i) {
+      atual = (i + total) % total;
+      trilha.style.transform = "translateX(-" + (atual * 100) + "%)";
+      Array.prototype.forEach.call(pontos, function (p, k) {
+        p.classList.toggle("ativo", k === atual);
+      });
+    }
+    function iniciarTimer() {
+      pararTimer();
+      timerBanner = setInterval(function () { irSlide(atual + 1); }, 5000);
+    }
+    function pararTimer() {
+      if (timerBanner) { clearInterval(timerBanner); timerBanner = null; }
+    }
+
+    box.querySelector(".carrossel-ant").addEventListener("click", function () {
+      irSlide(atual - 1);
+      iniciarTimer();
+    });
+    box.querySelector(".carrossel-prox").addEventListener("click", function () {
+      irSlide(atual + 1);
+      iniciarTimer();
+    });
+    Array.prototype.forEach.call(pontos, function (btn) {
+      btn.addEventListener("click", function () {
+        irSlide(parseInt(btn.getAttribute("data-i"), 10));
+        iniciarTimer();
+      });
+    });
+
+    box.addEventListener("mouseenter", pararTimer);
+    box.addEventListener("mouseleave", iniciarTimer);
+
+    /* celular: deslizar o dedo para o lado troca o banner */
+    var tx = null, ty = 0;
+    box.addEventListener("touchstart", function (e) {
+      if (e.touches.length === 1) { tx = e.touches[0].clientX; ty = e.touches[0].clientY; pararTimer(); }
+    }, { passive: true });
+    box.addEventListener("touchend", function (e) {
+      if (tx !== null) {
+        var dx = e.changedTouches[0].clientX - tx, dy = e.changedTouches[0].clientY - ty;
+        tx = null;
+        if (Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy) * 1.4) {
+          irSlide(atual + (dx < 0 ? 1 : -1));
+        }
+      }
+      iniciarTimer();
+    }, { passive: true });
+
+    iniciarTimer();
+  }
+
   function home() {
     setTema("neutro");
     var destaques = listaPorIds(
@@ -505,40 +578,48 @@
     var consoles = PRODUTOS.filter(function (p) { return p.tipo === "console" || p.tipo === "acessorio"; }).slice(0, 4);
 
     var pastaRaiz = "/" + (SITE.pastaImagens ? SITE.pastaImagens + "/" : "");
-    var lojasFaixa = Object.keys(LOJAS).map(function (k) {
-      return '<div class="faixa-loja" title="' + esc(LOJAS[k].nome) + '">' +
-        '<img src="' + pastaRaiz + "lojas/loja-" + k + '.png" alt="' + esc(LOJAS[k].nome) + '">' +
-        "<span>" + esc(LOJAS[k].nome) + "</span></div>";
+    var listaBanners = typeof HOME_BANNERS !== "undefined" && Array.isArray(HOME_BANNERS) && HOME_BANNERS.length
+      ? HOME_BANNERS
+      : [];
+
+    var slidesHTML = listaBanners.map(function (b) {
+      var href = b.link || (b.id ? "/produto/" + b.id : "/");
+      var est = b.estilo || "gta";
+      return '<a class="banner-slide banner-estilo-' + esc(est) + '" href="' + esc(href) + '">' +
+        '<img class="banner-gta-img" src="' + pastaRaiz + esc(b.imagem) + '" alt="' + esc(b.chamada) + '">' +
+        '<div class="banner-gta-sombra"></div>' +
+        '<div class="banner-gta-conteudo">' +
+        (b.selo ? '<span class="banner-gta-selo">' + esc(b.selo) + "</span>" : "") +
+        '<p class="banner-gta-chamada">' + esc(b.chamada) + "</p>" +
+        (b.subtexto ? '<p class="banner-gta-sub">' + esc(b.subtexto) + "</p>" : "") +
+        '<span class="banner-gta-cta">' + esc(b.botao || "Ver agora →") + "</span>" +
+        "</div></a>";
     }).join("");
 
-    var b = typeof HOME_BANNER === "object" && HOME_BANNER ? HOME_BANNER : {
-      id: "gta-6",
-      imagem: "jogos-ps5/gta-6_banner.jpg",
-      selo: "🔥 Super Lançamento • PlayStation 5",
-      chamada: "Compare os preços e garanta seu GTA 6 no menor preço!",
-      subtexto: "Assista ao trailer, veja os prints em tela cheia e compre nas lojas oficiais verificadas.",
-      botao: "Ver onde comprar agora →"
-    };
+    var pontosHTML = listaBanners.map(function (_, i) {
+      return '<button type="button" class="carrossel-ponto' + (i === 0 ? " ativo" : "") +
+        '" data-i="' + i + '" aria-label="Banner ' + (i + 1) + '"></button>';
+    }).join("");
 
-    var bannerHTML =
-      '<a class="banner-gta" href="/produto/' + esc(b.id) + '" aria-label="Ir para a página de ' + esc(b.id) + '">' +
-      '<img class="banner-gta-img" src="' + pastaRaiz + esc(b.imagem) + '" alt="Grand Theft Auto VI">' +
-      '<div class="banner-gta-sombra"></div>' +
-      '<div class="banner-gta-conteudo">' +
-      (b.selo ? '<span class="banner-gta-selo">' + esc(b.selo) + "</span>" : "") +
-      '<p class="banner-gta-chamada">' + esc(b.chamada) + "</p>" +
-      (b.subtexto ? '<p class="banner-gta-sub">' + esc(b.subtexto) + "</p>" : "") +
-      '<span class="banner-gta-cta">' + esc(b.botao || "Comprar agora →") + "</span>" +
-      "</div></a>";
+    var carrosselHTML = listaBanners.length ? (
+      '<div id="carrosselHome" class="carrossel">' +
+      '<div id="carrosselTrilha" class="carrossel-trilha">' + slidesHTML + "</div>" +
+      (listaBanners.length > 1 ? (
+        '<button type="button" class="carrossel-seta carrossel-ant" aria-label="Banner anterior">‹</button>' +
+        '<button type="button" class="carrossel-seta carrossel-prox" aria-label="Próximo banner">›</button>' +
+        '<div class="carrossel-pontos">' + pontosHTML + "</div>"
+      ) : "") +
+      "</div>"
+    ) : "";
 
     app.innerHTML =
-      bannerHTML +
+      carrosselHTML +
       '<section class="hero hero-compacto">' +
       '<div class="hero-botoes">' +
       '<a class="plat-btn tema-ps5" href="/ps5"><small>Plataforma</small><strong>PlayStation 5</strong><span class="plat-sub">Jogos, consoles e DualSense →</span></a>' +
       '<a class="plat-btn tema-switch" href="/switch"><small>Plataforma</small><strong>Nintendo Switch 1 & 2</strong><span class="plat-sub">Jogos, consoles e acessórios →</span></a>' +
+      '<a class="plat-btn tema-xbox" href="/xbox"><small>Plataforma</small><strong>Xbox Series X|S</strong><span class="plat-sub">Jogos, consoles e controles →</span></a>' +
       "</div>" +
-      '<div class="faixa-lojas"><span class="faixa-rotulo">Lojas parceiras verificadas:</span><div class="faixa-lista">' + lojasFaixa + "</div></div>" +
       "</section>" +
       secao(
         "⭐ Destaques",
@@ -550,14 +631,16 @@
         "🚀 Últimos Lançamentos",
         grade(lancamentos, "Nenhum lançamento cadastrado no momento.", { modo: "lancamento" }),
         '<a class="mais" href="/lancamentos">Ver todos →</a>',
-        "Novidades e próximos grandes lançamentos para PlayStation 5 e Nintendo Switch 2"
+        "Novidades e próximos grandes lançamentos para PlayStation 5, Nintendo Switch 2 e Xbox"
       ) +
       secao(
         "🎮 Consoles e Acessórios",
         grade(consoles, "Nenhum console cadastrado no momento."),
-        "",
+        '<a class="mais" href="/consoles">Ver todos →</a>',
         "Aparelhos e controles oficiais para elevar seu setup"
       );
+
+    montarCarrossel();
   }
 
   function plataforma(plat, aba) {
@@ -590,6 +673,21 @@
     app.innerHTML =
       '<section class="plat-topo"><p class="hero-kicker">Plataforma</p><h1>' + esc(PLAT[plat].nome) + "</h1></section>" +
       tabs + corpo;
+  }
+
+  function consolesPag() {
+    setTema("neutro", "Consoles e Acessórios");
+    var todosConsoles = PRODUTOS.filter(function (p) { return p.tipo === "console"; });
+    var todosAcessorios = PRODUTOS.filter(function (p) { return p.tipo === "acessorio"; });
+    app.innerHTML =
+      '<section class="plat-topo"><p class="hero-kicker">Hardware Oficial</p><h1>🎮 Consoles e Acessórios</h1></section>' +
+      '<div class="hero-botoes" style="justify-content:flex-start;margin:10px 0 6px">' +
+      '<a class="aba" href="/ps5/consoles">PlayStation 5</a>' +
+      '<a class="aba" href="/switch/consoles">Nintendo Switch 1 & 2</a>' +
+      '<a class="aba" href="/xbox/consoles">Xbox Series X|S</a>' +
+      "</div>" +
+      secao("Consoles de Nova Geração", grade(todosConsoles, "Nenhum console cadastrado."), "", "PlayStation 5, Nintendo Switch 1 & 2 e Xbox Series X|S") +
+      secao("Controles e Acessórios", grade(todosAcessorios, "Nenhum acessório cadastrado."), "", "Controles sem fio e acessórios oficiais");
   }
 
   function lancamentosPag() {
@@ -717,6 +815,7 @@
   /* ---------- rotas ---------- */
   function rota() {
     tokenRota++;
+    if (timerBanner) { clearInterval(timerBanner); timerBanner = null; }
     /* links antigos com "#/produto/x" são convertidos para "/produto/x" */
     if (/^#\//.test(location.hash) && history.replaceState) {
       history.replaceState(null, "", location.hash.slice(1));
@@ -729,7 +828,8 @@
     window.scrollTo(0, 0);
     var a = partes[0], b = partes[1];
     if (!a) home();
-    else if (a === "ps5" || a === "switch") plataforma(a, b || "");
+    else if (a === "ps5" || a === "switch" || a === "xbox") plataforma(a, b || "");
+    else if (a === "consoles") consolesPag();
     else if (a === "lancamentos") lancamentosPag();
     else if (a === "promocoes") promocoes();
     else if (a === "produto") produto(b);
@@ -755,6 +855,20 @@
   if (urlSegura(SITE.youtube)) redes.push('<a href="' + esc(SITE.youtube) + '" target="_blank" rel="noopener">▶ YouTube</a>');
   if (urlSegura(SITE.twitch)) redes.push('<a href="' + esc(SITE.twitch) + '" target="_blank" rel="noopener">🟣 Twitch</a>');
   document.getElementById("redes").innerHTML = redes.join("");
+
+  var lojasRodape = document.getElementById("lojasRodape");
+  if (lojasRodape) {
+    var pastaLojas = "/" + (SITE.pastaImagens ? SITE.pastaImagens + "/" : "") + "lojas/";
+    lojasRodape.innerHTML =
+      '<span class="faixa-rotulo">Lojas parceiras verificadas:</span>' +
+      '<div class="faixa-lista">' +
+      Object.keys(LOJAS).map(function (k) {
+        return '<div class="faixa-loja" title="' + esc(LOJAS[k].nome) + '">' +
+          '<img src="' + pastaLojas + "loja-" + k + '.png" alt="' + esc(LOJAS[k].nome) + '">' +
+          "<span>" + esc(LOJAS[k].nome) + "</span></div>";
+      }).join("") +
+      "</div>";
+  }
 
   rota();
 })();

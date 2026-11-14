@@ -121,4 +121,37 @@ pro-controller_mercadolivre =
 pro-controller_shopee =
 pro-controller_aliexpress =
 
+# ===== Xbox Series X =====
+xbox-series-x_trailer =
+xbox-series-x_amazon =
+xbox-series-x_kabum =
+xbox-series-x_mercadolivre =
+xbox-series-x_shopee =
+xbox-series-x_aliexpress =
+
+# ===== Xbox Series S =====
+xbox-series-s_trailer =
+xbox-series-s_amazon =
+xbox-series-s_kabum =
+xbox-series-s_mercadolivre =
+xbox-series-s_shopee =
+xbox-series-s_aliexpress =
+
+# ===== Forza Horizon 5 =====
+forza-horizon-5_trailer =
+forza-horizon-5_amazon =
+forza-horizon-5_kabum =
+forza-horizon-5_mercadolivre =
+forza-horizon-5_shopee =
+forza-horizon-5_aliexpress =
+
+# ===== Controle Sem Fio Xbox =====
+controle-xbox_trailer =
+controle-xbox_amazon =
+controle-xbox_kabum =
+controle-xbox_mercadolivre =
+controle-xbox_shopee =
+controle-xbox_aliexpress =
+
+
 `;

@@ -9,19 +9,21 @@
 | `index.html`, `app.js`, `style.css` | O site em si (normalmente você não mexe) |
 
 ## Imagens: pastas fixas por categoria (dentro da pasta `imagens`)
-Você **não** precisa criar uma pasta para cada jogo! Basta ter estas **6 pastas fixas** dentro de `imagens/`:
+Você **não** precisa criar uma pasta para cada jogo! Basta ter estas **8 pastas fixas** dentro de `imagens/`:
 
 ```
 imagens/
-  jogos-ps5/           (todos os jogos de PS5: gta-6_capa.png, gta-6_print1.png, astro-bot_capa.png...)
+  jogos-ps5/           (todos os jogos de PS5: gta-6_capa.jpg, gta-6_print1.jpg, astro-bot_capa.jpg...)
   jogos-switch/        (todos os jogos de Nintendo Switch 1 e 2)
-  consoles/            (consoles de PS5 e Switch)
+  jogos-xbox/          (todos os jogos de Xbox Series X|S)
+  consoles/            (consoles de PS5, Switch e Xbox + banner consoles_banner.jpg)
   ps5-acessorios/      (controles, headsets e acessórios de PS5)
   switch-acessorios/   (controles e acessórios de Switch)
+  xbox-acessorios/     (controles e acessórios de Xbox)
   lojas/               (loja-amazon.png, loja-kabum.png, loja-mercadolivre.png, loja-shopee.png, loja-aliexpress.png)
 ```
-- O site sabe sozinho em qual pasta procurar olhando a `plataforma` (`ps5` ou `switch`) e o `tipo` (`jogo`, `console` ou `acessorio`) no `produtos.js`.
-- Os nomes dos arquivos continuam começando com o **id** do produto: `{id}_capa.png`, `{id}_print1.png`, `{id}_print2.png`…
+- O site sabe sozinho em qual pasta procurar olhando a `plataforma` (`ps5`, `switch` ou `xbox`) e o `tipo` (`jogo`, `console` ou `acessorio`) no `produtos.js`.
+- Os nomes dos arquivos continuam começando com o **id** do produto: `{id}_capa.jpg`, `{id}_print1.jpg`, `{id}_print2.jpg`…
 - **Loja nova:** adicione uma linha em `LOJAS` no `produtos.js` e o logo `imagens/lojas/loja-NOME.png`. O botão aparece em todos os produtos ("Link em breve" até você colocar o link no `links.js`).
 
 Regras:

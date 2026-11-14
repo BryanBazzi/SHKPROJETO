@@ -25,16 +25,37 @@ const LOJAS = {
   aliexpress:   { nome: "AliExpress",    sigla: "Ali" }
 };
 
-/* ---------- Banner principal do topo da Página Inicial ----------
-   Quando clicado, leva direto para a página do produto configurado abaixo. */
-const HOME_BANNER = {
-  id: "gta-6",
-  imagem: "jogos-ps5/gta-6_banner.jpg",
-  selo: "🔥 Super Lançamento • PlayStation 5",
-  chamada: "Compare os preços e garanta seu GTA 6 no menor preço!",
-  subtexto: "Assista ao trailer, veja os prints em tela cheia e compre nas lojas oficiais verificadas.",
-  botao: "Ver onde comprar agora →"
-};
+/* ---------- Banners rotativos do topo da Página Inicial (passam a cada 5s) ----------
+   Cada item pode ter "link" (qualquer rota do site, ex.: "/produto/gta-6" ou "/consoles"). */
+const HOME_BANNERS = [
+  {
+    link: "/produto/gta-6",
+    estilo: "gta",
+    imagem: "jogos-ps5/gta-6_banner.jpg",
+    selo: "🔥 Super Lançamento • PlayStation 5 & Xbox",
+    chamada: "Compare os preços e garanta seu GTA 6 no menor preço!",
+    subtexto: "Assista ao trailer, veja os prints em tela cheia e compre nas lojas oficiais verificadas.",
+    botao: "Ver onde comprar agora →"
+  },
+  {
+    link: "/produto/zelda-ocarina-remake",
+    estilo: "zelda",
+    imagem: "jogos-switch/zelda-ocarina-remake_banner.jpg",
+    selo: "✨ Lançamento Exclusivo • Nintendo Switch 2",
+    chamada: "The Legend of Zelda: Ocarina of Time Remake",
+    subtexto: "A lenda de Hyrule reconstruída do zero para o Nintendo Switch 2. Veja o trailer e garanta o seu!",
+    botao: "Ver lojas e trailer →"
+  },
+  {
+    link: "/consoles",
+    estilo: "consoles",
+    imagem: "consoles/consoles_banner.jpg",
+    selo: "🎮 Nova Geração • PS5 • Switch 1 & 2 • Xbox",
+    chamada: "Consoles e Acessórios Oficiais nas Melhores Lojas",
+    subtexto: "PlayStation 5 Slim, Nintendo Switch 2, Switch OLED e Xbox Series X|S com links diretos e seguros.",
+    botao: "Explorar todos os consoles →"
+  }
+];
 
 /* ---------- Ordem da página inicial ----------
    Basta colocar os IDs dos produtos na ordem exata em que você quer que apareçam! */
@@ -61,9 +82,9 @@ const HOME_LANCAMENTOS = [
    id         -> nome curto, minúsculo, sem espaço nem acento (ex.: "gta-6").
                  É ele que você usa nos nomes das imagens e no links.js.
    nome       -> como aparece no site
-   plataforma -> "ps5" ou "switch"
+   plataforma -> "ps5", "switch" ou "xbox"
    tipo       -> "console", "acessorio" ou "jogo"
-   versao     -> (opcional) etiqueta extra, ex.: "Switch 2", "Switch 1", "Switch 1 e 2"
+   versao     -> (opcional) etiqueta extra, ex.: "Switch 2", "Series X", "Series S"
    promocao   -> true se estiver em promoção, senão false
    destaque   -> true para aparecer em Destaques
    lancamento -> true para aparecer em Lançamentos
@@ -209,6 +230,52 @@ const PRODUTOS = [
     destaque: false,
     lancamento: false,
     descricao: "Controle oficial, confortável para sessões longas."
+  },
+
+  /* ===================== XBOX ===================== */
+  {
+    id: "xbox-series-x",
+    nome: "Xbox Series X",
+    plataforma: "xbox",
+    tipo: "console",
+    versao: "Series X",
+    promocao: false,
+    destaque: false,
+    lancamento: false,
+    descricao: "O Xbox mais rápido e poderoso de todos os tempos, com 1 TB de SSD e jogos em verdadeiro 4K a até 120 FPS."
+  },
+  {
+    id: "xbox-series-s",
+    nome: "Xbox Series S",
+    plataforma: "xbox",
+    tipo: "console",
+    versao: "Series S",
+    promocao: false,
+    destaque: false,
+    lancamento: false,
+    descricao: "Desempenho de nova geração no menor Xbox de todos, 100% digital e perfeito para o Game Pass."
+  },
+  {
+    id: "forza-horizon-5",
+    nome: "Forza Horizon 5",
+    plataforma: "xbox",
+    tipo: "jogo",
+    versao: "Series X|S",
+    promocao: false,
+    destaque: false,
+    lancamento: false,
+    descricao: "Explore as paisagens vibrantes do México em mundo aberto com centenas dos melhores carros do mundo."
+  },
+  {
+    id: "controle-xbox",
+    nome: "Controle Sem Fio Xbox",
+    plataforma: "xbox",
+    tipo: "acessorio",
+    versao: "Series X|S & PC",
+    promocao: false,
+    destaque: false,
+    lancamento: false,
+    descricao: "Design modernizado com superfícies esculpidas, gatilhos texturizados e botão dedicado de compartilhamento."
   }
 
 ];
