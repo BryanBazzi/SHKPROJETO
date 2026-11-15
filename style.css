@@ -607,13 +607,15 @@ html[data-modo="claro"] .card:hover {
 }
 html[data-modo="claro"] .capa { background: #edf0f9; }
 html[data-modo="claro"] .aba.ativa { color: #fff; background: var(--neon); }
-html[data-modo="claro"] .loja-ico img { filter: none; }
+html[data-modo="claro"] .loja-ico img { filter: brightness(0) saturate(100%) opacity(.85); }
 html[data-modo="claro"] .loja-ico.sem-logo::before { color: var(--txt); text-shadow: none; }
-html[data-modo="claro"] .faixa-loja {
-  background: #ffffff; border-color: rgba(20, 24, 43, .12);
-  box-shadow: 0 2px 8px rgba(20, 24, 43, .06);
+html[data-modo="claro"] .faixa-lojas {
+  background: #ffffff;
+  border-color: rgba(20, 24, 43, .12);
+  box-shadow: 0 4px 18px -8px rgba(20, 24, 43, .14);
 }
-html[data-modo="claro"] .faixa-loja img { filter: none; }
+html[data-modo="claro"] .faixa-loja { color: var(--txt); }
+html[data-modo="claro"] .faixa-loja img { filter: brightness(0) saturate(100%) opacity(.85); }
 html[data-modo="claro"] .rodape { border-top-color: rgba(20, 24, 43, .12); }
 @media (max-width: 380px) {
   .grade { grid-template-columns: 1fr; }

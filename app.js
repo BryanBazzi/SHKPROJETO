@@ -704,7 +704,7 @@
     });
     app.innerHTML =
       '<section class="plat-topo"><p class="hero-kicker">Novidades</p><h1>Últimos Lançamentos</h1></section>' +
-      secao("PlayStation 5 e Nintendo Switch 2", grade(lancs, "Nenhum lançamento no momento.", { modo: "lancamento" }));
+      secao("Todos os lançamentos", grade(lancs, "Nenhum lançamento no momento.", { modo: "lancamento" }));
   }
 
   function promocoes() {

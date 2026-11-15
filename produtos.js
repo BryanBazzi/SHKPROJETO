@@ -62,14 +62,14 @@ const HOME_BANNERS = [
 const HOME_DESTAQUES = [
   "gta-6",
   "zelda-ocarina-remake",
-  "phantom-blade-zero",
+  "resident-evil-9",
   "astro-bot"
 ];
 
 const HOME_LANCAMENTOS = [
   "gta-6",
   "zelda-ocarina-remake",
-  "phantom-blade-zero",
+  "resident-evil-9",
   "death-stranding-2"
 ];
 
@@ -124,14 +124,14 @@ const PRODUTOS = [
     descricao: "Aventura de plataforma cheia de criatividade, eleita Jogo do Ano e feita para aproveitar tudo do DualSense."
   },
   {
-    id: "phantom-blade-zero",
-    nome: "Phantom Blade Zero",
+    id: "resident-evil-9",
+    nome: "Resident Evil 9 Remake",
     plataforma: "ps5",
     tipo: "jogo",
     promocao: false,
     destaque: true,
     lancamento: true,
-    descricao: "RPG de ação frenético em estilo kung-fu punk sombrio, com combates de espada cinematográficos no PS5."
+    descricao: "O novo capítulo de terror e sobrevivência da Capcom para PlayStation 5, com gráficos de nova geração."
   },
   {
     id: "death-stranding-2",
@@ -186,6 +186,28 @@ const PRODUTOS = [
     destaque: true,
     lancamento: true,
     descricao: "O clássico lendário de Hyrule totalmente reconstruído para a nova geração no Nintendo Switch 2."
+  },
+  {
+    id: "resident-evil-9-switch",
+    nome: "Resident Evil 9 Remake",
+    plataforma: "switch",
+    tipo: "jogo",
+    versao: "Switch 2",
+    promocao: false,
+    destaque: false,
+    lancamento: true,
+    descricao: "O novo capítulo de terror e sobrevivência da Capcom chegando ao Nintendo Switch 2."
+  },
+  {
+    id: "resident-evil-generation-pack",
+    nome: "Resident Evil Generation Pack",
+    plataforma: "switch",
+    tipo: "jogo",
+    versao: "Switch 2 (RE 7 + 8 + 9)",
+    promocao: false,
+    destaque: false,
+    lancamento: true,
+    descricao: "Pacote especial para Nintendo Switch 2 reunindo Resident Evil 7, Resident Evil Village (8) e Resident Evil 9."
   },
   {
     id: "switch-oled",

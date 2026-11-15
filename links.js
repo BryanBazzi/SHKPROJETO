@@ -41,13 +41,13 @@ astro-bot_mercadolivre =
 astro-bot_shopee =
 astro-bot_aliexpress =
 
-# ===== Phantom Blade Zero =====
-phantom-blade-zero_trailer =
-phantom-blade-zero_amazon =
-phantom-blade-zero_kabum =
-phantom-blade-zero_mercadolivre =
-phantom-blade-zero_shopee =
-phantom-blade-zero_aliexpress =
+# ===== Resident Evil 9 Remake (PS5) =====
+resident-evil-9_trailer =
+resident-evil-9_amazon =
+resident-evil-9_kabum =
+resident-evil-9_mercadolivre =
+resident-evil-9_shopee =
+resident-evil-9_aliexpress =
 
 # ===== Death Stranding 2: On the Beach =====
 death-stranding-2_trailer =
@@ -64,6 +64,22 @@ zelda-ocarina-remake_kabum =
 zelda-ocarina-remake_mercadolivre =
 zelda-ocarina-remake_shopee =
 zelda-ocarina-remake_aliexpress =
+
+# ===== Resident Evil 9 Remake (Switch 2) =====
+resident-evil-9-switch_trailer =
+resident-evil-9-switch_amazon =
+resident-evil-9-switch_kabum =
+resident-evil-9-switch_mercadolivre =
+resident-evil-9-switch_shopee =
+resident-evil-9-switch_aliexpress =
+
+# ===== Resident Evil Generation Pack (Switch 2) =====
+resident-evil-generation-pack_trailer =
+resident-evil-generation-pack_amazon =
+resident-evil-generation-pack_kabum =
+resident-evil-generation-pack_mercadolivre =
+resident-evil-generation-pack_shopee =
+resident-evil-generation-pack_aliexpress =
 
 # ===== Marvel's Spider-Man 2 =====
 spider-man-2_trailer =
