@@ -481,6 +481,7 @@ body.lb-aberto { overflow: hidden; }
 .desc { color: var(--mut); margin-bottom: 18px; }
 .produto-info h2 { font-size: 1rem; text-transform: uppercase; letter-spacing: .12em; color: var(--neon); margin-bottom: 10px; }
 .lojas { display: flex; flex-direction: column; gap: 10px; }
+.lojas[hidden] { display: none; }
 .loja {
   --lc: #888; --ib: #333; --if: #fff;
   display: flex; align-items: center; gap: 14px;
