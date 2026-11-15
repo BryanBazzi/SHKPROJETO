@@ -44,7 +44,7 @@ const HOME_BANNERS = [
     selo: "✨ Lançamento Exclusivo • Nintendo Switch 2",
     chamada: "The Legend of Zelda: Ocarina of Time Remake",
     subtexto: "A lenda de Hyrule reconstruída do zero para o Nintendo Switch 2. Veja o trailer e garanta o seu!",
-    botao: "Ver lojas e trailer →"
+    botao: "Ver onde comprar agora →"
   },
   {
     link: "/consoles",

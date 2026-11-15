@@ -165,8 +165,8 @@ main { flex: 1; width: 100%; max-width: 1120px; margin: 0 auto; padding: 24px 16
 }
 .banner-estilo-zelda .banner-gta-sombra {
   background:
-    linear-gradient(0deg, rgba(6, 12, 10, .94) 0%, rgba(10, 20, 16, .62) 36%, rgba(0, 0, 0, 0) 68%),
-    radial-gradient(circle at 22% 85%, rgba(255, 42, 85, .32), transparent 55%);
+    linear-gradient(0deg, rgba(6, 14, 10, .94) 0%, rgba(10, 26, 17, .64) 36%, rgba(0, 0, 0, 0) 68%),
+    radial-gradient(circle at 22% 85%, rgba(24, 165, 88, .34), transparent 55%);
 }
 .banner-estilo-consoles .banner-gta-sombra {
   background:
@@ -183,8 +183,8 @@ main { flex: 1; width: 100%; max-width: 1120px; margin: 0 auto; padding: 24px 16
   box-shadow: 0 0 18px rgba(255, 42, 166, .7);
 }
 .banner-estilo-zelda .banner-gta-selo {
-  background: linear-gradient(90deg, #e60012, #ff6a3d);
-  box-shadow: 0 0 18px rgba(255, 42, 85, .7);
+  background: linear-gradient(90deg, #0d7a3e, #18a558 65%, #c9a227);
+  box-shadow: 0 0 18px rgba(24, 165, 88, .75);
 }
 .banner-estilo-consoles .banner-gta-selo {
   background: linear-gradient(90deg, #2d8cff, #10b940, #ff2a55);
@@ -197,7 +197,7 @@ main { flex: 1; width: 100%; max-width: 1120px; margin: 0 auto; padding: 24px 16
   text-shadow: 0 2px 4px rgba(0, 0, 0, .9), 0 0 16px #ff2aa6, 0 0 34px rgba(255, 120, 50, .85);
 }
 .banner-estilo-zelda .banner-gta-chamada {
-  text-shadow: 0 2px 6px rgba(0, 0, 0, .95), 0 0 18px rgba(255, 196, 54, .75), 0 0 32px rgba(255, 42, 85, .6);
+  text-shadow: 0 2px 6px rgba(0, 0, 0, .95), 0 0 18px rgba(42, 214, 118, .75), 0 0 32px rgba(235, 194, 68, .55);
 }
 .banner-estilo-consoles .banner-gta-chamada {
   text-shadow: 0 2px 6px rgba(0, 0, 0, .95), 0 0 20px rgba(45, 140, 255, .8);
@@ -215,8 +215,8 @@ main { flex: 1; width: 100%; max-width: 1120px; margin: 0 auto; padding: 24px 16
   transition: transform .2s, box-shadow .2s;
 }
 .banner-estilo-zelda .banner-gta-cta {
-  background: linear-gradient(90deg, #e60012 0%, #ff6a3d 60%, #ffb703 100%);
-  box-shadow: 0 0 24px rgba(230, 0, 18, .7);
+  background: linear-gradient(90deg, #0c6b37 0%, #19a959 62%, #d4af37 100%);
+  box-shadow: 0 0 24px rgba(25, 169, 89, .7);
 }
 .banner-estilo-consoles .banner-gta-cta {
   background: linear-gradient(90deg, #2d8cff 0%, #10b940 52%, #ff2a55 100%);
@@ -301,6 +301,12 @@ main { flex: 1; width: 100%; max-width: 1120px; margin: 0 auto; padding: 24px 16
 .secao-topo { display: flex; justify-content: space-between; align-items: flex-end; gap: 12px; margin-bottom: 16px; }
 .secao-tit { display: flex; flex-direction: column; gap: 2px; }
 .secao h2 { font-size: 1.25rem; letter-spacing: .04em; }
+.secao-home h2 {
+  font-size: clamp(1.55rem, 2.5vw, 1.95rem);
+  letter-spacing: .06em;
+  color: #ffffff;
+  text-shadow: 0 0 12px rgba(242, 246, 255, .85), 0 0 26px rgba(188, 208, 255, .55);
+}
 .secao-sub { color: var(--mut); font-size: .95rem; }
 .mais { color: var(--neon); font-weight: 700; white-space: nowrap; }
 .mais:hover { text-shadow: 0 0 10px var(--neon); }

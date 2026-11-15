@@ -489,8 +489,8 @@
     }).join("") + "</div>";
   }
 
-  function secao(titulo, html, extra, subtitulo) {
-    return '<section class="secao"><div class="secao-topo"><div class="secao-tit"><h2>' + esc(titulo) + "</h2>" +
+  function secao(titulo, html, extra, subtitulo, classe) {
+    return '<section class="secao' + (classe ? " " + classe : "") + '"><div class="secao-topo"><div class="secao-tit"><h2>' + esc(titulo) + "</h2>" +
       (subtitulo ? '<p class="secao-sub">' + esc(subtitulo) + "</p>" : "") +
       "</div>" + (extra || "") + "</div>" + html + "</section>";
   }
@@ -622,22 +622,25 @@
       "</div>" +
       "</section>" +
       secao(
-        "⭐ Destaques",
+        "Destaques",
         grade(destaques, "Nenhum destaque no momento.", { numerar: true, modo: "destaque" }),
         "",
-        "Os games mais procurados e recomendados no canal"
+        "Os games mais procurados e recomendados no canal",
+        "secao-home"
       ) +
       secao(
-        "🚀 Últimos Lançamentos",
+        "Últimos Lançamentos",
         grade(lancamentos, "Nenhum lançamento cadastrado no momento.", { modo: "lancamento" }),
         '<a class="mais" href="/lancamentos">Ver todos →</a>',
-        "Novidades e próximos grandes lançamentos para PlayStation 5, Nintendo Switch 2 e Xbox"
+        "Novidades e próximos grandes lançamentos para PlayStation 5, Nintendo Switch 2 e Xbox",
+        "secao-home"
       ) +
       secao(
-        "🎮 Consoles e Acessórios",
+        "Consoles e Acessórios",
         grade(consoles, "Nenhum console cadastrado no momento."),
         '<a class="mais" href="/consoles">Ver todos →</a>',
-        "Aparelhos e controles oficiais para elevar seu setup"
+        "Aparelhos e controles oficiais para elevar seu setup",
+        "secao-home"
       );
 
     montarCarrossel();
