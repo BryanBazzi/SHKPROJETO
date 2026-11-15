@@ -94,12 +94,12 @@ zelda-ocarina-remake_digital_shopee =
 zelda-ocarina-remake_digital_aliexpress =
 
 # ===== Resident Evil Requiem (Switch 2) =====
-resident-evil-requiem-switch_trailer =
-resident-evil-requiem-switch_amazon =
-resident-evil-requiem-switch_kabum =
-resident-evil-requiem-switch_mercadolivre =
-resident-evil-requiem-switch_shopee =
-resident-evil-requiem-switch_aliexpress =
+resident-evil-requiem-switch_trailer = https://www.youtube.com/watch?v=T54OWinnymM
+resident-evil-requiem-switch_amazon = https://link.amazon/B0eOvovv5
+resident-evil-requiem-switch_kabum = https://tidd.ly/4AvCK1r
+resident-evil-requiem-switch_mercadolivre = https://meli.la/24T6KZ1
+resident-evil-requiem-switch_shopee = https://s.shopee.com.br/7fbOy2d9xK
+resident-evil-requiem-switch_aliexpress = -
 resident-evil-requiem-switch_digital_amazon =
 resident-evil-requiem-switch_digital_kabum =
 resident-evil-requiem-switch_digital_mercadolivre =
@@ -107,12 +107,12 @@ resident-evil-requiem-switch_digital_shopee =
 resident-evil-requiem-switch_digital_aliexpress =
 
 # ===== Resident Evil Generation Pack (Switch 2) =====
-resident-evil-generation-pack_trailer =
-resident-evil-generation-pack_amazon =
-resident-evil-generation-pack_kabum =
-resident-evil-generation-pack_mercadolivre =
-resident-evil-generation-pack_shopee =
-resident-evil-generation-pack_aliexpress =
+resident-evil-generation-pack_trailer = https://www.youtube.com/watch?v=T54OWinnymM
+resident-evil-generation-pack_amazon = https://link.amazon/B07GjG2Pv
+resident-evil-generation-pack_kabum = https://tidd.ly/4zSnJXQ
+resident-evil-generation-pack_mercadolivre = https://meli.la/33nnGUr
+resident-evil-generation-pack_shopee = N
+resident-evil-generation-pack_aliexpress = -
 resident-evil-generation-pack_digital_amazon =
 resident-evil-generation-pack_digital_kabum =
 resident-evil-generation-pack_digital_mercadolivre =
@@ -133,28 +133,28 @@ spider-man-2_digital_shopee =
 spider-man-2_digital_aliexpress =
 
 # ===== Controle DualSense (PS5) =====
-dualsense_trailer =
-dualsense_amazon =
-dualsense_kabum =
-dualsense_mercadolivre =
-dualsense_shopee =
-dualsense_aliexpress =
+dualsense_trailer = https://www.youtube.com/watch?v=KAvwl27SnvA
+dualsense_amazon = https://link.amazon/B04vLBpqS
+dualsense_kabum = https://tidd.ly/4BVlzIa
+dualsense_mercadolivre = https://meli.la/1H9suwZ
+dualsense_shopee = https://s.shopee.com.br/7fbOyqaUYu
+dualsense_aliexpress = -
 
 # ===== Nintendo Switch 2 =====
-switch-2_trailer =
-switch-2_amazon =
-switch-2_kabum =
-switch-2_mercadolivre =
-switch-2_shopee =
-switch-2_aliexpress =
+switch-2_trailer = https://www.youtube.com/watch?v=0QeqO0kFz-E
+switch-2_amazon = https://link.amazon/B001RfHH8
+switch-2_kabum = https://tidd.ly/4iGT3CH
+switch-2_mercadolivre = https://meli.la/2MyWCp5
+switch-2_shopee = https://s.shopee.com.br/2gCj1CrdcM
+switch-2_aliexpress = -
 
 # ===== Nintendo Switch OLED =====
-switch-oled_trailer =
-switch-oled_amazon =
-switch-oled_kabum =
-switch-oled_mercadolivre =
-switch-oled_shopee =
-switch-oled_aliexpress =
+switch-oled_trailer = https://www.youtube.com/watch?v=FfbAyayKynY
+switch-oled_amazon = https://link.amazon/B0d0ui0uN
+switch-oled_kabum = https://tidd.ly/4iS1DNF
+switch-oled_mercadolivre = https://meli.la/1uQ5j9E
+switch-oled_shopee = https://s.shopee.com.br/1W0ldCwysl
+switch-oled_aliexpress = -
 
 # ===== Mario Kart World =====
 mario-kart-world_trailer =
@@ -184,27 +184,27 @@ zelda-totk_digital_aliexpress =
 
 # ===== Controle Pro Nintendo Switch =====
 pro-controller_trailer =
-pro-controller_amazon =
-pro-controller_kabum =
-pro-controller_mercadolivre =
-pro-controller_shopee =
-pro-controller_aliexpress =
+pro-controller_amazon = https://link.amazon/B08FtUq83
+pro-controller_kabum = https://tidd.ly/4AtALKZ
+pro-controller_mercadolivre = https://meli.la/1gMsj6N
+pro-controller_shopee = https://s.shopee.com.br/9zzJlI66mu
+pro-controller_aliexpress = -
 
 # ===== Xbox Series X =====
-xbox-series-x_trailer =
-xbox-series-x_amazon =
-xbox-series-x_kabum =
-xbox-series-x_mercadolivre =
-xbox-series-x_shopee =
-xbox-series-x_aliexpress =
+xbox-series-x_trailer = https://www.youtube.com/watch?v=0tUqIHwHDEc
+xbox-series-x_amazon = N
+xbox-series-x_kabum = N
+xbox-series-x_mercadolivre = https://meli.la/192pHRg
+xbox-series-x_shopee = N
+xbox-series-x_aliexpress = -
 
 # ===== Xbox Series S =====
-xbox-series-s_trailer =
-xbox-series-s_amazon =
-xbox-series-s_kabum =
-xbox-series-s_mercadolivre =
-xbox-series-s_shopee =
-xbox-series-s_aliexpress =
+xbox-series-s_trailer = https://www.youtube.com/watch?v=KHLfCFMKxPg
+xbox-series-s_amazon = https://link.amazon/B01hwVHuR
+xbox-series-s_kabum = N
+xbox-series-s_mercadolivre = https://meli.la/1XdxN5M
+xbox-series-s_shopee = N
+xbox-series-s_aliexpress = -
 
 # ===== Forza Horizon 5 =====
 forza-horizon-5_trailer =
@@ -221,11 +221,11 @@ forza-horizon-5_digital_aliexpress =
 
 # ===== Controle Sem Fio Xbox =====
 controle-xbox_trailer =
-controle-xbox_amazon =
-controle-xbox_kabum =
-controle-xbox_mercadolivre =
-controle-xbox_shopee =
-controle-xbox_aliexpress =
+controle-xbox_amazon = https://link.amazon/B02qh9H9s
+controle-xbox_kabum = https://tidd.ly/4iVEr0Y
+controle-xbox_mercadolivre = https://meli.la/2ZPHNos
+controle-xbox_shopee = https://s.shopee.com.br/3LSPpYip3E
+controle-xbox_aliexpress = -
 
 
 `;
