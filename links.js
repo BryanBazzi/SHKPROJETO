@@ -18,11 +18,11 @@
 const LINKS = `
 
 # ===== PlayStation 5 Slim =====
-ps5-slim_trailer =
-ps5-slim_amazon =
-ps5-slim_kabum =
-ps5-slim_mercadolivre =
-ps5-slim_shopee =
+ps5-slim_trailer = https://www.youtube.com/watch?v=RkC0l4iekYo
+ps5-slim_amazon = https://link.amazon/B02j0rBMC
+ps5-slim_kabum = https://tidd.ly/48RTRi8
+ps5-slim_mercadolivre = https://meli.la/1mYS1Uq
+ps5-slim_shopee = https://s.shopee.com.br/50adjoR040
 ps5-slim_aliexpress =
 
 # ===== Grand Theft Auto VI =====
@@ -35,19 +35,19 @@ gta-6_aliexpress = -
 
 # ===== Astro Bot =====
 astro-bot_trailer = https://www.youtube.com/watch?v=wHMNQzLG_Jg
-astro-bot_amazon =
-astro-bot_kabum =
-astro-bot_mercadolivre =
-astro-bot_shopee =
-astro-bot_aliexpress =
+astro-bot_amazon = https://link.amazon/B0fzOUbMP
+astro-bot_kabum = https://tidd.ly/4sWME9G
+astro-bot_mercadolivre = https://meli.la/1r8LN1Q
+astro-bot_shopee = https://s.shopee.com.br/2BGSMwBZCX
+astro-bot_aliexpress = -
 
 # ===== Resident Evil Requiem (PS5) =====
-resident-evil-requiem_trailer =
-resident-evil-requiem_amazon =
+resident-evil-requiem_trailer = https://www.youtube.com/watch?v=T54OWinnymM
+resident-evil-requiem_amazon = https://link.amazon/B0iX72Iw0
 resident-evil-requiem_kabum =
-resident-evil-requiem_mercadolivre =
+resident-evil-requiem_mercadolivre = https://meli.la/1z15hw3
 resident-evil-requiem_shopee =
-resident-evil-requiem_aliexpress =
+resident-evil-requiem_aliexpress = -
 
 # ===== Death Stranding 2: On the Beach =====
 death-stranding-2_trailer =
@@ -59,11 +59,11 @@ death-stranding-2_aliexpress =
 
 # ===== Zelda: Ocarina of Time Remake =====
 zelda-ocarina-remake_trailer = https://www.youtube.com/watch?v=o3lNWCdj3bc
-zelda-ocarina-remake_amazon =
-zelda-ocarina-remake_kabum =
-zelda-ocarina-remake_mercadolivre =
-zelda-ocarina-remake_shopee =
-zelda-ocarina-remake_aliexpress =
+zelda-ocarina-remake_amazon = https://link.amazon/B0j3XaJhX
+zelda-ocarina-remake_kabum = https://tidd.ly/4AB2Lww
+zelda-ocarina-remake_mercadolivre = https://meli.la/1g1Qbur
+zelda-ocarina-remake_shopee = https://s.shopee.com.br/20x2BOO9SC
+zelda-ocarina-remake_aliexpress = -
 
 # ===== Resident Evil Requiem (Switch 2) =====
 resident-evil-requiem-switch_trailer =
