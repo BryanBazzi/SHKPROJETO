@@ -57,12 +57,12 @@ astro-bot_digital_aliexpress =
 # ===== Resident Evil Requiem (PS5) =====
 resident-evil-requiem_trailer = https://www.youtube.com/watch?v=T54OWinnymM
 resident-evil-requiem_amazon = https://link.amazon/B0iX72Iw0
-resident-evil-requiem_kabum =
+resident-evil-requiem_kabum = N
 resident-evil-requiem_mercadolivre = https://meli.la/1z15hw3
-resident-evil-requiem_shopee =
+resident-evil-requiem_shopee = N
 resident-evil-requiem_aliexpress = -
 resident-evil-requiem_digital_amazon =
-resident-evil-requiem_digital_kabum =
+resident-evil-requiem_digital_kabum = 
 resident-evil-requiem_digital_mercadolivre =
 resident-evil-requiem_digital_shopee =
 resident-evil-requiem_digital_aliexpress =
@@ -89,7 +89,7 @@ zelda-ocarina-remake_shopee = https://s.shopee.com.br/20x2BOO9SC
 zelda-ocarina-remake_aliexpress = -
 zelda-ocarina-remake_digital_amazon =
 zelda-ocarina-remake_digital_kabum =
-zelda-ocarina-remake_digital_mercadolivre =
+zelda-ocarina-remake_digital_mercadolivre = https://meli.la/2wRjxBC
 zelda-ocarina-remake_digital_shopee =
 zelda-ocarina-remake_digital_aliexpress =
 
