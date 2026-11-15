@@ -26,12 +26,12 @@ ps5-slim_shopee =
 ps5-slim_aliexpress =
 
 # ===== Grand Theft Auto VI =====
-gta-6_trailer =
-gta-6_amazon =
-gta-6_kabum =
-gta-6_mercadolivre =
-gta-6_shopee =
-gta-6_aliexpress =
+gta-6_trailer = https://www.youtube.com/watch?v=3JUboYgqIxc
+gta-6_amazon = https://link.amazon/B0dTmjbzj
+gta-6_kabum = https://tidd.ly/4zGRw5o
+gta-6_mercadolivre = https://meli.la/2gLhkNJ
+gta-6_shopee = https://s.shopee.com.br/7KyYVbHIpX
+gta-6_aliexpress = -
 
 # ===== Astro Bot =====
 astro-bot_trailer = https://www.youtube.com/watch?v=wHMNQzLG_Jg
