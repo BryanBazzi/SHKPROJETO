@@ -166,8 +166,13 @@
       return '<div class="video"><iframe src="https://www.youtube-nocookie.com/embed/' + m.id + '" title="Trailer de ' + esc(p.nome) +
         '" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture; fullscreen" allowfullscreen></iframe></div>';
     }
-    return '<div class="video palco-img" role="button" tabindex="0" aria-label="Ampliar imagem de ' + esc(p.nome) + '">' +
-      '<img class="palco-fundo" src="' + esc(m.src) + '" alt="" aria-hidden="true">' +
+    var estilo = String(p.fundo || "branco").toLowerCase();
+    if (estilo === "embacado" || estilo === "embaçado") estilo = "desfocado";
+    var classeFundo = estilo === "desfocado"
+      ? "palco-fundo-desfocado"
+      : (estilo === "preto" ? "palco-fundo-preto" : "palco-fundo-branco");
+    return '<div class="video palco-img ' + classeFundo + '" role="button" tabindex="0" aria-label="Ampliar imagem de ' + esc(p.nome) + '">' +
+      (estilo === "desfocado" ? '<img class="palco-fundo" src="' + esc(m.src) + '" alt="" aria-hidden="true">' : "") +
       '<img class="palco-foto" src="' + esc(m.src) + '" alt="' + esc(p.nome) + '" draggable="false">' +
       '<span class="palco-ampliar" aria-hidden="true">⤢ Ampliar</span>' +
       "</div>";
