@@ -737,10 +737,11 @@
       secao(achados.length + (achados.length === 1 ? " resultado" : " resultados"), grade(achados, "Não achei nada com esse nome. Tente outra palavra."));
   }
 
-  /* botão de uma loja: com link = clicável; sem link = "Link em breve"; link "-" = escondido */
-  function botaoLoja(p, k) {
-    var v = linkDe(p.id, k);
+  /* botão de uma loja: com link = clicável; sem link = "Link em breve"; "N" = "Não disponível no momento"; "-" = escondido */
+  function botaoLoja(p, k, prefixo) {
+    var v = linkDe(p.id, (prefixo || "") + k);
     if (v === "-") return "";
+    if (prefixo && !v) return "";
     var nome = esc(LOJAS[k].nome);
     var pasta = "/" + (SITE.pastaImagens ? SITE.pastaImagens + "/" : "") + "lojas/";
     var ico = '<span class="loja-ico" aria-hidden="true" data-sigla="' + esc(LOJAS[k].sigla) + '">' +
@@ -749,8 +750,9 @@
       return '<a class="loja loja-' + k + '" href="' + esc(v) + '" target="_blank" rel="sponsored noopener noreferrer">' + ico +
         '<span class="loja-txt"><strong>' + nome + "</strong><small>Ver preço atualizado</small></span><em>→</em></a>";
     }
+    var msg = v.toUpperCase() === "N" ? "Não disponível no momento" : "Link em breve";
     return '<div class="loja loja-' + k + ' off">' + ico +
-      '<span class="loja-txt"><strong>' + nome + "</strong><small>Link em breve</small></span></div>";
+      '<span class="loja-txt"><strong>' + nome + "</strong><small>" + msg + "</small></span></div>";
   }
 
   function produto(id) {
@@ -760,7 +762,11 @@
     var plat = PLAT[p.plataforma];
     var meu = tokenRota;
 
-    var botoes = Object.keys(LOJAS).map(function (k) { return botaoLoja(p, k); }).join("");
+    var botoes = Object.keys(LOJAS).map(function (k) { return botaoLoja(p, k, ""); }).join("");
+    var temDigital = Object.keys(LOJAS).some(function (k) { return !!urlSegura(linkDe(p.id, "digital_" + k)); });
+    var botoesDigital = temDigital
+      ? Object.keys(LOJAS).map(function (k) { return botaoLoja(p, k, "digital_"); }).join("")
+      : "";
 
     var rel = PRODUTOS.filter(function (x) {
       return x.id !== p.id && x.plataforma === p.plataforma && x.tipo === p.tipo;
@@ -768,6 +774,15 @@
 
     var catRota = p.tipo === "console" ? "consoles" : (p.tipo === "acessorio" ? "acessorios" : "jogos");
     var catNome = p.tipo === "console" ? "Consoles" : (p.tipo === "acessorio" ? "Acessórios" : "Jogos");
+
+    var blocoLojas = temDigital
+      ? '<div class="abas abas-midia" role="tablist">' +
+        '<button type="button" class="aba ativa" data-midia="fisica" role="tab" aria-selected="true">💿 Mídia Física</button>' +
+        '<button type="button" class="aba" data-midia="digital" role="tab" aria-selected="false">☁️ Mídia Digital</button>' +
+        "</div>" +
+        '<div id="lojasFisica" class="lojas">' + (botoes || '<p class="vazio">Links de compra em breve.</p>') + "</div>" +
+        '<div id="lojasDigital" class="lojas" hidden>' + botoesDigital + "</div>"
+      : '<div class="lojas">' + (botoes || '<p class="vazio">Links de compra em breve.</p>') + "</div>";
 
     app.innerHTML =
       '<nav class="trilha"><a href="/">Início</a> › <a href="/' + p.plataforma + '">' + esc(plat.nome) + "</a> › " +
@@ -781,10 +796,27 @@
       "<h1>" + esc(p.nome) + "</h1>" +
       "<p class=\"desc\">" + esc(p.descricao) + "</p>" +
       "<h2>Onde comprar</h2>" +
-      '<div class="lojas">' + (botoes || '<p class="vazio">Links de compra em breve.</p>') + "</div>" +
+      blocoLojas +
       '<p class="nota">Os links abrem na loja com o preço do dia. Posso receber comissão pela compra, sem custo extra pra você.</p>' +
       "</div></article>" +
       (rel.length ? secao("Veja também", grade(rel)) : "");
+
+    if (temDigital) {
+      var boxFis = document.getElementById("lojasFisica");
+      var boxDig = document.getElementById("lojasDigital");
+      Array.prototype.forEach.call(app.querySelectorAll(".abas-midia .aba"), function (tab) {
+        tab.addEventListener("click", function () {
+          var dig = tab.getAttribute("data-midia") === "digital";
+          Array.prototype.forEach.call(app.querySelectorAll(".abas-midia .aba"), function (t) {
+            var on = t === tab;
+            t.classList.toggle("ativa", on);
+            t.setAttribute("aria-selected", on ? "true" : "false");
+          });
+          boxFis.hidden = dig;
+          boxDig.hidden = !dig;
+        });
+      });
+    }
 
     resolverMidia(p).then(function (itens) { montarMidia(itens, p, meu); });
   }

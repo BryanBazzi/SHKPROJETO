@@ -326,7 +326,8 @@ main { flex: 1; width: 100%; max-width: 1120px; margin: 0 auto; padding: 24px 16
 .vazio { color: var(--mut); padding: 18px; border: 1px dashed var(--bg3); border-radius: var(--raio); }
 
 .abas { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px; }
-.aba { padding: 9px 18px; border-radius: 999px; background: var(--bg2); border: 1px solid var(--bg3); font-weight: 700; }
+.abas-midia { margin: 10px 0 12px; }
+.aba { padding: 9px 18px; border-radius: 999px; background: var(--bg2); border: 1px solid var(--bg3); font-weight: 700; color: var(--txt); font-family: inherit; font-size: .95rem; cursor: pointer; }
 .aba:hover { border-color: var(--neon); }
 .aba.ativa { color: #fff; background: color-mix(in srgb, var(--neon) 30%, var(--bg2)); border-color: var(--neon); box-shadow: 0 0 16px -2px var(--glow); }
 
