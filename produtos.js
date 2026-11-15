@@ -85,6 +85,7 @@ const HOME_LANCAMENTOS = [
    plataforma -> "ps5", "switch" ou "xbox"
    tipo       -> "console", "acessorio" ou "jogo"
    versao     -> (opcional) etiqueta extra, ex.: "Switch 2", "Series X", "Series S"
+   fundo      -> (opcional) estilo do fundo da capa no card: "branco" (padrão), "preto" ou "desfocado"
    promocao   -> true se estiver em promoção, senão false
    destaque   -> true para aparecer em Destaques
    lancamento -> true para aparecer em Lançamentos
@@ -204,6 +205,7 @@ const PRODUTOS = [
     plataforma: "switch",
     tipo: "jogo",
     versao: "Switch 2 (RE 7 + Village + Requiem)",
+    fundo: "desfocado",
     promocao: false,
     destaque: false,
     lancamento: true,

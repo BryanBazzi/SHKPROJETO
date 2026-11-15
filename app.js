@@ -433,7 +433,8 @@
   /* capa dos cards: começa com a capa neon e troca pela imagem {id}_capa se ela existir */
   function capa(p) {
     var ico = p.tipo === "console" ? "🎮" : (p.tipo === "acessorio" ? "🎧" : "💿");
-    return '<div class="capa capa-' + esc(p.plataforma) + '" data-id="' + esc(p.id) + '" data-nome="' + esc(p.nome) + '">' +
+    var fundo = p.fundo || "branco";
+    return '<div class="capa capa-' + esc(p.plataforma) + '" data-id="' + esc(p.id) + '" data-nome="' + esc(p.nome) + '" data-fundo="' + esc(fundo) + '">' +
       '<span class="capa-ico">' + ico + "</span>" +
       '<span class="capa-nome">' + esc(p.nome) + "</span></div>";
   }
@@ -445,8 +446,16 @@
       acharImagem(c.getAttribute("data-id") + "_capa").then(function (src) {
         if (!src || meu !== tokenRota) return;
         c.classList.remove("capa-ps5", "capa-switch", "capa-xbox");
-        c.innerHTML = '<img class="capa-fundo" src="' + esc(src) + '" alt="" aria-hidden="true">' +
-          '<img class="capa-foto" src="' + esc(src) + '" alt="' + esc(c.getAttribute("data-nome")) + '">';
+        var estilo = (c.getAttribute("data-fundo") || "branco").toLowerCase();
+        if (estilo === "embacado" || estilo === "embaçado") estilo = "desfocado";
+        if (estilo === "desfocado") {
+          c.classList.add("capa-fundo-desfocado");
+          c.innerHTML = '<img class="capa-fundo" src="' + esc(src) + '" alt="" aria-hidden="true">' +
+            '<img class="capa-foto" src="' + esc(src) + '" alt="' + esc(c.getAttribute("data-nome")) + '">';
+        } else {
+          c.classList.add(estilo === "preto" ? "capa-fundo-preto" : "capa-fundo-branco");
+          c.innerHTML = '<img class="capa-foto" src="' + esc(src) + '" alt="' + esc(c.getAttribute("data-nome")) + '">';
+        }
       });
     });
   }

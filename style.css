@@ -339,6 +339,9 @@ main { flex: 1; width: 100%; max-width: 1120px; margin: 0 auto; padding: 24px 16
 }
 .card:hover { transform: translateY(-4px); border-color: var(--neon); box-shadow: 0 0 28px -2px var(--glow); }
 .capa { aspect-ratio: 1 / 1; position: relative; overflow: hidden; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; padding: 12px; text-align: center; background: linear-gradient(135deg, #1a1030, #3a1a6a); }
+.capa-fundo-branco { background: #ffffff; }
+.capa-fundo-preto { background: #07070d; }
+.capa-fundo-desfocado { background: #07070d; }
 .capa-fundo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; filter: blur(18px) brightness(.55); transform: scale(1.2); }
 .capa-foto { position: absolute; inset: 8px; width: calc(100% - 16px); height: calc(100% - 16px); object-fit: contain; z-index: 1; }
 .capa-ps5 { background: linear-gradient(135deg, #07123a 0%, #1f6bff 60%, #00d4ff 100%); }
@@ -606,6 +609,9 @@ html[data-modo="claro"] .card:hover {
   box-shadow: 0 14px 30px -12px var(--glow);
 }
 html[data-modo="claro"] .capa { background: #edf0f9; }
+html[data-modo="claro"] .capa-fundo-branco { background: #ffffff; }
+html[data-modo="claro"] .capa-fundo-preto { background: #07070d; }
+html[data-modo="claro"] .capa-fundo-desfocado { background: #07070d; }
 html[data-modo="claro"] .aba.ativa { color: #fff; background: var(--neon); }
 html[data-modo="claro"] .loja-ico img { filter: brightness(0) saturate(100%) opacity(.85); }
 html[data-modo="claro"] .loja-ico.sem-logo::before { color: var(--txt); text-shadow: none; }
