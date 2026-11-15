@@ -6,10 +6,13 @@
   <title>SHKN Games</title>
   <meta name="description" content="Jogos, consoles e acessórios de PlayStation 5, Nintendo Switch e Xbox com links diretos para as melhores lojas.">
   <meta name="theme-color" content="#07070d">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="shortcut icon" href="/favicon.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800&family=Pricedown&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/style.css">
+  <script>try{if(localStorage.getItem("shkn_modo")==="claro")document.documentElement.setAttribute("data-modo","claro");}catch(e){}</script>
 </head>
 <body data-tema="neutro">
 
@@ -36,13 +39,14 @@
       <a class="nav-link nav-ps5" href="/ps5" data-nav="ps5">PlayStation 5</a>
       <a class="nav-link nav-switch" href="/switch" data-nav="switch">Nintendo Switch</a>
       <a class="nav-link nav-xbox" href="/xbox" data-nav="xbox">Xbox</a>
-      <a class="nav-link nav-promo" href="/lancamentos" data-nav="lancamentos">🚀 Lançamentos</a>
+      <a class="nav-link nav-promo" href="/lancamentos" data-nav="lancamentos">Lançamentos</a>
     </nav>
     <form id="formBusca" class="busca" role="search">
       <svg class="busca-lupa" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4.5 4.5"/></svg>
       <input id="campoBusca" type="search" placeholder="Buscar jogo ou console…" aria-label="Buscar jogo ou console" autocomplete="off">
       <button type="submit" aria-label="Buscar">Buscar</button>
     </form>
+    <button id="btnModo" class="btn-modo" type="button" aria-label="Ativar modo claro" title="Ativar modo claro">☀️</button>
   </header>
 
   <div id="fundo" class="fundo"></div>
@@ -78,7 +82,7 @@
     </div>
 
     <a class="menu-link" href="/consoles">🎮 Todos os consoles</a>
-    <a class="menu-link menu-promo" href="/lancamentos">🚀 Últimos lançamentos</a>
+    <a class="menu-link menu-promo" href="/lancamentos">Últimos lançamentos</a>
     <div class="redes" id="redes"></div>
   </nav>
 

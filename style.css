@@ -113,6 +113,19 @@ main { flex: 1; width: 100%; max-width: 1120px; margin: 0 auto; padding: 24px 16
   box-shadow: 0 0 14px -3px var(--glow); transition: transform .15s, box-shadow .15s;
 }
 .busca button:hover { transform: scale(1.04); box-shadow: 0 0 22px -2px var(--glow); }
+.btn-modo {
+  flex: none; width: 42px; height: 42px; border-radius: 999px; cursor: pointer;
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: 1.15rem; line-height: 1;
+  background: linear-gradient(180deg, rgba(255, 255, 255, .1), rgba(255, 255, 255, .04));
+  border: 1px solid rgba(255, 255, 255, .22); color: var(--txt);
+  box-shadow: 0 0 12px -4px var(--glow);
+  transition: transform .18s, border-color .2s, box-shadow .2s, background .2s;
+}
+.btn-modo:hover {
+  transform: scale(1.06); border-color: var(--neon);
+  box-shadow: 0 0 18px -2px var(--glow);
+}
 /* ---------- menu lateral ---------- */
 .fundo { position: fixed; inset: 0; z-index: 40; background: rgba(0, 0, 0, .6); opacity: 0; pointer-events: none; transition: opacity .25s; }
 .fundo.aberto { opacity: 1; pointer-events: auto; }
@@ -521,7 +534,87 @@ a.loja:hover { transform: translateX(4px); border-color: var(--lc); box-shadow: 
   .lb-ant { left: 8px; }
   .lb-prox { right: 8px; }
   .lb-mini { width: 64px; }
+  .btn-modo { width: 38px; height: 38px; font-size: 1rem; }
 }
+
+/* ---------- modo claro ---------- */
+html[data-modo="claro"] {
+  --bg: #f3f5fb;
+  --bg2: #ffffff;
+  --bg3: #e7ebf7;
+  --txt: #14182b;
+  --mut: #56607e;
+  --neon: #1d4ed8;
+  --neon2: #3b82f6;
+  --glow: rgba(29, 78, 216, .24);
+}
+html[data-modo="claro"] body[data-tema="ps5"],
+html[data-modo="claro"] .tema-ps5 {
+  --neon: #1a6de0; --neon2: #0099cc; --glow: rgba(26, 109, 224, .28);
+}
+html[data-modo="claro"] body[data-tema="switch"],
+html[data-modo="claro"] .tema-switch {
+  --neon: #d91438; --neon2: #ea580c; --glow: rgba(217, 20, 56, .26);
+}
+html[data-modo="claro"] body[data-tema="xbox"],
+html[data-modo="claro"] .tema-xbox {
+  --neon: #0f8f34; --neon2: #16a34a; --glow: rgba(15, 143, 52, .26);
+}
+html[data-modo="claro"] .topo {
+  background: rgba(255, 255, 255, .9);
+  border-bottom-color: rgba(20, 24, 43, .12);
+  box-shadow: 0 4px 22px -10px rgba(20, 24, 43, .16);
+}
+html[data-modo="claro"] .marca-texto span {
+  text-shadow: 0 2px 12px var(--glow);
+}
+html[data-modo="claro"] .nav-link:hover {
+  color: var(--txt); background: rgba(20, 24, 43, .06);
+}
+html[data-modo="claro"] .nav-link.ativo {
+  color: var(--c, #1d4ed8);
+  background: color-mix(in srgb, var(--c, #1d4ed8) 12%, #fff);
+}
+html[data-modo="claro"] .busca {
+  background: #f5f7fd; border-color: rgba(20, 24, 43, .18); box-shadow: none;
+}
+html[data-modo="claro"] .busca:hover { border-color: rgba(20, 24, 43, .34); }
+html[data-modo="claro"] .busca:focus-within { background: #ffffff; border-color: var(--neon); }
+html[data-modo="claro"] .busca input::-webkit-search-cancel-button { filter: none; }
+html[data-modo="claro"] .busca button {
+  color: #fff; background: linear-gradient(135deg, #1d4ed8, #2563eb);
+}
+html[data-modo="claro"] .btn-modo {
+  background: #f5f7fd; border-color: rgba(20, 24, 43, .18); color: var(--txt);
+}
+html[data-modo="claro"] .carrossel {
+  border-color: rgba(20, 24, 43, .12);
+  box-shadow: 0 18px 40px -18px rgba(20, 24, 43, .3);
+}
+html[data-modo="claro"] .plat-btn {
+  background: #ffffff;
+  box-shadow: 0 8px 24px -14px rgba(20, 24, 43, .22);
+}
+html[data-modo="claro"] .secao-home h2 {
+  color: #14182b;
+  text-shadow: 0 0 14px rgba(59, 130, 246, .25), 0 2px 6px rgba(20, 24, 43, .12);
+}
+html[data-modo="claro"] .card {
+  box-shadow: 0 8px 22px -14px rgba(20, 24, 43, .2);
+}
+html[data-modo="claro"] .card:hover {
+  box-shadow: 0 14px 30px -12px var(--glow);
+}
+html[data-modo="claro"] .capa { background: #edf0f9; }
+html[data-modo="claro"] .aba.ativa { color: #fff; background: var(--neon); }
+html[data-modo="claro"] .loja-ico img { filter: none; }
+html[data-modo="claro"] .loja-ico.sem-logo::before { color: var(--txt); text-shadow: none; }
+html[data-modo="claro"] .faixa-loja {
+  background: #ffffff; border-color: rgba(20, 24, 43, .12);
+  box-shadow: 0 2px 8px rgba(20, 24, 43, .06);
+}
+html[data-modo="claro"] .faixa-loja img { filter: none; }
+html[data-modo="claro"] .rodape { border-top-color: rgba(20, 24, 43, .12); }
 @media (max-width: 380px) {
   .grade { grid-template-columns: 1fr; }
 }

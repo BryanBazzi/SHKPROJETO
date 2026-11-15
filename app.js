@@ -666,7 +666,7 @@
     if (aba === "consoles") corpo = secao("Consoles", grade(consoles, "Nenhum console cadastrado ainda."));
     else if (aba === "acessorios") corpo = secao("Acessórios", grade(acessorios, "Nenhum acessório cadastrado ainda."));
     else if (aba === "jogos") corpo = secao("Jogos", grade(jogos, "Nenhum jogo cadastrado ainda."));
-    else if (aba === "lancamentos") corpo = secao("🚀 Lançamentos", grade(lancamentos, "Nenhum lançamento cadastrado ainda.", { modo: "lancamento" }));
+    else if (aba === "lancamentos") corpo = secao("Lançamentos", grade(lancamentos, "Nenhum lançamento cadastrado ainda.", { modo: "lancamento" }));
     else if (aba === "promocoes") corpo = secao("🔥 Promoções", grade(promos, "Sem promoções no momento."));
     else corpo =
       secao("Jogos", grade(jogos, "Nenhum jogo cadastrado ainda.")) +
@@ -703,7 +703,7 @@
       if (p.lancamento && lancs.indexOf(p) === -1) lancs.push(p);
     });
     app.innerHTML =
-      '<section class="plat-topo"><p class="hero-kicker">Novidades</p><h1>🚀 Últimos Lançamentos</h1></section>' +
+      '<section class="plat-topo"><p class="hero-kicker">Novidades</p><h1>Últimos Lançamentos</h1></section>' +
       secao("PlayStation 5 e Nintendo Switch 2", grade(lancs, "Nenhum lançamento no momento.", { modo: "lancamento" }));
   }
 
@@ -872,6 +872,37 @@
       }).join("") +
       "</div>";
   }
+
+  function aplicarModo(modo) {
+    var claro = modo === "claro";
+    if (claro) document.documentElement.setAttribute("data-modo", "claro");
+    else document.documentElement.removeAttribute("data-modo");
+    var metaTema = document.querySelector('meta[name="theme-color"]');
+    if (metaTema) metaTema.setAttribute("content", claro ? "#f4f6fc" : "#07070d");
+    var btn = document.getElementById("btnModo");
+    if (btn) {
+      btn.textContent = claro ? "🌙" : "☀️";
+      var texto = claro ? "Ativar modo escuro" : "Ativar modo claro";
+      btn.setAttribute("aria-label", texto);
+      btn.setAttribute("title", texto);
+    }
+    try { localStorage.setItem("shkn_modo", claro ? "claro" : "escuro"); } catch (e) {}
+  }
+
+  (function iniciarModo() {
+    var salvo = "escuro";
+    try {
+      if (localStorage.getItem("shkn_modo") === "claro") salvo = "claro";
+    } catch (e) {}
+    aplicarModo(salvo);
+    var btn = document.getElementById("btnModo");
+    if (btn) {
+      btn.addEventListener("click", function () {
+        var atualClaro = document.documentElement.getAttribute("data-modo") === "claro";
+        aplicarModo(atualClaro ? "escuro" : "claro");
+      });
+    }
+  })();
 
   rota();
 })();
