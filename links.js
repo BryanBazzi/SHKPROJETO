@@ -41,13 +41,13 @@ astro-bot_mercadolivre =
 astro-bot_shopee =
 astro-bot_aliexpress =
 
-# ===== Resident Evil 9 Remake (PS5) =====
-resident-evil-9_trailer =
-resident-evil-9_amazon =
-resident-evil-9_kabum =
-resident-evil-9_mercadolivre =
-resident-evil-9_shopee =
-resident-evil-9_aliexpress =
+# ===== Resident Evil Requiem (PS5) =====
+resident-evil-requiem_trailer =
+resident-evil-requiem_amazon =
+resident-evil-requiem_kabum =
+resident-evil-requiem_mercadolivre =
+resident-evil-requiem_shopee =
+resident-evil-requiem_aliexpress =
 
 # ===== Death Stranding 2: On the Beach =====
 death-stranding-2_trailer =
@@ -65,13 +65,13 @@ zelda-ocarina-remake_mercadolivre =
 zelda-ocarina-remake_shopee =
 zelda-ocarina-remake_aliexpress =
 
-# ===== Resident Evil 9 Remake (Switch 2) =====
-resident-evil-9-switch_trailer =
-resident-evil-9-switch_amazon =
-resident-evil-9-switch_kabum =
-resident-evil-9-switch_mercadolivre =
-resident-evil-9-switch_shopee =
-resident-evil-9-switch_aliexpress =
+# ===== Resident Evil Requiem (Switch 2) =====
+resident-evil-requiem-switch_trailer =
+resident-evil-requiem-switch_amazon =
+resident-evil-requiem-switch_kabum =
+resident-evil-requiem-switch_mercadolivre =
+resident-evil-requiem-switch_shopee =
+resident-evil-requiem-switch_aliexpress =
 
 # ===== Resident Evil Generation Pack (Switch 2) =====
 resident-evil-generation-pack_trailer =

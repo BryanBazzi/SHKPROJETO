@@ -62,14 +62,14 @@ const HOME_BANNERS = [
 const HOME_DESTAQUES = [
   "gta-6",
   "zelda-ocarina-remake",
-  "resident-evil-9",
+  "resident-evil-requiem",
   "astro-bot"
 ];
 
 const HOME_LANCAMENTOS = [
   "gta-6",
   "zelda-ocarina-remake",
-  "resident-evil-9",
+  "resident-evil-requiem",
   "death-stranding-2"
 ];
 
@@ -124,8 +124,8 @@ const PRODUTOS = [
     descricao: "Aventura de plataforma cheia de criatividade, eleita Jogo do Ano e feita para aproveitar tudo do DualSense."
   },
   {
-    id: "resident-evil-9",
-    nome: "Resident Evil 9 Remake",
+    id: "resident-evil-requiem",
+    nome: "Resident Evil Requiem",
     plataforma: "ps5",
     tipo: "jogo",
     promocao: false,
@@ -188,8 +188,8 @@ const PRODUTOS = [
     descricao: "O clássico lendário de Hyrule totalmente reconstruído para a nova geração no Nintendo Switch 2."
   },
   {
-    id: "resident-evil-9-switch",
-    nome: "Resident Evil 9 Remake",
+    id: "resident-evil-requiem-switch",
+    nome: "Resident Evil Requiem",
     plataforma: "switch",
     tipo: "jogo",
     versao: "Switch 2",
@@ -203,11 +203,11 @@ const PRODUTOS = [
     nome: "Resident Evil Generation Pack",
     plataforma: "switch",
     tipo: "jogo",
-    versao: "Switch 2 (RE 7 + 8 + 9)",
+    versao: "Switch 2 (RE 7 + Village + Requiem)",
     promocao: false,
     destaque: false,
     lancamento: true,
-    descricao: "Pacote especial para Nintendo Switch 2 reunindo Resident Evil 7, Resident Evil Village (8) e Resident Evil 9."
+    descricao: "Pacote especial de 30 anos para Nintendo Switch 2 reunindo Resident Evil 7, Resident Evil Village e Resident Evil Requiem."
   },
   {
     id: "switch-oled",
