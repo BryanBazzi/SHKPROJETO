@@ -37,7 +37,7 @@ gta-6_shopee = https://s.shopee.com.br/7KyYVbHIpX
 gta-6_aliexpress = -
 gta-6_digital_amazon =
 gta-6_digital_kabum =
-gta-6_digital_mercadolivre = https://meli.la/2mqGSeX
+gta-6_digital_mercadolivre = https://tidd.ly/3WL5Xad
 gta-6_digital_shopee =
 gta-6_digital_aliexpress =
 
