@@ -1,0 +1,73 @@
+{
+  "atualizadoEm": "2026-11-21T18:16:43.648Z",
+  "precos": {
+    "ps5-slim": {
+      "kabum": {
+        "preco": 4184.07,
+        "em": 1795229551
+      }
+    },
+    "gta-6": {
+      "kabum": {
+        "preco": 371.91,
+        "cupom": "VICECITY",
+        "em": 1795285003
+      }
+    },
+    "astro-bot": {
+      "kabum": {
+        "preco": 295.9,
+        "em": 1795229551
+      }
+    },
+    "dualsense": {
+      "kabum": {
+        "preco": 333.96,
+        "cupom": "CONTROLENAMAO",
+        "em": 1795229551
+      }
+    },
+    "switch-2": {
+      "kabum": {
+        "preco": 4299,
+        "em": 1795229551
+      }
+    },
+    "zelda-ocarina-remake": {
+      "kabum": {
+        "preco": 599,
+        "em": 1795229551
+      }
+    },
+    "resident-evil-requiem-switch": {
+      "kabum": {
+        "preco": 371.9,
+        "em": 1795229551
+      }
+    },
+    "resident-evil-generation-pack": {
+      "kabum": {
+        "preco": 839.9,
+        "em": 1795229551
+      }
+    },
+    "switch-oled": {
+      "kabum": {
+        "preco": 1999,
+        "em": 1795229551
+      }
+    },
+    "pro-controller": {
+      "kabum": {
+        "preco": 369,
+        "em": 1795229551
+      }
+    },
+    "controle-xbox": {
+      "kabum": {
+        "preco": 319.99,
+        "em": 1795229551
+      }
+    }
+  }
+}

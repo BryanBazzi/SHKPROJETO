@@ -11,7 +11,10 @@
    - Quer esconder uma loja de um produto?  Escreva um traço:  astro-bot_shopee = -
    - Mídia Digital (opcional):  produto_digital_amazon = link
      A aba "Mídia Digital" só aparece no site se você preencher pelo menos 1 link digital!
-   - Linhas que começam com # são só comentários (o site ignora).
+    - Preço (opcional):  produto_preco_loja = 4500   (aceita 4500, 4.500,00 ou R$ 4500)
+      Ex.: ps5-slim_preco_amazon = 4000   |   Digital: gta-6_preco_digital_amazon = 349,90
+      Com preço, o site ordena do mais barato ao mais caro e marca o "Menor preço".
+    - Linhas que começam com # são só comentários (o site ignora).
    - Maiúscula, minúscula e hífen não importam: "Amazon_AstroBot" funciona igual a "astro-bot_amazon".
 
    CUIDADO: não use o símbolo ` (crase) dentro da lista, nem apague as crases do começo e do fim.
@@ -139,6 +142,67 @@ dualsense_kabum = https://tidd.ly/4BVlzIa
 dualsense_mercadolivre = https://meli.la/1H9suwZ
 dualsense_shopee = https://s.shopee.com.br/7fbOyqaUYu
 dualsense_aliexpress = -
+
+# ===== Gift Cards PlayStation Store =====
+psn-gift-35_amazon =
+psn-gift-35_kabum =
+psn-gift-35_mercadolivre =
+psn-gift-35_shopee =
+psn-gift-35_aliexpress = -
+
+psn-gift-60_amazon =
+psn-gift-60_kabum =
+psn-gift-60_mercadolivre =
+psn-gift-60_shopee =
+psn-gift-60_aliexpress = -
+
+psn-gift-100_amazon =
+psn-gift-100_kabum =
+psn-gift-100_mercadolivre =
+psn-gift-100_shopee =
+psn-gift-100_aliexpress = -
+
+psn-gift-150_amazon =
+psn-gift-150_kabum =
+psn-gift-150_mercadolivre =
+psn-gift-150_shopee =
+psn-gift-150_aliexpress = -
+
+psn-gift-250_amazon =
+psn-gift-250_kabum =
+psn-gift-250_mercadolivre =
+psn-gift-250_shopee =
+psn-gift-250_aliexpress = -
+
+psn-gift-300_amazon =
+psn-gift-300_kabum =
+psn-gift-300_mercadolivre =
+psn-gift-300_shopee =
+psn-gift-300_aliexpress = -
+
+psn-gift-360_amazon =
+psn-gift-360_kabum =
+psn-gift-360_mercadolivre =
+psn-gift-360_shopee =
+psn-gift-360_aliexpress = -
+
+psn-gift-450_amazon =
+psn-gift-450_kabum =
+psn-gift-450_mercadolivre =
+psn-gift-450_shopee =
+psn-gift-450_aliexpress = -
+
+psn-gift-550_amazon =
+psn-gift-550_kabum =
+psn-gift-550_mercadolivre =
+psn-gift-550_shopee =
+psn-gift-550_aliexpress = -
+
+psn-gift-700_amazon =
+psn-gift-700_kabum =
+psn-gift-700_mercadolivre =
+psn-gift-700_shopee =
+psn-gift-700_aliexpress = -
 
 # ===== Nintendo Switch 2 =====
 switch-2_trailer = https://www.youtube.com/watch?v=0QeqO0kFz-E

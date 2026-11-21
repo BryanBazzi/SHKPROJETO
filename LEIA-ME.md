@@ -34,8 +34,8 @@ Regras:
 A galeria aparece nesta ordem: **capa → trailer → prints**.
 
 ## Endereços sem "#"
-O site usa endereços normais (`/produto/astro-bot`). O arquivo `vercel.json` faz isso funcionar no Vercel: **não apague**.
-Para testar no PC não dá mais para só abrir o `index.html`: use a extensão Live Server ou um servidor local que mande tudo para o `index.html`.
+O site usa endereços normais (`/produto/astro-bot`). O arquivo `.htaccess` faz isso funcionar na HostGator (Apache/cPanel): **não apague**.
+Para testar no PC não dá mais para só abrir o `index.html`: use um servidor local que mande as rotas para o `index.html`.
 
 ## Trailer e links de afiliado: arquivo `links.js`
 Cada linha: `produto_loja = seu link`
@@ -56,12 +56,13 @@ gta-6_kabum = https://...
 2. Em `links.js`, copie as 6 linhas de outro produto e troque o nome pelo novo `id`.
 3. Suba as imagens com o nome `{id}_capa.jpg`, `{id}_print1.jpg`…
 
-## Publicar mudanças
-GitHub → Add file → Upload files (ou edite o arquivo direto no GitHub) → Commit changes.
-O Vercel atualiza o site sozinho em cerca de 1 minuto.
+## Publicar mudanças na HostGator (cPanel)
+1. Acesse o **Gerenciador de Arquivos** no cPanel da HostGator e abra a pasta do domínio (`public_html`).
+2. Envie apenas os arquivos que você alterou (ex.: `links.js` e `index.html`). Não precisa subir a pasta `imagens/` inteira toda vez.
+3. Sempre que editar `style.css`, `produtos.js`, `links.js` ou `app.js`, aumente o número do `?v=` no `index.html` (ex.: `?v=2`, `?v=3`) para forçar o navegador dos visitantes a carregar a versão nova.
 
 ## Ver o site no seu computador
-Como os endereços não têm mais "#", abrir o `index.html` com dois cliques só mostra a página inicial. Para testar tudo, use a extensão Live Server do VS Code configurada para mandar tudo ao `index.html`, ou veja direto no site publicado (o Vercel já está configurado pelo `vercel.json`).
+Como os endereços não têm mais "#", abrir o `index.html` com dois cliques só mostra a página inicial. Para testar tudo, use um servidor local (como o servidor em Node ou Live Server) apontando para a pasta do projeto.
 
 Cuidado com aspas, vírgulas e chaves no `produtos.js`: se o site ficar em branco depois de editar, quase sempre é uma vírgula ou aspas faltando.
 

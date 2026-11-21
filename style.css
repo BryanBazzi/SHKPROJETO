@@ -634,3 +634,10 @@ html[data-modo="claro"] .rodape { border-top-color: rgba(20, 24, 43, .12); }
 @media (prefers-reduced-motion: reduce) {
   * { transition: none !important; scroll-behavior: auto !important; }
 }
+
+/* ---- comparador de preços ---- */
+.loja-preco{font-weight:700;font-size:1.15rem;white-space:nowrap;margin-left:auto;padding-left:10px}
+.loja-melhor{outline:2px solid #22c55e;outline-offset:-2px}
+.selo-menor{display:inline-block;margin-left:8px;padding:1px 8px;border-radius:999px;background:#22c55e;color:#04210e;font-size:.7rem;font-weight:700;vertical-align:middle}
+
+.selo-cupom{display:inline-block;margin-left:8px;padding:1px 8px;border-radius:999px;background:#facc15;color:#1f1600;font-size:.7rem;font-weight:700;vertical-align:middle}

@@ -1,0 +1,32 @@
+# Protege o script de automação para não ser acessado/baixado pelo navegador
+<Files "atualizar-precos.php">
+  <IfModule mod_authz_core.c>
+    Require all denied
+  </IfModule>
+  <IfModule !mod_authz_core.c>
+    Order allow,deny
+    Deny from all
+  </IfModule>
+</Files>
+
+# Rotas limpas do site (/produto/gta-6, /ps5...) sem dar erro 404 ao recarregar a página.
+# Tudo que não for arquivo/pasta real é entregue para o index.html (o app.js decide a página).
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule ^ /index.html [L]
+</IfModule>
+
+# Cache: o navegador revalida os arquivos do site (o ?v=N no index.html força a versão nova);
+# imagens podem ficar em cache por mais tempo.
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType text/css "access plus 1 day"
+  ExpiresByType application/javascript "access plus 1 day"
+  ExpiresByType text/javascript "access plus 1 day"
+  ExpiresByType image/png "access plus 30 days"
+  ExpiresByType image/jpeg "access plus 30 days"
+  ExpiresByType image/webp "access plus 30 days"
+  ExpiresByType image/svg+xml "access plus 30 days"
+</IfModule>

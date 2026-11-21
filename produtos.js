@@ -164,6 +164,126 @@ const PRODUTOS = [
     lancamento: false,
     descricao: "Controle sem fio oficial do PS5, com gatilhos adaptáveis e retorno tátil."
   },
+  {
+    id: "psn-gift-35",
+    nome: "Gift Card PlayStation Store R$ 35",
+    plataforma: "ps5",
+    tipo: "acessorio",
+    versao: "Gift Card",
+    fundo: "desfocado",
+    promocao: false,
+    destaque: false,
+    lancamento: false,
+    descricao: "Cartão presente digital de R$ 35 para contas da PlayStation Store Brasil. Use para comprar jogos, DLCs ou assinar o PS Plus."
+  },
+  {
+    id: "psn-gift-60",
+    nome: "Gift Card PlayStation Store R$ 60",
+    plataforma: "ps5",
+    tipo: "acessorio",
+    versao: "Gift Card",
+    fundo: "desfocado",
+    promocao: false,
+    destaque: false,
+    lancamento: false,
+    descricao: "Cartão presente digital de R$ 60 para contas da PlayStation Store Brasil. Use para comprar jogos, DLCs ou assinar o PS Plus."
+  },
+  {
+    id: "psn-gift-100",
+    nome: "Gift Card PlayStation Store R$ 100",
+    plataforma: "ps5",
+    tipo: "acessorio",
+    versao: "Gift Card",
+    fundo: "desfocado",
+    promocao: false,
+    destaque: false,
+    lancamento: false,
+    descricao: "Cartão presente digital de R$ 100 para contas da PlayStation Store Brasil. Use para comprar jogos, DLCs ou assinar o PS Plus."
+  },
+  {
+    id: "psn-gift-150",
+    nome: "Gift Card PlayStation Store R$ 150",
+    plataforma: "ps5",
+    tipo: "acessorio",
+    versao: "Gift Card",
+    fundo: "desfocado",
+    promocao: false,
+    destaque: false,
+    lancamento: false,
+    descricao: "Cartão presente digital de R$ 150 para contas da PlayStation Store Brasil. Use para comprar jogos, DLCs ou assinar o PS Plus."
+  },
+  {
+    id: "psn-gift-250",
+    nome: "Gift Card PlayStation Store R$ 250",
+    plataforma: "ps5",
+    tipo: "acessorio",
+    versao: "Gift Card",
+    fundo: "desfocado",
+    promocao: false,
+    destaque: false,
+    lancamento: false,
+    descricao: "Cartão presente digital de R$ 250 para contas da PlayStation Store Brasil. Use para comprar jogos, DLCs ou assinar o PS Plus."
+  },
+  {
+    id: "psn-gift-300",
+    nome: "Gift Card PlayStation Store R$ 300",
+    plataforma: "ps5",
+    tipo: "acessorio",
+    versao: "Gift Card",
+    fundo: "desfocado",
+    promocao: false,
+    destaque: false,
+    lancamento: false,
+    descricao: "Cartão presente digital de R$ 300 para contas da PlayStation Store Brasil. Use para comprar jogos, DLCs ou assinar o PS Plus."
+  },
+  {
+    id: "psn-gift-360",
+    nome: "Gift Card PlayStation Store R$ 360",
+    plataforma: "ps5",
+    tipo: "acessorio",
+    versao: "Gift Card",
+    fundo: "desfocado",
+    promocao: false,
+    destaque: false,
+    lancamento: false,
+    descricao: "Cartão presente digital de R$ 360 para contas da PlayStation Store Brasil. Use para comprar jogos, DLCs ou assinar o PS Plus."
+  },
+  {
+    id: "psn-gift-450",
+    nome: "Gift Card PlayStation Store R$ 450",
+    plataforma: "ps5",
+    tipo: "acessorio",
+    versao: "Gift Card",
+    fundo: "desfocado",
+    promocao: false,
+    destaque: false,
+    lancamento: false,
+    descricao: "Cartão presente digital de R$ 450 para contas da PlayStation Store Brasil. Use para comprar jogos, DLCs ou assinar o PS Plus."
+  },
+  {
+    id: "psn-gift-550",
+    nome: "Gift Card PlayStation Store R$ 550",
+    plataforma: "ps5",
+    tipo: "acessorio",
+    versao: "Gift Card",
+    fundo: "desfocado",
+    promocao: false,
+    destaque: false,
+    lancamento: false,
+    descricao: "Cartão presente digital de R$ 550 para contas da PlayStation Store Brasil. Use para comprar jogos, DLCs ou assinar o PS Plus."
+  },
+  {
+    id: "psn-gift-700",
+    nome: "Gift Card PlayStation Store R$ 700",
+    plataforma: "ps5",
+    tipo: "acessorio",
+    versao: "Gift Card",
+    fundo: "desfocado",
+    promocao: false,
+    destaque: false,
+    lancamento: false,
+    descricao: "Cartão presente digital de R$ 700 para contas da PlayStation Store Brasil. Use para comprar jogos, DLCs ou assinar o PS Plus."
+  },
 
   /* ===================== NINTENDO SWITCH ===================== */
   {

@@ -737,8 +737,83 @@
       secao(achados.length + (achados.length === 1 ? " resultado" : " resultados"), grade(achados, "Não achei nada com esse nome. Tente outra palavra."));
   }
 
+  /* ---------- preços (manual no links.js ou automático via precos.json) ----------
+     No links.js:  produto_preco_loja = 4500   (ou 4.500,00 / R$ 4500)
+     Mídia digital: produto_preco_digital_loja = 299,90 */
+  var PRECOS_AUTO = {};
+  var MAX_IDADE_PRECO = 3 * 24 * 3600; // 3 dias (em segundos)
+
+  function carregarPrecosAuto() {
+    if (typeof fetch !== "function") return;
+    fetch("/precos.json?t=" + Date.now(), { cache: "no-store" })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (d) {
+        if (!d || !d.precos) return;
+        PRECOS_AUTO = d.precos;
+        var box = document.getElementById("lojasFisica") || app.querySelector(".lojas");
+        var m = location.pathname.match(/^\/produto\/([^/]+)/);
+        if (box && m) {
+          var p = achar(decodeURIComponent(m[1]));
+          if (p) box.innerHTML = botoesLojas(p, "") || '<p class="vazio">Links de compra em breve.</p>';
+        }
+      })
+      .catch(function () {});
+  }
+  carregarPrecosAuto();
+
+  function lerPreco(txt) {
+    var t = String(txt || "").replace(/[^\d.,]/g, "");
+    if (!t) return null;
+    if (t.indexOf(",") !== -1) t = t.replace(/\./g, "").replace(",", ".");
+    else if (/\.\d{3}$/.test(t)) t = t.replace(/\./g, ""); // "4.500" = quatro mil e quinhentos
+    var n = parseFloat(t);
+    return n > 0 ? n : null;
+  }
+  function itemAuto(p, k, prefixo) {
+    if (prefixo || !PRECOS_AUTO[p.id] || !PRECOS_AUTO[p.id][k]) return null;
+    var item = PRECOS_AUTO[p.id][k];
+    var agora = Math.floor(Date.now() / 1000);
+    if (item.preco > 0 && (!item.em || (agora - item.em) <= MAX_IDADE_PRECO)) return item;
+    return null;
+  }
+  function precoDe(p, k, prefixo) {
+    var manual = lerPreco(linkDe(p.id, "preco_" + (prefixo || "") + k));
+    if (manual !== null) return manual;
+    var auto = itemAuto(p, k, prefixo);
+    return auto ? Number(auto.preco) : null;
+  }
+  function cupomDe(p, k, prefixo) {
+    var auto = itemAuto(p, k, prefixo);
+    return auto && auto.cupom ? String(auto.cupom) : "";
+  }
+  function dinheiro(n) {
+    return "R$ " + n.toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  }
+  /* lojas com preço (do menor para o maior) vêm primeiro; as sem preço mantêm a ordem original */
+  function ordenarLojas(p, prefixo) {
+    var chaves = Object.keys(LOJAS);
+    return chaves.map(function (k, i) {
+      var v = linkDe(p.id, (prefixo || "") + k);
+      var preco = urlSegura(v) ? precoDe(p, k, prefixo) : null;
+      return { k: k, i: i, preco: preco };
+    }).sort(function (a, b) {
+      if (a.preco !== null && b.preco !== null) return a.preco - b.preco || a.i - b.i;
+      if (a.preco !== null) return -1;
+      if (b.preco !== null) return 1;
+      return a.i - b.i;
+    });
+  }
+  function botoesLojas(p, prefixo) {
+    var ordem = ordenarLojas(p, prefixo);
+    var comPreco = ordem.filter(function (o) { return o.preco !== null; });
+    var menor = comPreco.length > 1 ? comPreco[0].preco : null; // só destaca se houver o que comparar
+    return ordem.map(function (o) {
+      return botaoLoja(p, o.k, prefixo, o.preco, menor !== null && o.preco === menor, cupomDe(p, o.k, prefixo));
+    }).join("");
+  }
+
   /* botão de uma loja: com link = clicável; sem link = "Link em breve"; "N" = "Não disponível no momento"; "-" = escondido */
-  function botaoLoja(p, k, prefixo) {
+  function botaoLoja(p, k, prefixo, preco, ehMenor, cupom) {
     var v = linkDe(p.id, (prefixo || "") + k);
     if (v === "-") return "";
     if (prefixo && !v) return "";
@@ -747,8 +822,14 @@
     var ico = '<span class="loja-ico" aria-hidden="true" data-sigla="' + esc(LOJAS[k].sigla) + '">' +
       '<img src="' + pasta + 'loja-' + k + '.png" alt="" onerror="this.parentNode.classList.add(\'sem-logo\');this.remove()"></span>';
     if (urlSegura(v)) {
-      return '<a class="loja loja-' + k + '" href="' + esc(v) + '" target="_blank" rel="sponsored noopener noreferrer">' + ico +
-        '<span class="loja-txt"><strong>' + nome + "</strong><small>Ver preço atualizado</small></span><em>→</em></a>";
+      var sub = cupom ? "Com cupom na loja" : (preco !== null ? "Ver oferta na loja" : "Ver preço atualizado");
+      return '<a class="loja loja-' + k + (ehMenor ? " loja-melhor" : "") + '" href="' + esc(v) + '" target="_blank" rel="sponsored noopener noreferrer">' + ico +
+        '<span class="loja-txt"><strong>' + nome + "</strong>" +
+        (ehMenor ? '<span class="selo-menor">Menor preço</span>' : "") +
+        (cupom ? '<span class="selo-cupom">🎟️ Cupom: ' + esc(cupom) + "</span>" : "") +
+        "<small>" + sub + "</small></span>" +
+        (preco !== null ? '<span class="loja-preco">' + dinheiro(preco) + "</span>" : "") +
+        "<em>→</em></a>";
     }
     var msg = v.toUpperCase() === "N" ? "Não disponível no momento" : "Link em breve";
     return '<div class="loja loja-' + k + ' off">' + ico +
@@ -762,11 +843,9 @@
     var plat = PLAT[p.plataforma];
     var meu = tokenRota;
 
-    var botoes = Object.keys(LOJAS).map(function (k) { return botaoLoja(p, k, ""); }).join("");
+    var botoes = botoesLojas(p, "");
     var temDigital = Object.keys(LOJAS).some(function (k) { return !!urlSegura(linkDe(p.id, "digital_" + k)); });
-    var botoesDigital = temDigital
-      ? Object.keys(LOJAS).map(function (k) { return botaoLoja(p, k, "digital_"); }).join("")
-      : "";
+    var botoesDigital = temDigital ? botoesLojas(p, "digital_") : "";
 
     var rel = PRODUTOS.filter(function (x) {
       return x.id !== p.id && x.plataforma === p.plataforma && x.tipo === p.tipo;
@@ -797,7 +876,7 @@
       "<p class=\"desc\">" + esc(p.descricao) + "</p>" +
       "<h2>Onde comprar</h2>" +
       blocoLojas +
-      '<p class="nota">Os links abrem na loja com o preço do dia. Posso receber comissão pela compra, sem custo extra pra você.</p>' +
+      '<p class="nota">Os preços mostrados são de referência e podem mudar: confirme o valor final na loja. Posso receber comissão pela compra, sem custo extra pra você.</p>' +
       "</div></article>" +
       (rel.length ? secao("Veja também", grade(rel)) : "");
 
